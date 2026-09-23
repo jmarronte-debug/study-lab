@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Lab">
+<meta name="theme-color" content="#176B62">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
+</head>
+<body>
+<title>AP Bio Practice Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F6F7F4; --paper:#FFFFFF; --ink:#1A2230; --ink-2:#4A5568; --ink-3:#7A8494;
+  --line:#DDE1DA; --line-2:#C9CFC6;
+  --teal:#176B62; --teal-soft:#DDEFEA; --teal-ink:#0F4F48;
+  --good:#1E7F4F; --good-soft:#DDF3E4; --bad:#B4342B; --bad-soft:#FBE7E4; --warn:#9A6A00; --warn-soft:#FFF1C9;
+  --hi:#FFE85C;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D; --line:#2C3841; --line-2:#3A4852;
+  --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+  --good:#5CCB8A; --good-soft:#173826; --bad:#F08A80; --bad-soft:#3A1F1C; --warn:#E5B85A; --warn-soft:#3A2F12; --hi:#C9B23A;}}
+:root[data-theme="dark"]{
+  --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D; --line:#2C3841; --line-2:#3A4852;
+  --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+  --good:#5CCB8A; --good-soft:#173826; --bad:#F08A80; --bad-soft:#3A1F1C; --warn:#E5B85A; --warn-soft:#3A2F12; --hi:#C9B23A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.12}
+h1{font-size:clamp(30px,6.5vw,44px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:24px;font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:10px 0}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px}
+.eyebrow{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-top:26px;flex-wrap:wrap}
+.top .sub{color:var(--ink-2);margin:6px 0 0;max-width:52ch}
+.btn{background:var(--teal);color:#fff;font-family:var(--display);font-weight:700;font-size:16px;padding:12px 18px;border-radius:10px}
+:root[data-theme="dark"] .btn{color:#0E1A18}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#0E1A18}}
+.btn.ghost{background:transparent;color:var(--teal);border:1.5px solid var(--teal)}
+.btn.quiet{background:var(--paper);color:var(--ink-2);border:1px solid var(--line-2)}
+.btn:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+/* modes */
+.mode{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink)}
+.mode:hover{border-color:var(--teal)}
+.mode .t{font-family:var(--display);font-weight:700;font-size:17px}
+.mode .d{grid-column:1;font-size:14.5px;color:var(--ink-2)}
+.mode .n{grid-row:1/3;font-family:var(--mono);font-size:13px;color:var(--ink-3);white-space:nowrap}
+/* topic bars */
+.topics{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.topic{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.topic .nm{font-weight:700;font-size:15.5px}
+.topic .st{font-family:var(--display);font-size:12.5px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.st.strong{background:var(--good-soft);color:var(--good)}
+.st.ok{background:var(--warn-soft);color:var(--warn)}
+.st.weak{background:var(--bad-soft);color:var(--bad)}
+.st.none{background:var(--bg);color:var(--ink-3);border:1px solid var(--line)}
+.bar{grid-column:1/3;height:8px;background:var(--line);border-radius:999px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:999px;transition:width .4s}
+.topic .meta{grid-column:1/3;font-size:13px;color:var(--ink-3);font-family:var(--mono)}
+/* quiz */
+.prog{display:flex;align-items:center;gap:12px;margin-top:20px;font-family:var(--mono);font-size:13px;color:var(--ink-3)}
+.prog .bar{flex:1;grid-column:auto}
+.qtopic{margin-top:18px}
+.stem{font-size:19px;font-weight:700;margin:8px 0 16px;line-height:1.35}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;text-align:left;background:var(--paper);border:1.5px solid var(--line-2);border-radius:10px;padding:12px 14px;color:var(--ink);font-size:16.5px;line-height:1.4}
+.opt .k{font-family:var(--mono);font-weight:600;color:var(--ink-3);padding-top:2px}
+.opt:hover{border-color:var(--teal)}
+.opt.sel{border-color:var(--teal);background:var(--teal-soft)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrongpick{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.fb{margin-top:14px;border-radius:12px;padding:14px 16px;border:1px solid var(--line)}
+.fb.ok{background:var(--good-soft);border-color:transparent}
+.fb.no{background:var(--bad-soft);border-color:transparent}
+.fb .h{font-family:var(--display);font-weight:800;font-size:18px;margin-bottom:6px}
+.fb.ok .h{color:var(--good)}.fb.no .h{color:var(--bad)}
+.fb p{margin:6px 0;font-size:16px}
+.fb .lbl{font-family:var(--display);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+/* frq */
+.frq-stem{background:var(--paper);border-left:4px solid var(--teal);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+.part{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.part .v{font-family:var(--display);font-weight:800;color:var(--teal)}
+.part .pts{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);margin-left:6px}
+textarea{width:100%;min-height:90px;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line-2);border-radius:10px;background:var(--paper);color:var(--ink);resize:vertical;margin-top:8px}
+textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.rubric{margin-top:10px;background:var(--teal-soft);border-radius:10px;padding:10px 14px}
+.rubric label{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;padding:6px 0;font-size:15.5px;color:var(--teal-ink);cursor:pointer}
+.rubric input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--teal)}
+.rubric .rl{font-family:var(--display);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-ink);margin-bottom:4px}
+.timer{font-family:var(--mono);font-size:14px;color:var(--ink-3)}
+/* results */
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.score .big{font-family:var(--display);font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.score .pct{font-family:var(--mono);color:var(--ink-3)}
+.miss{margin-top:10px;padding:12px 14px;border-radius:10px;background:var(--paper);border:1px solid var(--line);font-size:15.5px}
+.miss b{display:block}
+.miss .why{color:var(--ink-2);margin-top:4px}
+.small{font-size:14px;color:var(--ink-3)}
+.hist{font-family:var(--mono);font-size:13.5px;color:var(--ink-2);display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;margin-top:10px}
+.hidden{display:none!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-family:var(--display);font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.sel-topics{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{background:var(--paper);border:1.5px solid var(--line-2);border-radius:999px;padding:6px 12px;font-size:14.5px;color:var(--ink)}
+.chip.on{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-ink)}
+a{color:var(--teal)}
+.field{width:100%;font:inherit;font-size:17px;padding:11px 12px;border:1.5px solid var(--line-2);border-radius:10px;background:var(--paper);color:var(--ink)}
+.field:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.student-only{}
+body.viewer .student-only{display:none!important}
+.today{margin-top:22px;border:2px solid var(--teal);border-radius:14px;padding:18px;background:var(--paper)}
+.today .big{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.2}
+.today .status{margin-top:6px;color:var(--ink-2)}
+.today .status.done{color:var(--good);font-weight:700}
+.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:14px}
+.strip .d{aspect-ratio:1;border-radius:5px;background:var(--line);display:flex;align-items:flex-end;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--ink-3);padding-bottom:2px}
+.strip .d.on{background:var(--teal);color:var(--paper)}
+.strip .d.now{outline:2px solid var(--ink);outline-offset:1px}
+.streak{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:8px}
+.units{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.numrow input{font:inherit;font-size:20px;font-family:var(--mono);width:160px;max-width:100%;padding:10px 12px;border:1.5px solid var(--line-2);border-radius:10px;background:var(--paper);color:var(--ink)}
+.numrow input:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.numrow .u{color:var(--ink-3);font-family:var(--mono)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow">AP Biology · all units · 2026–27</div>
+      <h1>AP Bio Practice Lab</h1>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 7 · Unit 2 through 2.4 · saved to your account, works on any device</div>
+      <p class="sub">A short session every day, explanations for every miss, FRQs scored against the rubric, and a running picture of what's strong and what needs another pass.</p>
+    </div>
+  </div>
+
+  <!-- SIGN IN -->
+  <section id="login" class="hidden">
+    <div class="card" style="margin-top:22px;max-width:440px">
+      <div class="eyebrow">Sign in</div>
+      <p style="margin:6px 0 14px;color:var(--ink-2)">Once per device. After that it remembers you.</p>
+      <label for="email" class="small" style="display:block;margin-bottom:4px">Email</label>
+      <input id="email" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" class="field">
+      <label for="pw" class="small" style="display:block;margin:12px 0 4px">Password</label>
+      <input id="pw" type="password" autocomplete="current-password" class="field">
+      <div class="row" style="margin-top:16px;align-items:center">
+        <button class="btn" id="signIn">Sign in</button>
+        <button class="btn quiet" id="forgot" type="button">Forgot password</button>
+      </div>
+      <p id="loginMsg" class="small" style="margin-top:12px;min-height:1.4em"></p>
+    </div>
+  </section>
+  <section id="loading"><p class="small" style="margin-top:28px">Loading…</p></section>
+
+  <!-- HOME -->
+  <section id="home" class="hidden">
+    <div id="viewerBanner" class="card hidden" style="margin-top:22px;border-color:var(--warn);background:var(--warn-soft)">
+      <b>Viewing Ana's progress (read-only).</b> <span class="small" id="viewerWho"></span>
+    </div>
+    <div class="today student-only">
+      <div class="eyebrow" id="todayEyebrow">Today</div>
+      <div class="big" id="todayTitle">Today's session</div>
+      <div class="status" id="todayStatus"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="todayBtn">Start today's session</button>
+        <button class="btn ghost hidden" id="todayWritten">Today's written question</button>
+      </div>
+      <div class="strip" id="strip" aria-label="Last 14 days"></div>
+      <div class="streak" id="streak"></div>
+    </div>
+
+    <div class="units" id="unitChips" role="tablist" aria-label="Unit"></div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="eyebrow" id="standEyebrow">Where you stand</div>
+      <div id="overview" class="small" style="margin-top:6px"></div>
+      <div id="cloudStatus" class="small" style="margin-top:6px"></div>
+      <div id="topicBars" class="topics"></div>
+    </div>
+
+    <h2 style="margin-top:28px" class="student-only">Practice</h2>
+    <div class="grid student-only" style="margin-top:12px">
+      <button class="mode" data-mode="smart"><span class="t">Smart 10</span><span class="n">10 MCQ · ~8 min</span><span class="d">Leans toward your weak topics and questions you've missed. Best default.</span></button>
+      <button class="mode" data-mode="test"><span class="t">Full MCQ test</span><span class="n">25 MCQ · timed</span><span class="d">Mixed topics, like the real first period. Timer shows how you pace.</span></button>
+      <button class="mode" data-mode="topic"><span class="t">Topic drill</span><span class="n">pick topics</span><span class="d">Every question from the topics you choose.</span></button>
+      <button class="mode" data-mode="misses"><span class="t">Redo my misses</span><span class="n" id="missCount">0 saved</span><span class="d">Only questions you've gotten wrong and not yet gotten right since.</span></button>
+      <button class="mode" data-mode="frq"><span class="t">FRQ practice</span><span class="n">1 FRQ · 10 min</span><span class="d">Write in the box, then reveal the rubric and score yourself point by point.</span></button>
+      <button class="mode" data-mode="frqset"><span class="t">FRQ set</span><span class="n">3 FRQs · 30 min</span><span class="d">Half a real FRQ period. Do it in pen on paper if you can, then score here.</span></button>
+    </div>
+
+    <div id="topicPick" class="card hidden" style="margin-top:14px">
+      <div class="eyebrow">Choose topics</div>
+      <div class="sel-topics" id="chips"></div>
+      <div class="row"><button class="btn" id="startTopic">Start drill</button><button class="btn quiet" id="cancelTopic">Cancel</button></div>
+    </div>
+
+    <h2 style="margin-top:28px">History</h2>
+    <div class="card" style="margin-top:12px">
+      <div id="history" class="hist"></div>
+      <div id="noHist" class="small">No sessions yet. Your first round will show up here.</div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn ghost" id="copySummary">Copy progress summary</button>
+        <button class="btn quiet" id="backup">Download backup</button>
+      </div>
+      <p class="small" style="margin-top:10px">"Copy progress summary" puts a plain-text report on the clipboard you can text or email. "Download backup" saves the full history as a file.</p>
+    </div>
+
+    <h2 style="margin-top:28px">Account</h2>
+    <div class="card" style="margin-top:12px">
+      <p style="margin-top:0" id="acctLine"></p>
+      <div class="row"><button class="btn quiet" id="signOut">Sign out</button>
+        <button class="btn quiet student-only" id="importToggle">Bring in progress from the old Lab</button></div>
+      <div id="importBox" class="hidden student-only" style="margin-top:12px">
+        <p class="small" style="margin-top:0">On the device that has old progress, open the old Claude Lab link, tap "Copy sync link for another device," then paste it here.</p>
+        <textarea id="importInput" style="min-height:70px" placeholder="Paste the sync link here"></textarea>
+        <div class="row" style="margin-top:8px"><button class="btn" id="importGo">Add to my account</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MCQ -->
+  <section id="quiz" class="hidden">
+    <div class="prog"><span id="qnum"></span><div class="bar"><i id="qbar" style="width:0%"></i></div><span class="timer" id="timer"></span></div>
+    <div class="qtopic eyebrow" id="qtopic"></div>
+    <div class="stem" id="stem"></div>
+    <div class="opts" id="opts"></div>
+    <div class="numrow hidden" id="numrow"><input id="numIn" inputmode="decimal" autocomplete="off" placeholder="Your answer"><span class="u" id="numUnit"></span></div>
+    <div id="fb" class="fb hidden"></div>
+    <div class="actions">
+      <button class="btn quiet" id="quit">Quit</button>
+      <button class="btn" id="next" disabled>Check answer</button>
+    </div>
+  </section>
+
+  <!-- FRQ -->
+  <section id="frq" class="hidden">
+    <div class="prog"><span id="fnum"></span><div class="bar"><i id="fbar" style="width:0%"></i></div><span class="timer" id="ftimer"></span></div>
+    <div class="qtopic eyebrow" id="ftopic"></div>
+    <h2 id="ftitle" style="margin-top:6px"></h2>
+    <div class="frq-stem" id="fstem"></div>
+    <div id="fparts"></div>
+    <div class="actions">
+      <button class="btn quiet" id="fquit">Quit</button>
+      <div class="row"><button class="btn ghost" id="reveal">Reveal rubric &amp; score</button><button class="btn hidden" id="fnext">Save score →</button></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hidden">
+    <div class="eyebrow" id="rlabel">Session complete</div>
+    <div class="score"><div class="big" id="rscore"></div><div class="pct" id="rpct"></div></div>
+    <p id="rmsg"></p>
+    <div class="card" style="margin-top:14px"><div class="eyebrow">This session by topic</div><div id="rtopics" class="topics"></div></div>
+    <div id="rmisses" style="margin-top:18px"></div>
+    <div class="actions"><button class="btn quiet" id="rhome">Back to home</button><button class="btn" id="ragain">Go again</button></div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="vendor/firebase-app-compat.js"></script>
+<script src="vendor/firebase-auth-compat.js"></script>
+<script src="vendor/firebase-firestore-compat.js"></script>
+<script src="questions.js?v=7"></script>
+<script>
+(function(){
+"use strict";
+// ---------- storage ----------
+const blank=()=>({attempts:[],frq:[],sessions:[]});
+let S=blank();
+const save=()=>{};                      // progress is written per event to Firestore (see logAttempt etc.)
+const $=id=>document.getElementById(id);
+const show=id=>{['login','loading','home','quiz','frq','results'].forEach(s=>$(s).classList.toggle('hidden',s!==id)); document.querySelector('.top .sub').classList.toggle('hidden',id!=='home'); window.scrollTo({top:0});};
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)};
+const byId=Object.fromEntries(MCQ.map(q=>[q.id,q]));
+const frqById=Object.fromEntries(FRQ.map(f=>[f.id,f]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let SEL_UNIT=CURRENT.unit; try{const u=localStorage.getItem('lab:unit'); if(u&&UNITS[u]) SEL_UNIT=+u;}catch(e){}
+const unitOf=q=>TOPICS[q.t].unit;
+const inUnit=u=>MCQ.filter(q=>unitOf(q)===u);
+const frqInUnit=u=>FRQ.filter(f=>TOPICS[f.t].unit===u);
+const dayKey=ts=>{const d=new Date(ts); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const isTodayLabel=l=>/^Today/.test(l||'');
+
+// ---------- analytics ----------
+function topicStats(){
+  const st={}; for(const k in TOPICS) st[k]={n:0,c:0,fpts:0,fmax:0};
+  for(const a of S.attempts){const q=byId[a.q]; if(!q) continue; st[q.t].n++; if(a.ok) st[q.t].c++;}
+  for(const f of S.frq){const F=frqById[f.f]; if(!F) continue; st[F.t].fpts+=f.pts; st[F.t].fmax+=f.max;}
+  for(const k in st){const s=st[k]; const total=s.n+s.fmax; s.acc= total? (s.c+s.fpts)/total : null; s.total=total;
+    s.level = s.acc===null||total<4 ? 'none' : s.acc>=.8?'strong': s.acc>=.6?'ok':'weak';}
+  return st;
+}
+function currentMisses(){ // questions whose most recent attempt was wrong
+  const last={}; for(const a of S.attempts) last[a.q]=a.ok;
+  return Object.keys(last).filter(q=>!last[q] && byId[q]);
+}
+function renderHome(){
+  const st=topicStats();
+  const bars=$('topicBars'); bars.innerHTML='';
+  const totalAtt=S.attempts.length, totalC=S.attempts.filter(a=>a.ok).length;
+  $('overview').textContent = totalAtt? `${totalAtt} multiple-choice answers so far · ${Math.round(100*totalC/totalAtt)}% correct · ${S.frq.length} FRQ${S.frq.length===1?'':'s'} scored` : 'Nothing answered yet. Start with Smart 10.';
+  const label={strong:'Strong',ok:'Getting there',weak:'Needs review',none:'Not enough data'};
+  const order=Object.keys(TOPICS).filter(k=>TOPICS[k].unit===SEL_UNIT).sort((a,b)=>{const A=st[a],B=st[b]; if(A.acc===null&&B.acc===null)return 0; if(A.acc===null)return 1; if(B.acc===null)return -1; return A.acc-B.acc;});
+  for(const k of order){const s=st[k];
+    const d=document.createElement('div'); d.className='topic';
+    d.innerHTML=`<div class="nm">${TOPICS[k].name}</div><span class="st ${s.level}">${label[s.level]}</span><div class="bar"><i style="width:${s.acc===null?0:Math.round(s.acc*100)}%"></i></div><div class="meta">${s.n} MCQ${s.fmax?` · ${s.fpts}/${s.fmax} FRQ pts`:''}${s.acc!==null?` · ${Math.round(s.acc*100)}%`:''}</div>`;
+    bars.appendChild(d);}
+  $('standEyebrow').textContent='Where you stand · '+UNITS[SEL_UNIT].name;
+  const uc=$('unitChips'); uc.innerHTML='';
+  Object.keys(UNITS).sort((a,b)=>b-a).forEach(u=>{const b=document.createElement('button'); b.className='chip'+(+u===SEL_UNIT?' on':''); b.setAttribute('role','tab'); b.setAttribute('aria-selected',+u===SEL_UNIT);
+    b.textContent=UNITS[u].name+(+u===CURRENT.unit?' · now':''); b.onclick=()=>{SEL_UNIT=+u; try{localStorage.setItem('lab:unit',u)}catch(e){} renderHome();}; uc.appendChild(b);});
+  renderToday();
+  const m=currentMisses(); $('missCount').textContent=`${m.length} saved`;
+  const h=$('history'); h.innerHTML='';
+  $('noHist').classList.toggle('hidden',S.sessions.length>0);
+  S.sessions.slice(-8).reverse().forEach(s=>{const d=new Date(s.ts);
+    h.insertAdjacentHTML('beforeend',`<span>${d.toLocaleDateString(undefined,{weekday:'short'})} ${d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}</span><span>${s.label}</span><span>${s.score}/${s.max} · ${Math.round(100*s.score/s.max)}%</span>`);});
+}
+
+// ---------- question selection ----------
+function pickSmart(n,pool){
+  pool=pool||inUnit(SEL_UNIT);
+  const st=topicStats(); const miss=new Set(currentMisses()); const seen=new Set(S.attempts.map(a=>a.q));
+  const w=pool.map(q=>{let wt=1; if(miss.has(q.id)) wt+=3; if(!seen.has(q.id)) wt+=1.5;
+    const s=st[q.t]; if(s.level==='weak') wt+=2; else if(s.level==='ok') wt+=1; else if(s.level==='strong') wt*=.5; return {q,wt};});
+  const out=[]; const used=new Set(); const topicCount={};
+  while(out.length<n && out.length<pool.length){
+    let tot=0; const pool=w.filter(x=>!used.has(x.q.id)); pool.forEach(x=>{tot+=x.wt*(1/(1+(topicCount[x.q.t]||0)))});
+    let r=Math.random()*tot; let pick=pool[0];
+    for(const x of pool){r-=x.wt*(1/(1+(topicCount[x.q.t]||0))); if(r<=0){pick=x;break}}
+    used.add(pick.q.id); topicCount[pick.q.t]=(topicCount[pick.q.t]||0)+1; out.push(pick.q);}
+  return out;
+}
+function pickTest(n){ // balanced across topics
+  const groups={}; for(const q of inUnit(SEL_UNIT))(groups[q.t]=groups[q.t]||[]).push(q);
+  const keys=Object.keys(groups); for(const k of keys) groups[k]=shuffle(groups[k]);
+  const out=[]; let i=0; while(out.length<n){const k=keys[i%keys.length]; if(groups[k].length) out.push(groups[k].pop()); i++; if(keys.every(k=>!groups[k].length))break;}
+  return shuffle(out);
+}
+
+// ---------- MCQ session ----------
+let Q={list:[],i:0,order:[],picked:null,results:[],label:'',start:0,timer:null,timed:false};
+function startMCQ(list,label,timed){
+  if(!list.length){toast('No questions match');return}
+  Q={list,i:0,order:[],picked:null,results:[],label,start:Date.now(),timer:null,timed}; newSession(label);
+  show('quiz'); renderQ(); if(Q.timer)clearInterval(Q.timer); Q.timer=setInterval(tick,1000); tick();
+}
+function tick(){const s=Math.floor((Date.now()-Q.start)/1000); const el=$('timer'); el.textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; if(Q.timed && s>Q.list.length*96){el.style.color='var(--bad)'}else{el.style.color=''}}
+function renderQ(){
+  const q=Q.list[Q.i]; Q.picked=null; Q.order=shuffle([0,1,2,3]);
+  $('qnum').textContent=`${Q.i+1} / ${Q.list.length}`; $('qbar').style.width=`${100*Q.i/Q.list.length}%`;
+  $('qtopic').textContent=TOPICS[q.t].name+(q.type==='num'?' · type your answer':''); $('stem').textContent=q.q;
+  const o=$('opts'); o.innerHTML='';
+  const nr=$('numrow'); nr.classList.toggle('hidden',q.type!=='num'); o.classList.toggle('hidden',q.type==='num');
+  if(q.type==='num'){ const inp=$('numIn'); inp.value=''; inp.disabled=false; $('numUnit').textContent=q.unit||'';
+    inp.oninput=()=>{Q.picked=inp.value.trim()===''?null:inp.value.trim(); $('next').disabled=Q.picked===null;};
+    inp.onkeydown=e=>{if(e.key==='Enter'&&!$('next').disabled)$('next').click();};
+    $('fb').classList.add('hidden'); $('fb').innerHTML='';
+    const n=$('next'); n.textContent='Check answer'; n.disabled=true; n.dataset.state='pick'; setTimeout(()=>inp.focus(),50); return; }
+  Q.order.forEach((idx,k)=>{const b=document.createElement('button'); b.className='opt'; b.dataset.idx=idx;
+    b.innerHTML=`<span class="k">${'ABCD'[k]}</span><span>${q.opts[idx]}</span>`;
+    b.addEventListener('click',()=>{if(Q.picked!==null&&$('next').dataset.state==='checked')return; Q.picked=idx; [...o.children].forEach(c=>c.classList.toggle('sel',+c.dataset.idx===idx)); $('next').disabled=false;});
+    o.appendChild(b);});
+  $('fb').classList.add('hidden'); $('fb').innerHTML='';
+  const n=$('next'); n.textContent='Check answer'; n.disabled=true; n.dataset.state='pick';
+}
+function parseNum(v){ v=String(v).replace(/,/g,'').replace(/[%×x]/g,'').trim(); if(/^[-+]?\d*\.?\d+\s*\/\s*\d*\.?\d+$/.test(v)){const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b);} return parseFloat(v); }
+function checkNum(){
+  const q=Q.list[Q.i]; const val=parseNum(Q.picked); const ok=isFinite(val)&&Math.abs(val-q.answer)<=q.tol;
+  $('numIn').disabled=true;
+  const fb=$('fb'); fb.className='fb '+(ok?'ok':'no'); fb.classList.remove('hidden');
+  fb.innerHTML = ok ? `<div class="h">Correct</div><p>${q.why}</p>`
+    : `<div class="h">Not quite</div><p>You entered <b>${Q.picked}</b>. The answer is <b>${q.answer} ${q.unit||''}</b>.</p><div class="lbl">Where it goes wrong</div><p>${q.hint||''}</p><div class="lbl">Worked solution</div><p>${q.why}</p>`;
+  Q.results.push({q:q.id,ok,chosen:Q.picked}); logAttempt(q.id,ok);
+  const n=$('next'); n.dataset.state='checked'; n.textContent = Q.i+1<Q.list.length?'Next question →':'See results'; n.focus();
+}
+function checkQ(){
+  const q=Q.list[Q.i]; if(q.type==='num') return checkNum(); const ok=Q.picked===q.a;
+  [...$('opts').children].forEach(c=>{c.disabled=true; const idx=+c.dataset.idx; c.classList.remove('sel'); if(idx===q.a)c.classList.add('right'); else if(idx===Q.picked)c.classList.add('wrongpick');});
+  const fb=$('fb'); fb.className='fb '+(ok?'ok':'no'); fb.classList.remove('hidden');
+  fb.innerHTML = ok
+    ? `<div class="h">Correct</div><p>${q.why}</p>`
+    : `<div class="h">Not quite</div><div class="lbl">Why your choice is wrong</div><p>${q.wrong[Q.picked]||''}</p><div class="lbl">The answer: ${q.opts[q.a]}</div><p>${q.why}</p>`;
+  Q.results.push({q:q.id,ok,chosen:Q.picked}); logAttempt(q.id,ok);
+  const n=$('next'); n.dataset.state='checked'; n.textContent = Q.i+1<Q.list.length?'Next question →':'See results';
+  n.focus();
+}
+$('next').addEventListener('click',()=>{ if($('next').dataset.state==='pick'){ if(Q.picked===null)return; checkQ(); } else { Q.i++; if(Q.i<Q.list.length) renderQ(); else finishMCQ(); } });
+$('quit').addEventListener('click',()=>{ clearInterval(Q.timer); if(Q.results.length) finishMCQ(true); else {renderHome(); show('home');} });
+function finishMCQ(partial){
+  clearInterval(Q.timer);
+  const score=Q.results.filter(r=>r.ok).length, max=Q.results.length;
+  const secs=Math.floor((Date.now()-Q.start)/1000);
+  logSummary({ts:Date.now(),label:Q.label+(partial?' (partial)':''),score,max,secs});
+  $('rlabel').textContent=Q.label+(partial?' · stopped early':'')+` · ${Math.floor(secs/60)}m ${secs%60}s`;
+  $('rscore').textContent=`${score} / ${max}`; $('rpct').textContent=`${Math.round(100*score/max)}%`;
+  const pct=score/max; $('rmsg').textContent = pct>=.9?'A-level. Keep the misses list tight and move to FRQ practice.': pct>=.8?'Solid. The misses below are exactly where the next points are.': pct>=.65?'Getting there. Read each miss explanation twice, then redo them with "Redo my misses".':'Good — you found the gaps before the test did. Go back to the Game Plan section for the weakest topics, then redo these.';
+  // topic breakdown this session
+  const t={}; Q.results.forEach(r=>{const k=byId[r.q].t; t[k]=t[k]||{n:0,c:0}; t[k].n++; if(r.ok)t[k].c++;});
+  const rt=$('rtopics'); rt.innerHTML='';
+  Object.keys(t).sort((a,b)=>t[a].c/t[a].n-t[b].c/t[b].n).forEach(k=>{const s=t[k]; const lv=s.c/s.n>=.8?'strong':s.c/s.n>=.6?'ok':'weak';
+    rt.insertAdjacentHTML('beforeend',`<div class="topic"><div class="nm">${TOPICS[k].name}</div><span class="st ${lv}">${s.c}/${s.n}</span><div class="bar"><i style="width:${Math.round(100*s.c/s.n)}%"></i></div></div>`);});
+  const rm=$('rmisses'); rm.innerHTML='';
+  const misses=Q.results.filter(r=>!r.ok);
+  if(misses.length){rm.insertAdjacentHTML('beforeend',`<h3>Review your ${misses.length} miss${misses.length===1?'':'es'}</h3>`);
+    misses.forEach(r=>{const q=byId[r.q]; const mine=q.type==='num'?r.chosen:q.opts[r.chosen]; const ans=q.type==='num'?(q.answer+' '+(q.unit||'')):q.opts[q.a]; rm.insertAdjacentHTML('beforeend',`<div class="miss"><b>${q.q}</b><span class="small">You ${q.type==='num'?'entered':'chose'}: ${mine}</span><div class="why"><strong>Answer:</strong> ${ans}. ${q.why}</div></div>`);});}
+  const wd=new Date().getDay(); const wantWritten=isTodayLabel(Q.label)&&!partial&&(wd===2||wd===4);
+  if(wantWritten) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · Tuesdays and Thursdays</div><p style="margin:6px 0 12px">Today also has one written question. Write it in pen if you can, then score it against the rubric.</p><button class="btn" id="goWritten">Start the written question →</button></div>`);
+  if(wantWritten) setTimeout(()=>{const b=$('goWritten'); if(b) b.onclick=startTodayWritten;},0);
+  $('ragain').onclick=()=>startMode(lastMode); $('ragain').textContent=isTodayLabel(Q.label)?'Another round':'Go again';
+  show('results');
+}
+
+// ---------- FRQ session ----------
+let F={list:[],i:0,label:'',start:0,timer:null,scores:[]};
+function startFRQ(list,label){
+  F={list,i:0,label,start:Date.now(),timer:null,scores:[]}; newSession(label); show('frq'); renderF();
+  if(F.timer)clearInterval(F.timer); F.timer=setInterval(ftick,1000); ftick();
+}
+function ftick(){const s=Math.floor((Date.now()-F.start)/1000); const el=$('ftimer'); el.textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; el.style.color = s>F.list.length*600?'var(--bad)':'';}
+function renderF(){
+  const f=F.list[F.i];
+  $('fnum').textContent=`${F.i+1} / ${F.list.length}`; $('fbar').style.width=`${100*F.i/F.list.length}%`;
+  $('ftopic').textContent=TOPICS[f.t].name; $('ftitle').textContent=f.title; $('fstem').textContent=f.stem;
+  const p=$('fparts'); p.innerHTML='';
+  f.parts.forEach((pt,k)=>{
+    p.insertAdjacentHTML('beforeend',`<div class="part"><div><span class="v">(${'abcdefgh'[k]}) ${pt.verb}</span> ${pt.text}<span class="pts">${pt.pts} pt${pt.pts>1?'s':''}</span></div>
+      <textarea id="ans${k}" placeholder="${pt.verb==='Construct'?'Sketch on paper, then describe your axes and scale here.':pt.verb==='Identify'||pt.verb==='Predict'?'Short and specific.':pt.verb==='Describe'?'Characteristics only — no how/why.':pt.verb==='Calculate'?'Show the setup and the answer, with units.':'Give the how or why. Cause before effect.'}"></textarea>
+      <div class="rubric hidden" id="rub${k}"><div class="rl">Rubric — check each point you earned</div>${pt.rubric.map((r,j)=>`<label><input type="checkbox" data-part="${k}" data-pt="${pt.pts/pt.rubric.length}"><span>${r}</span></label>`).join('')}</div></div>`);
+  });
+  $('reveal').classList.remove('hidden'); $('fnext').classList.add('hidden');
+}
+$('reveal').addEventListener('click',()=>{ document.querySelectorAll('.rubric').forEach(r=>r.classList.remove('hidden')); $('reveal').classList.add('hidden'); $('fnext').classList.remove('hidden'); $('fnext').textContent= F.i+1<F.list.length?'Save score & next →':'Save score & finish'; });
+$('fnext').addEventListener('click',()=>{
+  const f=F.list[F.i]; let pts=0; document.querySelectorAll('.rubric input:checked').forEach(c=>pts+=parseFloat(c.dataset.pt));
+  const max=f.parts.reduce((a,p)=>a+p.pts,0); pts=Math.round(pts*2)/2;
+  F.scores.push({f:f.id,pts,max}); logFrq(f.id,pts,max);
+  F.i++; if(F.i<F.list.length) renderF(); else finishFRQ();
+});
+$('fquit').addEventListener('click',()=>{clearInterval(F.timer); if(F.scores.length) finishFRQ(true); else {renderHome(); show('home');}});
+function finishFRQ(partial){
+  clearInterval(F.timer);
+  const score=F.scores.reduce((a,s)=>a+s.pts,0), max=F.scores.reduce((a,s)=>a+s.max,0);
+  const secs=Math.floor((Date.now()-F.start)/1000);
+  logSummary({ts:Date.now(),label:F.label+(partial?' (partial)':''),score,max,secs});
+  $('rlabel').textContent=F.label+` · ${Math.floor(secs/60)}m ${secs%60}s`;
+  $('rscore').textContent=`${score} / ${max}`; $('rpct').textContent=`${Math.round(100*score/max)}%`;
+  const pct=score/max; $('rmsg').textContent = pct>=.85?'Rubric-level writing. Keep matching length to the verb.': pct>=.65?'Most points are there. Where you lost one, check: did you give the WHY on Explain, and address both sides on comparisons?':'Reread the FRQ recipe in the Game Plan, then rewrite the parts you missed using the rubric language.';
+  const rt=$('rtopics'); rt.innerHTML='';
+  F.scores.forEach(s=>{const f=frqById[s.f]; const lv=s.pts/s.max>=.8?'strong':s.pts/s.max>=.6?'ok':'weak'; rt.insertAdjacentHTML('beforeend',`<div class="topic"><div class="nm">${f.title} <span class="small">· ${TOPICS[f.t].short}</span></div><span class="st ${lv}">${s.pts}/${s.max}</span><div class="bar"><i style="width:${Math.round(100*s.pts/s.max)}%"></i></div></div>`);});
+  $('rmisses').innerHTML='';
+  $('ragain').onclick=()=>startMode(lastMode);
+  show('results');
+}
+
+// ---------- today ----------
+function streakCount(){
+  const days=new Set(S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial/.test(x.label)).map(x=>dayKey(x.ts)));
+  let n=0, t=Date.now(); if(!days.has(dayKey(t))) t-=864e5; // today not done yet doesn't break the streak
+  while(days.has(dayKey(t))){n++; t-=864e5;} return n;
+}
+function renderToday(){
+  const todays=S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial/.test(x.label));
+  const done=todays.filter(x=>dayKey(x.ts)===dayKey(Date.now()));
+  const mcq=done.find(x=>!/written/.test(x.label)), wr=done.find(x=>/written/.test(x.label));
+  const wd=new Date().getDay(), writtenDay=(wd===2||wd===4);
+  $('todayEyebrow').textContent='Today · '+new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+  $('todayTitle').textContent=`10 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review`+(writtenDay?' · + 1 written':'');
+  const st=$('todayStatus');
+  if(mcq){ const tm=new Date(mcq.ts).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+    st.className='status done'; st.textContent=`Done at ${tm} · ${mcq.score}/${mcq.max}`+(writtenDay?(wr?` · written ${wr.score}/${wr.max}`:' · written question still to do'):'');
+    $('todayBtn').textContent='Do another round'; $('todayBtn').className='btn quiet';
+  } else { st.className='status'; st.textContent='Not done yet today. About 12 minutes.'; $('todayBtn').textContent="Start today's session"; $('todayBtn').className='btn'; }
+  $('todayWritten').classList.toggle('hidden',!(writtenDay&&mcq&&!wr));
+  const days=new Set(todays.filter(x=>!/written/.test(x.label)).map(x=>dayKey(x.ts)));
+  const strip=$('strip'); strip.innerHTML='';
+  for(let i=13;i>=0;i--){const t=Date.now()-i*864e5; const d=document.createElement('div'); d.className='d'+(days.has(dayKey(t))?' on':'')+(i===0?' now':'');
+    d.textContent='SMTWTFS'[new Date(t).getDay()]; d.title=new Date(t).toDateString()+(days.has(dayKey(t))?' · done':''); strip.appendChild(d);}
+  const n=streakCount(), last7=[...Array(7)].filter((_,i)=>days.has(dayKey(Date.now()-i*864e5))).length;
+  $('streak').textContent=`${n}-day streak · ${last7} of the last 7 days`;
+}
+function startToday(){
+  const cur=inUnit(CURRENT.unit), newest=cur.filter(q=>CURRENT.newest.includes(q.t)), older=cur.filter(q=>!CURRENT.newest.includes(q.t)), review=MCQ.filter(q=>unitOf(q)!==CURRENT.unit);
+  const a=pickSmart(5,newest), b=pickSmart(3,older), c=pickSmart(2,review.length?review:older.filter(q=>!b.includes(q)));
+  const list=[...a,...b,...c]; startMCQ(list,'Today · Unit '+CURRENT.unit,false);
+}
+function startTodayWritten(){
+  const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
+  const pool=frqInUnit(CURRENT.unit).sort((a,b)=>{const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
+  if(!pool.length){toast('No written questions for this unit yet');return}
+  startFRQ([pool[0]],'Today written · Unit '+CURRENT.unit);
+}
+$('todayBtn').addEventListener('click',()=>startMode('today'));
+$('todayWritten').addEventListener('click',startTodayWritten);
+
+// ---------- modes ----------
+let lastMode='smart'; let chosenTopics=new Set();
+function startMode(m){
+  lastMode=m;
+  const uTag=' · Unit '+SEL_UNIT;
+  if(m==='today') return startToday();
+  if(m==='smart') startMCQ(pickSmart(10),'Smart 10'+uTag,false);
+  else if(m==='test') startMCQ(pickTest(25),'Full MCQ test'+uTag,true);
+  else if(m==='misses'){const ids=currentMisses(); if(!ids.length){toast('No saved misses — nice.');return} startMCQ(shuffle(ids.map(i=>byId[i])),'Redo misses',false);}
+  else if(m==='topic'){$('topicPick').classList.remove('hidden'); renderChips(); $('topicPick').scrollIntoView({behavior:'smooth'});}
+  else if(m==='frq'){ // prefer weakest topic's FRQ not yet done
+    const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
+    const pool=frqInUnit(SEL_UNIT).sort((a,b)=>{const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; const A=st[a.t].acc??0.5,B=st[b.t].acc??0.5; return A-B;});
+    startFRQ([pool[0]],'FRQ practice'+uTag);}
+  else if(m==='frqset'){const done=new Set(S.frq.map(x=>x.f)); const pool=shuffle(frqInUnit(SEL_UNIT)).sort((a,b)=>(done.has(a.id)?1:0)-(done.has(b.id)?1:0)); startFRQ(pool.slice(0,3),'FRQ set'+uTag);}
+}
+function renderChips(){const c=$('chips'); c.innerHTML=''; for(const k in TOPICS){ if(TOPICS[k].unit!==SEL_UNIT) continue;const b=document.createElement('button'); b.className='chip'+(chosenTopics.has(k)?' on':''); b.textContent=TOPICS[k].short; b.onclick=()=>{chosenTopics.has(k)?chosenTopics.delete(k):chosenTopics.add(k); renderChips();}; c.appendChild(b);}}
+$('startTopic').addEventListener('click',()=>{ if(!chosenTopics.size){toast('Pick at least one topic');return} const list=shuffle(MCQ.filter(q=>chosenTopics.has(q.t))); $('topicPick').classList.add('hidden'); startMCQ(list,'Drill: '+[...chosenTopics].map(k=>TOPICS[k].short).join(', '),false); });
+$('cancelTopic').addEventListener('click',()=>$('topicPick').classList.add('hidden'));
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
+$('rhome').addEventListener('click',()=>{renderHome(); show('home');});
+
+// ---------- summary / reset ----------
+$('copySummary').addEventListener('click',async()=>{
+  const st=topicStats(); const lines=['AP Bio practice — progress summary',new Date().toLocaleString(),''];
+  const tot=S.attempts.length, c=S.attempts.filter(a=>a.ok).length;
+  lines.push(`MCQ answered: ${tot} (${tot?Math.round(100*c/tot):0}% correct) · FRQs scored: ${S.frq.length}`,'','By topic:');
+  const label={strong:'STRONG',ok:'getting there',weak:'NEEDS REVIEW',none:'not enough data'};
+  for(const k of Object.keys(TOPICS).sort((a,b)=>(st[a].acc??2)-(st[b].acc??2))){const s=st[k]; lines.push(`  ${TOPICS[k].name}: ${s.acc===null?'—':Math.round(s.acc*100)+'%'} (${s.n} MCQ${s.fmax?`, ${s.fpts}/${s.fmax} FRQ pts`:''}) — ${label[s.level]}`);}
+  const m=currentMisses(); if(m.length){lines.push('',`Still-missed questions (${m.length}):`); m.slice(0,15).forEach(i=>lines.push('  • '+byId[i].q)); if(m.length>15)lines.push(`  …and ${m.length-15} more`);}
+  const days=new Set(S.sessions.filter(x=>isTodayLabel(x.label)).map(x=>dayKey(x.ts)));
+  lines.push('',`Daily sessions: ${streakCount()}-day streak · ${[...Array(7)].filter((_,i)=>days.has(dayKey(Date.now()-i*864e5))).length} of the last 7 days`);
+  lines.push('','Recent sessions:'); S.sessions.slice(-6).reverse().forEach(s=>lines.push(`  ${new Date(s.ts).toLocaleString()} — ${s.label}: ${s.score}/${s.max}`));
+  const text=lines.join('\n');
+  try{await navigator.clipboard.writeText(text); toast('Summary copied');}catch(e){ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Summary copied');}catch(_){toast('Copy failed — select and copy manually'); } document.body.removeChild(ta);}
+});
+
+// ---------- import helper (old Claude Lab sync links) ----------
+function decodeState(str){
+  str=str.trim(); const m=str.match(/[#&?]p=([A-Za-z0-9\-_]+)/); if(m) str=m[1];
+  str=str.replace(/-/g,'+').replace(/_/g,'/'); while(str.length%4) str+='=';
+  const c=JSON.parse(decodeURIComponent(escape(atob(str))));
+  return {a:(c.a||[]).map(x=>({q:x[0],ok:!!x[1],t:x[2]})), f:(c.f||[]).map(x=>({f:x[0],p:x[1],m:x[2],t:x[3]})), s:(c.s||[]).map(x=>({l:x[0],sc:x[1],mx:x[2],t:x[3],sec:x[4]||0}))};
+}
+
+// ---------- Firebase ----------
+const FB_CONFIG = {"apiKey": "AIzaSyAPlhZsIOS-zwgqsOZf58duvVUUnvo4JsY", "authDomain": "ana-study-11th.firebaseapp.com", "projectId": "ana-study-11th", "storageBucket": "ana-study-11th.firebasestorage.app", "messagingSenderId": "891876804116", "appId": "1:891876804116:web:6a06b8bcac44e063cb0901"};
+const STUDENT_HASH = "ad3f45ba11e4d8535b02a2a4e44a7c276f9af14afa7f2fe17f8025df777eb627";           // SHA-256 of Ana's sign-in email (the email itself isn't published)
+const COL = 'students/ana/sessions';           // one document per practice session
+firebase.initializeApp(FB_CONFIG);
+const auth = firebase.auth();
+const db = firebase.firestore();
+try{ db.enablePersistence({synchronizeTabs:true}).catch(()=>{}); }catch(e){}   // works offline; syncs when back online
+let ROLE=null, SESS={}, CUR=null, unsub=null, lastSync=null, pendingWrites=false;
+
+const deviceName=()=>{const u=navigator.userAgent; return /iPad/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document)?'iPad':/iPhone/.test(u)?'iPhone':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'Windows':'Computer';};
+function newSession(label){ if(ROLE!=='student'){CUR=null;return} CUR={id:'s'+Date.now()+'-'+Math.random().toString(36).slice(2,7), l:label, start:Date.now(), dev:deviceName(), a:[], f:[], s:[]}; }
+function writeCur(){ if(!CUR||ROLE!=='student') return; const d=Object.assign({},CUR); delete d.id; SESS[CUR.id]=d; rebuild();
+  db.collection(COL).doc(CUR.id).set(d).catch(err=>{console.error(err); setStatus('error');}); }
+function logAttempt(q,ok){ if(!CUR) return; CUR.a.push({q,ok,t:Date.now()}); writeCur(); }
+function logFrq(f,p,m){ if(!CUR) return; CUR.f.push({f,p,m,t:Date.now()}); writeCur(); }
+function logSummary(x){ if(!CUR) return; CUR.s.push({l:x.label,sc:x.score,mx:x.max,t:x.ts,sec:x.secs||0}); writeCur(); }
+
+function rebuild(){
+  const S2=blank(), k1=new Set(), k2=new Set(), k3=new Set();
+  for(const d of Object.values(SESS)){
+    (d.a||[]).forEach(x=>{const k=x.q+'|'+x.t; if(!k1.has(k)){k1.add(k); S2.attempts.push({q:x.q,ok:!!x.ok,ts:x.t});}});
+    (d.f||[]).forEach(x=>{const k=x.f+'|'+x.t; if(!k2.has(k)){k2.add(k); S2.frq.push({f:x.f,pts:x.p,max:x.m,ts:x.t});}});
+    (d.s||[]).forEach(x=>{if(!k3.has(x.t)){k3.add(x.t); S2.sessions.push({label:x.l,score:x.sc,max:x.mx,ts:x.t,secs:x.sec});}});
+  }
+  S2.attempts.sort((a,b)=>a.ts-b.ts); S2.frq.sort((a,b)=>a.ts-b.ts); S2.sessions.sort((a,b)=>a.ts-b.ts);
+  S=S2;
+}
+function setStatus(kind){
+  const el=$('cloudStatus'); if(!el) return;
+  if(kind==='error'){ el.style.color='var(--bad)'; el.textContent="Couldn't save the last answer. Check the internet connection; it will retry."; return; }
+  el.style.color=''; const t=lastSync?new Date(lastSync).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}):'';
+  el.textContent = kind==='offline' ? 'Offline right now. Answers are kept on this device and will save when the connection is back.'
+    : pendingWrites ? 'Saving…' : ('Saved to your account'+(t?' · checked '+t:'')+'. Works on any device you sign in on.');
+}
+async function sha256(s){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+
+auth.onAuthStateChanged(async user=>{
+  if(unsub){unsub(); unsub=null;} SESS={}; rebuild();
+  if(!user){ ROLE=null; document.body.classList.remove('viewer'); show('login'); setTimeout(()=>$('email').focus(),50); return; }
+  ROLE = (await sha256((user.email||'').trim().toLowerCase()))===STUDENT_HASH ? 'student' : 'viewer';
+  document.body.classList.toggle('viewer', ROLE!=='student');
+  $('viewerBanner').classList.toggle('hidden', ROLE==='student');
+  $('viewerWho').textContent = ROLE==='student' ? '' : 'Signed in as '+user.email+'.';
+  $('acctLine').textContent = 'Signed in as '+user.email+(ROLE==='student'?' · your progress saves to your account automatically.':' · read-only view.');
+  show('loading');
+  unsub = db.collection(COL).onSnapshot({includeMetadataChanges:true}, snap=>{
+    snap.docChanges().forEach(ch=>{ if(ch.type==='removed') delete SESS[ch.doc.id]; else SESS[ch.doc.id]=ch.doc.data(); });
+    pendingWrites=snap.metadata.hasPendingWrites; if(!snap.metadata.fromCache) lastSync=Date.now();
+    rebuild();
+    if(!$('loading').classList.contains('hidden')) show('home');
+    if(!$('home').classList.contains('hidden')) renderHome();
+    setStatus(snap.metadata.fromCache && !navigator.onLine ? 'offline' : 'ok');
+  }, err=>{ console.error(err); $('loading').innerHTML='<p style="margin-top:28px;color:var(--bad)">This account can\'t open Ana\'s progress. Check that the sign-in email matches the one in Firebase, then sign out and try again.</p><button class="btn quiet" onclick="firebase.auth().signOut()">Sign out</button>'; show('loading'); });
+});
+window.addEventListener('online',()=>setStatus('ok')); window.addEventListener('offline',()=>setStatus('offline'));
+
+// sign in / out
+const friendly=e=>{const c=(e&&e.code)||''; return /invalid-credential|wrong-password|user-not-found|invalid-email|invalid-login/.test(c)?"That email and password don't match. Check for typos (and caps lock).":/too-many-requests/.test(c)?'Too many tries. Wait a few minutes, or use "Forgot password."':/network/.test(c)?"Can't reach the server. Check the internet connection.":/unauthorized-domain/.test(c)?'This website isn\'t on Firebase\'s allowed list yet (Authorized domains).':'Sign-in failed: '+(e&&e.message||c);};
+$('signIn').addEventListener('click',async()=>{ const em=$('email').value.trim(), pw=$('pw').value; if(!em||!pw){$('loginMsg').textContent='Enter your email and password.';return}
+  $('signIn').disabled=true; $('loginMsg').textContent='Signing in…';
+  try{ await auth.signInWithEmailAndPassword(em,pw); $('pw').value=''; $('loginMsg').textContent=''; }catch(e){ $('loginMsg').textContent=friendly(e); } $('signIn').disabled=false; });
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('signIn').click();});
+$('forgot').addEventListener('click',async()=>{ const em=$('email').value.trim(); if(!em){$('loginMsg').textContent='Type your email above first, then tap "Forgot password."';return}
+  try{ await auth.sendPasswordResetEmail(em); $('loginMsg').textContent='Password-reset email sent to '+em+'. Check that inbox (and spam).'; }catch(e){ $('loginMsg').textContent=friendly(e); } });
+$('signOut').addEventListener('click',()=>auth.signOut());
+
+// backup
+$('backup').addEventListener('click',()=>{
+  const data={exported:new Date().toISOString(), sessions:SESS};
+  const blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='ap-bio-progress-'+dayKey(Date.now())+'.json'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000); toast('Backup downloaded');
+});
+
+// import from the old Claude Lab
+$('importToggle').addEventListener('click',()=>{$('importBox').classList.toggle('hidden'); $('importInput').focus();});
+$('importGo').addEventListener('click',async()=>{
+  if(ROLE!=='student') return;
+  let d; try{ d=decodeState($('importInput').value); }catch(e){ toast("That doesn't look like a sync link"); return; }
+  const n=d.a.length+d.f.length; if(!n){toast('That link has no answers in it');return}
+  const id='import-'+Date.now(); const doc={l:'Imported from old Lab', start:Date.now(), dev:deviceName(), a:d.a, f:d.f, s:d.s};
+  SESS[id]=doc; rebuild(); renderHome();
+  try{ await db.collection(COL).doc(id).set(doc); toast(`Added ${d.a.length} answers and ${d.f.length} FRQs`); $('importInput').value=''; $('importBox').classList.add('hidden'); }
+  catch(e){ toast('Import failed: '+e.message); }
+});
+
+show('loading');
+})();
+</script>
+
+</body>
+</html>
