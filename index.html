@@ -464,7 +464,7 @@ $('reveal').addEventListener('click',()=>{ document.querySelectorAll('.rubric').
 $('fnext').addEventListener('click',()=>{
   const f=F.list[F.i]; let pts=0; document.querySelectorAll('.rubric input:checked').forEach(c=>pts+=parseFloat(c.dataset.pt));
   const max=f.parts.reduce((a,p)=>a+p.pts,0); pts=Math.round(pts*2)/2;
-  F.scores.push({f:f.id,pts,max}); logFrq(f.id,pts,max);
+  F.scores.push({f:f.id,pts,max}); logFrq(f.id,pts,max,[...document.querySelectorAll('#fparts textarea')].map(t=>t.value.trim()));
   F.i++; if(F.i<F.list.length) renderF(); else finishFRQ();
 });
 $('fquit').addEventListener('click',()=>{clearInterval(F.timer); if(F.scores.length) finishFRQ(true); else {renderHome(); show('home');}});
@@ -488,15 +488,18 @@ function planDone(item){ return S.sessions.some(x=>isTodayLabel(x.label)&&!/part
 function todayFocus(){
   if(typeof PLAN==='undefined'||!PLAN.length) return null;
   const today=dayKey(Date.now());
-  const due=PLAN.filter(p=>p.date<=today);
-  const cur=due.find(p=>p.date===today);
-  if(cur&&cur.topic==='quiz') return cur;                          // quiz day: quiz reminder comes first
-  const lastQuiz=due.filter(p=>p.topic==='quiz'&&p.date<today).map(p=>p.date).pop()||'';
-  const behind=due.find(p=>p.date<today&&p.date>lastQuiz&&p.topic!=='quiz'&&!planDone(p));   // oldest missed idea since the last quiz
-  if(behind) return Object.assign({catchup:true},behind);
-  if(cur) return cur;
-  if(!due.length) return Object.assign({early:true},PLAN[0]);    // before the plan starts
-  return null;                                                  // plan finished: general mixed practice
+  const cur=PLAN.find(p=>p.date===today);
+  if(cur&&cur.topic==='quiz') return cur;                           // quiz day: the quiz reminder comes first
+  // already did a planned session today → keep showing that one (card shows "Done")
+  const doneToday=S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial|written/.test(x.label)&&dayKey(x.ts)===today).pop();
+  if(doneToday){ const it=PLAN.find(p=>doneToday.label.indexOf(p.idea+':')>-1); if(it) return it; }
+  const lastQuiz=PLAN.filter(p=>p.topic==='quiz'&&p.date<today).map(p=>p.date).pop()||'';
+  const pending=PLAN.filter(p=>p.date>lastQuiz&&p.topic!=='quiz'&&!planDone(p));
+  const overdue=pending.find(p=>p.date<today); if(overdue) return Object.assign({catchup:true},overdue);   // oldest missed idea first
+  const todays=pending.find(p=>p.date===today); if(todays) return todays;
+  const ahead=pending.find(p=>p.date>today);
+  if(ahead) return Object.assign({ahead:true},ahead);               // caught up (or before the plan starts): work ahead
+  return null;
 }
 function streakCount(){
   const days=new Set(S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial/.test(x.label)).map(x=>dayKey(x.ts)));
@@ -511,7 +514,7 @@ function renderToday(){
   $('todayEyebrow').textContent='Today · '+new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
   const fc=todayFocus();
   if(fc){
-    $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':''}${fc.idea}: ${fc.title}`;
+    $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':fc.ahead?'Working ahead · ':''}${fc.idea}: ${fc.title}`;
     const extra=fc.catchup?'':(fc.extra||'');
     $('todaySteps').innerHTML = fc.topic==='quiz'
       ? `<li>${extra}</li><li>Optional: <a href="${fc.guide}">self-check</a> or a short session below.</li>`
@@ -630,7 +633,7 @@ function newSession(label){ if(ROLE!=='student'){CUR=null;return} CUR={id:'s'+Da
 function writeCur(){ if(!CUR||ROLE!=='student') return; const d=Object.assign({},CUR); delete d.id; SESS[CUR.id]=d; rebuild();
   db.collection(COL).doc(CUR.id).set(d).catch(err=>{console.error(err); setStatus('error');}); }
 function logAttempt(q,ok){ if(!CUR) return; CUR.a.push({q,ok,t:Date.now()}); writeCur(); }
-function logFrq(f,p,m){ if(!CUR) return; CUR.f.push({f,p,m,t:Date.now()}); writeCur(); }
+function logFrq(f,p,m,ans){ if(!CUR) return; CUR.f.push({f,p,m,t:Date.now(),ans:(ans||[]).map(x=>x.slice(0,4000))}); writeCur(); }   // typed answers saved so they can be graded
 function logSummary(x){ if(!CUR) return; CUR.s.push({l:x.label,sc:x.score,mx:x.max,t:x.ts,sec:x.secs||0}); writeCur(); }
 
 function rebuild(){
