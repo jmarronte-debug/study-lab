@@ -489,9 +489,12 @@ function todayFocus(){
   if(typeof PLAN==='undefined'||!PLAN.length) return null;
   const today=dayKey(Date.now());
   const due=PLAN.filter(p=>p.date<=today);
-  const behind=due.find(p=>p.date<today&&!planDone(p));       // oldest missed idea first
+  const cur=due.find(p=>p.date===today);
+  if(cur&&cur.topic==='quiz') return cur;                          // quiz day: quiz reminder comes first
+  const lastQuiz=due.filter(p=>p.topic==='quiz'&&p.date<today).map(p=>p.date).pop()||'';
+  const behind=due.find(p=>p.date<today&&p.date>lastQuiz&&p.topic!=='quiz'&&!planDone(p));   // oldest missed idea since the last quiz
   if(behind) return Object.assign({catchup:true},behind);
-  const cur=due.find(p=>p.date===today); if(cur) return cur;
+  if(cur) return cur;
   if(!due.length) return Object.assign({early:true},PLAN[0]);    // before the plan starts
   return null;                                                  // plan finished: general mixed practice
 }
@@ -509,7 +512,10 @@ function renderToday(){
   const fc=todayFocus();
   if(fc){
     $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':''}${fc.idea}: ${fc.title}`;
-    $('todaySteps').innerHTML=`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li><li><b>Practice</b> 10 questions: ${fc.topic==='mix'?'a mix of all six ideas':'6 on this idea, 2 from earlier ideas, 2 Unit 1 review'}.</li>`+(writtenDay?'<li><b>Write</b> one short FRQ (Tue & Thu).</li>':'');
+    const extra=fc.catchup?'':(fc.extra||'');
+    $('todaySteps').innerHTML = fc.topic==='quiz'
+      ? `<li>${extra}</li><li>Optional: <a href="${fc.guide}">self-check</a> or a short session below.</li>`
+      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 10 questions: ${fc.topic==='mix'?'a mix of all six ideas':'6 on this idea, 2 from earlier ideas, 2 Unit 1 review'}.</li>`+(writtenDay?'<li><b>Write</b> one short FRQ, right after the questions (Tue & Thu).</li>':'')+(extra?`<li>${extra}</li>`:'');
     $('todaySteps').classList.remove('hidden');
   } else {
     $('todayTitle').textContent=`10 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review`+(writtenDay?' · + 1 written':'');
@@ -533,7 +539,7 @@ function startToday(){
   if(fc){
     const cur=inUnit(CURRENT.unit), review=MCQ.filter(q=>unitOf(q)!==CURRENT.unit);
     let list;
-    if(fc.topic==='mix'){ list=[...pickSmart(8,cur),...pickSmart(2,review)]; }
+    if(fc.topic==='mix'||fc.topic==='quiz'){ list=[...pickSmart(8,cur),...pickSmart(2,review)]; }
     else {
       const order=PLAN.map(p=>p.topic), idx=order.indexOf(fc.topic);
       const focus=cur.filter(q=>q.t===fc.topic), earlier=cur.filter(q=>order.slice(0,idx).includes(q.t));
