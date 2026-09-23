@@ -141,6 +141,12 @@ body.viewer .student-only{display:none!important}
 .numrow input{font:inherit;font-size:20px;font-family:var(--mono);width:160px;max-width:100%;padding:10px 12px;border:1.5px solid var(--line-2);border-radius:10px;background:var(--paper);color:var(--ink)}
 .numrow input:focus{outline:2px solid var(--teal);border-color:var(--teal)}
 .numrow .u{color:var(--ink-3);font-family:var(--mono)}
+.wr{border-top:1px solid var(--line);padding:12px 0}
+.wr:first-child{border-top:0}
+.wr .q{font-weight:700}
+.wr .ans{white-space:pre-wrap;background:var(--bg);border-radius:8px;padding:8px 10px;margin-top:6px;font-size:15.5px}
+.wr .gr{margin-top:8px;font-size:15.5px}
+.wr .pend{color:var(--ink-3);font-size:14px;margin-top:6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -149,7 +155,7 @@ body.viewer .student-only{display:none!important}
     <div>
       <div class="eyebrow">AP Biology · all units · 2026–27</div>
       <h1>AP Bio Practice Lab</h1>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 9 · Unit 2 through 2.4 · saved to your account, works on any device</div>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 10 · Unit 2 through 2.4 · saved to your account, works on any device</div>
       <p class="sub">A short session every day, explanations for every miss, FRQs scored against the rubric, and a running picture of what's strong and what needs another pass.</p>
     </div>
   </div>
@@ -180,6 +186,7 @@ body.viewer .student-only{display:none!important}
     <div class="today student-only">
       <div class="eyebrow" id="todayEyebrow">Today</div>
       <div class="big" id="todayTitle">Today's session</div>
+      <div class="small" id="todayNote" style="margin-top:4px"></div>
       <ol class="steps hidden" id="todaySteps"></ol>
       <div class="status" id="todayStatus"></div>
       <div class="row" style="margin-top:14px">
@@ -214,14 +221,20 @@ body.viewer .student-only{display:none!important}
       <button class="mode" data-mode="test"><span class="t">Full MCQ test</span><span class="n">25 MCQ · timed</span><span class="d">Mixed topics, like the real first period. Timer shows how you pace.</span></button>
       <button class="mode" data-mode="topic"><span class="t">Topic drill</span><span class="n">pick topics</span><span class="d">Every question from the topics you choose.</span></button>
       <button class="mode" data-mode="misses"><span class="t">Redo my misses</span><span class="n" id="missCount">0 saved</span><span class="d">Only questions you've gotten wrong and not yet gotten right since.</span></button>
-      <button class="mode" data-mode="frq"><span class="t">FRQ practice</span><span class="n">1 FRQ · 10 min</span><span class="d">Write in the box, then reveal the rubric and score yourself point by point.</span></button>
-      <button class="mode" data-mode="frqset"><span class="t">FRQ set</span><span class="n">3 FRQs · 30 min</span><span class="d">Half a real FRQ period. Do it in pen on paper if you can, then score here.</span></button>
+      <button class="mode" data-mode="frq"><span class="t">FRQ practice</span><span class="n">1 FRQ · 10 min</span><span class="d">One full AP-style FRQ. Type your answer; Claude grades it that night against the rubric.</span></button>
+      <button class="mode" data-mode="frqset"><span class="t">FRQ set</span><span class="n">3 FRQs · 30 min</span><span class="d">Three FRQs, like half a real FRQ period. Typed answers are graded that night.</span></button>
     </div>
 
     <div id="topicPick" class="card hidden" style="margin-top:14px">
       <div class="eyebrow">Choose topics</div>
       <div class="sel-topics" id="chips"></div>
       <div class="row"><button class="btn" id="startTopic">Start drill</button><button class="btn quiet" id="cancelTopic">Cancel</button></div>
+    </div>
+
+    <h2 style="margin-top:28px">Written work</h2>
+    <div class="card" style="margin-top:12px">
+      <p class="small" style="margin-top:0">Every typed answer is saved here. Claude grades them each night against the rubric; the grade and feedback show up under the answer.</p>
+      <div id="written"></div>
     </div>
 
     <h2 style="margin-top:28px">History</h2>
@@ -271,7 +284,7 @@ body.viewer .student-only{display:none!important}
     <div id="fparts"></div>
     <div class="actions">
       <button class="btn quiet" id="fquit">Quit</button>
-      <div class="row"><button class="btn ghost" id="reveal">Reveal rubric &amp; score</button><button class="btn hidden" id="fnext">Save score →</button></div>
+      <div class="row"><button class="btn" id="reveal">Submit my answer</button><button class="btn hidden" id="fnext">Next →</button></div>
     </div>
   </section>
 
@@ -290,7 +303,7 @@ body.viewer .student-only{display:none!important}
 <script src="vendor/firebase-app-compat.js"></script>
 <script src="vendor/firebase-auth-compat.js"></script>
 <script src="vendor/firebase-firestore-compat.js"></script>
-<script src="questions.js?v=9"></script>
+<script src="questions.js?v=10"></script>
 <script>
 (function(){
 "use strict";
@@ -310,12 +323,27 @@ const inUnit=u=>MCQ.filter(q=>unitOf(q)===u);
 const frqInUnit=u=>FRQ.filter(f=>TOPICS[f.t].unit===u);
 const dayKey=ts=>{const d=new Date(ts); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const isTodayLabel=l=>/^Today/.test(l||'');
+let GRADES={};                                   // Claude's grades, keyed by FRQ id + answer time
+const gradeFor=f=>GRADES[f.f+'|'+f.ts]||null;
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DAY=864e5, sod=ts=>{const d=new Date(ts); d.setHours(0,0,0,0); return d.getTime();};
+// Spaced review: a miss comes back the next day; once answered right it comes back after 3 days, then 7, then retires.
+// A question answered right the first time comes back once, a week later.
+function reviewQueue(pool){
+  const ok=new Set((pool||MCQ).map(q=>q.id)); const h={};
+  for(const a of S.attempts){ if(ok.has(a.q)&&byId[a.q]) (h[a.q]=h[a.q]||[]).push(a); }
+  const now=Date.now(), out=[];
+  for(const id in h){ const L=h[id], last=L[L.length-1]; let c=0; for(let i=L.length-1;i>=0&&L[i].ok;i--) c++;
+    const missed=L.some(x=>!x.ok); const gap = c===0?1 : missed?(c===1?3:c===2?7:null) : (c===1?7:null);
+    if(gap===null) continue; const due=sod(last.ts)+gap*DAY; if(now>=due) out.push({q:byId[id],wrong:c===0,over:now-due}); }
+  return out.sort((a,b)=>(b.wrong-a.wrong)||(b.over-a.over)).map(x=>x.q);
+}
 
 // ---------- analytics ----------
 function topicStats(){
   const st={}; for(const k in TOPICS) st[k]={n:0,c:0,fpts:0,fmax:0};
   for(const a of S.attempts){const q=byId[a.q]; if(!q) continue; st[q.t].n++; if(a.ok) st[q.t].c++;}
-  for(const f of S.frq){const F=frqById[f.f]; if(!F) continue; st[F.t].fpts+=f.pts; st[F.t].fmax+=f.max;}
+  for(const f of S.frq){const F=frqById[f.f]; if(!F) continue; const g=gradeFor(f); const pts=g?g.pts:f.pts; if(pts==null) continue; st[F.t].fpts+=pts; st[F.t].fmax+=f.max;}
   for(const k in st){const s=st[k]; const total=s.n+s.fmax; s.acc= total? (s.c+s.fpts)/total : null; s.total=total;
     s.level = s.acc===null||total<4 ? 'none' : s.acc>=.8?'strong': s.acc>=.6?'ok':'weak';}
   return st;
@@ -328,7 +356,7 @@ function renderHome(){
   const st=topicStats();
   const bars=$('topicBars'); bars.innerHTML='';
   const totalAtt=S.attempts.length, totalC=S.attempts.filter(a=>a.ok).length;
-  $('overview').textContent = totalAtt? `${totalAtt} multiple-choice answers so far · ${Math.round(100*totalC/totalAtt)}% correct · ${S.frq.length} FRQ${S.frq.length===1?'':'s'} scored` : 'Nothing answered yet. Start with Smart 10.';
+  $('overview').textContent = totalAtt? `${totalAtt} multiple-choice answers so far · ${Math.round(100*totalC/totalAtt)}% correct · ${S.frq.length} written answer${S.frq.length===1?'':'s'}` : 'Nothing answered yet. Start with Smart 10.';
   const label={strong:'Strong',ok:'Getting there',weak:'Needs review',none:'Not enough data'};
   const order=Object.keys(TOPICS).filter(k=>TOPICS[k].unit===SEL_UNIT).sort((a,b)=>{const A=st[a],B=st[b]; if(A.acc===null&&B.acc===null)return 0; if(A.acc===null)return 1; if(B.acc===null)return -1; return A.acc-B.acc;});
   for(const k of order){const s=st[k];
@@ -344,7 +372,19 @@ function renderHome(){
   const h=$('history'); h.innerHTML='';
   $('noHist').classList.toggle('hidden',S.sessions.length>0);
   S.sessions.slice(-8).reverse().forEach(s=>{const d=new Date(s.ts);
-    h.insertAdjacentHTML('beforeend',`<span>${d.toLocaleDateString(undefined,{weekday:'short'})} ${d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}</span><span>${s.label}</span><span>${s.score}/${s.max} · ${Math.round(100*s.score/s.max)}%</span>`);});
+    h.insertAdjacentHTML('beforeend',`<span>${d.toLocaleDateString(undefined,{weekday:'short'})} ${d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}</span><span>${esc(s.label)}</span><span>${s.score==null||!s.max?'written':`${s.score}/${s.max} · ${Math.round(100*s.score/s.max)}%`}</span>`);});
+  renderWritten();
+}
+
+function renderWritten(){
+  const box=$('written'); if(!box) return;
+  const list=S.frq.filter(f=>f.ans&&f.ans.some(x=>x)).slice(-6).reverse();
+  if(!list.length){ box.innerHTML='<p class="small">No written answers yet. The daily written question will show up here.</p>'; return; }
+  box.innerHTML=list.map(f=>{const F=frqById[f.f]; if(!F) return ''; const g=gradeFor(f); const d=new Date(f.ts);
+    const parts=F.parts.map((pt,k)=>{const gp=g&&g.parts&&g.parts[k];
+      return `<div style="margin-top:8px"><span class="small"><b>(${'abcdefgh'[k]}) ${esc(pt.verb)}</b> ${esc(pt.text)}</span><div class="ans">${esc((f.ans[k]||'').trim())||'<i>(left blank)</i>'}</div>${gp?`<div class="gr"><b>${gp.pts}/${pt.pts}</b> · ${esc(gp.fb)}</div>`:''}</div>`;}).join('');
+    return `<div class="wr"><div class="q">${esc(F.title)} <span class="small">· ${d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</span></div><div class="small">${esc(F.stem)}</div>${parts}
+      ${g?`<div class="gr" style="margin-top:10px"><span class="st ${g.pts/g.max>=.8?'strong':g.pts/g.max>=.6?'ok':'weak'}">Claude's grade ${g.pts}/${g.max}</span> ${esc(g.overall||'')}</div>`:'<div class="pend">Waiting for tonight\'s grading.</div>'}</div>`;}).join('');
 }
 
 // ---------- question selection ----------
@@ -434,8 +474,8 @@ function finishMCQ(partial){
   const misses=Q.results.filter(r=>!r.ok);
   if(misses.length){rm.insertAdjacentHTML('beforeend',`<h3>Review your ${misses.length} miss${misses.length===1?'':'es'}</h3>`);
     misses.forEach(r=>{const q=byId[r.q]; const mine=q.type==='num'?r.chosen:q.opts[r.chosen]; const ans=q.type==='num'?(q.answer+' '+(q.unit||'')):q.opts[q.a]; rm.insertAdjacentHTML('beforeend',`<div class="miss"><b>${q.q}</b><span class="small">You ${q.type==='num'?'entered':'chose'}: ${mine}</span><div class="why"><strong>Answer:</strong> ${ans}. ${q.why}</div></div>`);});}
-  const wd=new Date().getDay(); const wantWritten=isTodayLabel(Q.label)&&!partial&&(wd===2||wd===4);
-  if(wantWritten) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · Tuesdays and Thursdays</div><p style="margin:6px 0 12px">Today also has one written question. Write it in pen if you can, then score it against the rubric.</p><button class="btn" id="goWritten">Start the written question →</button></div>`);
+  const fcw=todayFocus(); const wantWritten=isTodayLabel(Q.label)&&!partial&&!(fcw&&fcw.topic==='quiz');
+  if(wantWritten) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · every day</div><p style="margin:6px 0 12px">One short written answer on today's idea, about 4 minutes. Type it in full sentences. Claude grades it tonight.</p><button class="btn" id="goWritten">Start the written question →</button></div>`);
   if(wantWritten) setTimeout(()=>{const b=$('goWritten'); if(b) b.onclick=startTodayWritten;},0);
   $('ragain').onclick=()=>startMode(lastMode); $('ragain').textContent=isTodayLabel(Q.label)?'Another round':'Go again';
   show('results');
@@ -456,28 +496,33 @@ function renderF(){
   f.parts.forEach((pt,k)=>{
     p.insertAdjacentHTML('beforeend',`<div class="part"><div><span class="v">(${'abcdefgh'[k]}) ${pt.verb}</span> ${pt.text}<span class="pts">${pt.pts} pt${pt.pts>1?'s':''}</span></div>
       <textarea id="ans${k}" placeholder="${pt.verb==='Construct'?'Sketch on paper, then describe your axes and scale here.':pt.verb==='Identify'||pt.verb==='Predict'?'Short and specific.':pt.verb==='Describe'?'Characteristics only — no how/why.':pt.verb==='Calculate'?'Show the setup and the answer, with units.':'Give the how or why. Cause before effect.'}"></textarea>
-      <div class="rubric hidden" id="rub${k}"><div class="rl">Rubric — check each point you earned</div>${pt.rubric.map((r,j)=>`<label><input type="checkbox" data-part="${k}" data-pt="${pt.pts/pt.rubric.length}"><span>${r}</span></label>`).join('')}</div></div>`);
+      <div class="rubric hidden" id="rub${k}"><div class="rl">What full credit includes (compare with yours)</div>${pt.rubric.map(r=>`<div style="padding:4px 0;font-size:15.5px;color:var(--teal-ink)">• ${r}</div>`).join('')}</div></div>`);
   });
-  $('reveal').classList.remove('hidden'); $('fnext').classList.add('hidden');
+  $('reveal').classList.remove('hidden'); $('fnext').classList.add('hidden'); F.saved=false;
 }
-$('reveal').addEventListener('click',()=>{ document.querySelectorAll('.rubric').forEach(r=>r.classList.remove('hidden')); $('reveal').classList.add('hidden'); $('fnext').classList.remove('hidden'); $('fnext').textContent= F.i+1<F.list.length?'Save score & next →':'Save score & finish'; });
+$('reveal').addEventListener('click',()=>{
+  const tas=[...document.querySelectorAll('#fparts textarea')], ans=tas.map(t=>t.value.trim());
+  if(ans.join('').length<15){ toast('Type your answer first'); return; }
+  if(ans.some(a=>!a) && !confirm('Some parts are blank. Submit anyway?')) return;
+  const f=F.list[F.i], max=f.parts.reduce((a,p)=>a+p.pts,0);
+  F.scores.push({f:f.id,pts:null,max}); logFrq(f.id,null,max,ans); F.saved=true;
+  tas.forEach(t=>t.readOnly=true);
+  document.querySelectorAll('.rubric').forEach(r=>r.classList.remove('hidden')); $('reveal').classList.add('hidden'); $('fnext').classList.remove('hidden');
+  $('fnext').textContent= F.i+1<F.list.length?'Next question →':'Finish'; toast('Saved. Claude grades it tonight.'); });
 $('fnext').addEventListener('click',()=>{
-  const f=F.list[F.i]; let pts=0; document.querySelectorAll('.rubric input:checked').forEach(c=>pts+=parseFloat(c.dataset.pt));
-  const max=f.parts.reduce((a,p)=>a+p.pts,0); pts=Math.round(pts*2)/2;
-  F.scores.push({f:f.id,pts,max}); logFrq(f.id,pts,max,[...document.querySelectorAll('#fparts textarea')].map(t=>t.value.trim()));
   F.i++; if(F.i<F.list.length) renderF(); else finishFRQ();
 });
 $('fquit').addEventListener('click',()=>{clearInterval(F.timer); if(F.scores.length) finishFRQ(true); else {renderHome(); show('home');}});
 function finishFRQ(partial){
   clearInterval(F.timer);
-  const score=F.scores.reduce((a,s)=>a+s.pts,0), max=F.scores.reduce((a,s)=>a+s.max,0);
+  const max=F.scores.reduce((a,s)=>a+s.max,0);
   const secs=Math.floor((Date.now()-F.start)/1000);
-  logSummary({ts:Date.now(),label:F.label+(partial?' (partial)':''),score,max,secs});
+  logSummary({ts:Date.now(),label:F.label+(partial?' (partial)':''),score:null,max,secs});
   $('rlabel').textContent=F.label+` · ${Math.floor(secs/60)}m ${secs%60}s`;
-  $('rscore').textContent=`${score} / ${max}`; $('rpct').textContent=`${Math.round(100*score/max)}%`;
-  const pct=score/max; $('rmsg').textContent = pct>=.85?'Rubric-level writing. Keep matching length to the verb.': pct>=.65?'Most points are there. Where you lost one, check: did you give the WHY on Explain, and address both sides on comparisons?':'Reread the FRQ recipe in the Game Plan, then rewrite the parts you missed using the rubric language.';
+  $('rscore').textContent=`${F.scores.length} submitted`; $('rpct').textContent=`${max} points possible`;
+  $('rmsg').textContent='Saved. Claude grades it tonight against the rubric; the grade and feedback appear under "Written work" on the home screen. Before you leave: compare your answer with "What full credit includes." Did you name the specific structure, and give the WHY on every Explain?';
   const rt=$('rtopics'); rt.innerHTML='';
-  F.scores.forEach(s=>{const f=frqById[s.f]; const lv=s.pts/s.max>=.8?'strong':s.pts/s.max>=.6?'ok':'weak'; rt.insertAdjacentHTML('beforeend',`<div class="topic"><div class="nm">${f.title} <span class="small">· ${TOPICS[f.t].short}</span></div><span class="st ${lv}">${s.pts}/${s.max}</span><div class="bar"><i style="width:${Math.round(100*s.pts/s.max)}%"></i></div></div>`);});
+  F.scores.forEach(s=>{const f=frqById[s.f]; rt.insertAdjacentHTML('beforeend',`<div class="topic"><div class="nm">${f.title} <span class="small">· ${TOPICS[f.t].short}</span></div><span class="st none">graded tonight · ${s.max} pts</span></div>`);});
   $('rmisses').innerHTML='';
   $('ragain').onclick=()=>startMode(lastMode);
   show('results');
@@ -498,7 +543,7 @@ function todayFocus(){
   const overdue=pending.find(p=>p.date<today); if(overdue) return Object.assign({catchup:true},overdue);   // oldest missed idea first
   const todays=pending.find(p=>p.date===today); if(todays) return todays;
   const ahead=pending.find(p=>p.date>today);
-  if(ahead) return Object.assign({ahead:true},ahead);               // caught up (or before the plan starts): work ahead
+  if(ahead) return Object.assign({ahead:true},ahead);               // before the plan's first day: start it early
   return null;
 }
 function streakCount(){
@@ -510,25 +555,28 @@ function renderToday(){
   const todays=S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial/.test(x.label));
   const done=todays.filter(x=>dayKey(x.ts)===dayKey(Date.now()));
   const mcq=done.find(x=>!/written/.test(x.label)), wr=done.find(x=>/written/.test(x.label));
-  const wd=new Date().getDay(), writtenDay=(wd===2||wd===4);
+  const fc0=todayFocus(), writtenDay=!fc0||fc0.topic!=='quiz';
   $('todayEyebrow').textContent='Today · '+new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
   const fc=todayFocus();
   if(fc){
-    $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':fc.ahead?'Working ahead · ':''}${fc.idea}: ${fc.title}`;
+    const wdName=d=>new Date(d+'T12:00').toLocaleDateString(undefined,{weekday:'long'});
+    $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':''}${fc.idea}: ${fc.title}`;
+    $('todayNote').innerHTML=fc.catchup?`This was ${wdName(fc.date)}'s idea. Finish it first; today's idea comes next.`:(fc.note||'');
     const extra=fc.catchup?'':(fc.extra||'');
     $('todaySteps').innerHTML = fc.topic==='quiz'
       ? `<li>${extra}</li><li>Optional: <a href="${fc.guide}">self-check</a> or a short session below.</li>`
-      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 10 questions: ${fc.topic==='mix'?'a mix of all six ideas':'6 on this idea, 2 from earlier ideas, 2 Unit 1 review'}.</li>`+(writtenDay?'<li><b>Write</b> one short FRQ, right after the questions (Tue & Thu).</li>':'')+(extra?`<li>${extra}</li>`:'');
+      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 14 questions (about 10 min): ${fc.topic==='mix'?'8 from all of Unit 2 so far':'6 on this idea'}, plus 6 review questions due from earlier days (misses come back until they stick), plus ${fc.topic==='mix'?'none':'2'} from Unit 1.</li><li><b>Write</b> one short answer (about 4 min), typed. Claude grades it tonight.</li>`+(extra?`<li>${extra}</li>`:'');
     $('todaySteps').classList.remove('hidden');
   } else {
-    $('todayTitle').textContent=`10 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review`+(writtenDay?' · + 1 written':'');
-    $('todaySteps').classList.add('hidden');
+    $('todayTitle').textContent=`14 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review · + 1 written`;
+    $('todayNote').textContent=''; $('todaySteps').classList.add('hidden');
   }
   const st=$('todayStatus');
   if(mcq){ const tm=new Date(mcq.ts).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
-    st.className='status done'; st.textContent=`Done at ${tm} · ${mcq.score}/${mcq.max}`+(writtenDay?(wr?` · written ${wr.score}/${wr.max}`:' · written question still to do'):'');
+    st.className='status done'; st.textContent=`Questions done at ${tm} · ${mcq.score}/${mcq.max}`+(writtenDay?(wr?' · written answer submitted':' · written question still to do'):'');
+    if(writtenDay&&!wr) st.className='status';
     $('todayBtn').textContent='Do another round'; $('todayBtn').className='btn quiet';
-  } else { st.className='status'; st.textContent='Not done yet today. About 12 minutes.'; $('todayBtn').textContent="Start today's session"; $('todayBtn').className='btn'; }
+  } else { st.className='status'; st.textContent='Not done yet today. About 20–25 minutes.'; $('todayBtn').textContent="Start today's session"; $('todayBtn').className='btn'; }
   $('todayWritten').classList.toggle('hidden',!(writtenDay&&mcq&&!wr));
   const days=new Set(todays.filter(x=>!/written/.test(x.label)).map(x=>dayKey(x.ts)));
   const strip=$('strip'); strip.innerHTML='';
@@ -542,12 +590,18 @@ function startToday(){
   if(fc){
     const cur=inUnit(CURRENT.unit), review=MCQ.filter(q=>unitOf(q)!==CURRENT.unit);
     let list;
-    if(fc.topic==='mix'||fc.topic==='quiz'){ list=[...pickSmart(8,cur),...pickSmart(2,review)]; }
-    else {
-      const order=PLAN.map(p=>p.topic), idx=order.indexOf(fc.topic);
-      const focus=cur.filter(q=>q.t===fc.topic), earlier=cur.filter(q=>order.slice(0,idx).includes(q.t));
-      list=[...pickSmart(6,focus),...pickSmart(2,earlier.length?earlier:review),...pickSmart(2,review)];
-      const seen=new Set(); list=list.filter(q=>!seen.has(q.id)&&seen.add(q.id));
+    const seen=new Set(), take=(arr,n)=>{const out=[]; for(const q of arr){ if(out.length>=n) break; if(!seen.has(q.id)){seen.add(q.id); out.push(q);} } return out;};
+    const planTopics=PLAN.map(p=>p.topic).filter(t=>TOPICS[t]);
+    if(fc.topic==='mix'||fc.topic==='quiz'){
+      list=[...take(reviewQueue(),6)]; list.push(...take(pickSmart(20,cur),14-list.length));
+    } else {
+      const focus=cur.filter(q=>q.t===fc.topic);
+      list=take(reviewQueue(focus),3); list.push(...take(pickSmart(12,focus),6-list.length));   // this idea's due misses first
+      const due=take(reviewQueue().filter(q=>q.t!==fc.topic&&unitOf(q)===CURRENT.unit),6);   // due Unit 2 reviews first
+      const otherTaught=cur.filter(q=>q.t!==fc.topic&&planTopics.includes(q.t));             // all of 2.1–2.4 was taught already
+      const fill=take(pickSmart(12,otherTaught),6-due.length);
+      const u1=take(reviewQueue(review),2); u1.push(...take(pickSmart(6,review),2-u1.length));
+      list.push(...due,...fill,...u1);
     }
     return startMCQ(shuffle(list),'Today · '+fc.idea+': '+fc.title,false);
   }
@@ -558,9 +612,10 @@ function startToday(){
 function startTodayWritten(){
   const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
   const fc=todayFocus();
-  const pool=frqInUnit(CURRENT.unit).sort((a,b)=>{const fa=fc&&a.t===fc.topic?0:1, fb=fc&&b.t===fc.topic?0:1; if(fa!==fb)return fa-fb; const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
+  let pool=frqInUnit(CURRENT.unit).filter(f=>f.short); if(!pool.length) pool=frqInUnit(CURRENT.unit);
+  pool=shuffle(pool).sort((a,b)=>{const fa=fc&&a.t===fc.topic?0:1, fb=fc&&b.t===fc.topic?0:1; if(fa!==fb)return fa-fb; const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
   if(!pool.length){toast('No written questions for this unit yet');return}
-  startFRQ([pool[0]],'Today written · Unit '+CURRENT.unit);
+  startFRQ([pool[0]],'Today written · '+(fc?fc.idea+': '+fc.title:'Unit '+CURRENT.unit));
 }
 $('todayBtn').addEventListener('click',()=>startMode('today'));
 $('todayWritten').addEventListener('click',startTodayWritten);
@@ -585,9 +640,9 @@ function startMode(m){
   else if(m==='topic'){$('topicPick').classList.remove('hidden'); renderChips(); $('topicPick').scrollIntoView({behavior:'smooth'});}
   else if(m==='frq'){ // prefer weakest topic's FRQ not yet done
     const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
-    const pool=frqInUnit(SEL_UNIT).sort((a,b)=>{const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; const A=st[a.t].acc??0.5,B=st[b.t].acc??0.5; return A-B;});
+    const pool=frqInUnit(SEL_UNIT).filter(f=>!f.short).sort((a,b)=>{const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; const A=st[a.t].acc??0.5,B=st[b.t].acc??0.5; return A-B;});
     startFRQ([pool[0]],'FRQ practice'+uTag);}
-  else if(m==='frqset'){const done=new Set(S.frq.map(x=>x.f)); const pool=shuffle(frqInUnit(SEL_UNIT)).sort((a,b)=>(done.has(a.id)?1:0)-(done.has(b.id)?1:0)); startFRQ(pool.slice(0,3),'FRQ set'+uTag);}
+  else if(m==='frqset'){const done=new Set(S.frq.map(x=>x.f)); const pool=shuffle(frqInUnit(SEL_UNIT).filter(f=>!f.short)).sort((a,b)=>(done.has(a.id)?1:0)-(done.has(b.id)?1:0)); startFRQ(pool.slice(0,3),'FRQ set'+uTag);}
 }
 function renderChips(){const c=$('chips'); c.innerHTML=''; for(const k in TOPICS){ if(TOPICS[k].unit!==SEL_UNIT) continue;const b=document.createElement('button'); b.className='chip'+(chosenTopics.has(k)?' on':''); b.textContent=TOPICS[k].short; b.onclick=()=>{chosenTopics.has(k)?chosenTopics.delete(k):chosenTopics.add(k); renderChips();}; c.appendChild(b);}}
 $('startTopic').addEventListener('click',()=>{ if(!chosenTopics.size){toast('Pick at least one topic');return} const list=shuffle(MCQ.filter(q=>chosenTopics.has(q.t))); $('topicPick').classList.add('hidden'); startMCQ(list,'Drill: '+[...chosenTopics].map(k=>TOPICS[k].short).join(', '),false); });
@@ -626,7 +681,7 @@ firebase.initializeApp(FB_CONFIG);
 const auth = firebase.auth();
 const db = firebase.firestore();
 try{ db.enablePersistence({synchronizeTabs:true}).catch(()=>{}); }catch(e){}   // works offline; syncs when back online
-let ROLE=null, SESS={}, CUR=null, unsub=null, lastSync=null, pendingWrites=false;
+let ROLE=null, SESS={}, CUR=null, unsub=null, unsubG=null, lastSync=null, pendingWrites=false;
 
 const deviceName=()=>{const u=navigator.userAgent; return /iPad/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document)?'iPad':/iPhone/.test(u)?'iPhone':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'Windows':'Computer';};
 function newSession(label){ if(ROLE!=='student'){CUR=null;return} CUR={id:'s'+Date.now()+'-'+Math.random().toString(36).slice(2,7), l:label, start:Date.now(), dev:deviceName(), a:[], f:[], s:[]}; }
@@ -640,7 +695,7 @@ function rebuild(){
   const S2=blank(), k1=new Set(), k2=new Set(), k3=new Set();
   for(const d of Object.values(SESS)){
     (d.a||[]).forEach(x=>{const k=x.q+'|'+x.t; if(!k1.has(k)){k1.add(k); S2.attempts.push({q:x.q,ok:!!x.ok,ts:x.t});}});
-    (d.f||[]).forEach(x=>{const k=x.f+'|'+x.t; if(!k2.has(k)){k2.add(k); S2.frq.push({f:x.f,pts:x.p,max:x.m,ts:x.t});}});
+    (d.f||[]).forEach(x=>{const k=x.f+'|'+x.t; if(!k2.has(k)){k2.add(k); S2.frq.push({f:x.f,pts:x.p==null?null:x.p,max:x.m,ts:x.t,ans:x.ans||null});}});
     (d.s||[]).forEach(x=>{if(!k3.has(x.t)){k3.add(x.t); S2.sessions.push({label:x.l,score:x.sc,max:x.mx,ts:x.t,secs:x.sec});}});
   }
   S2.attempts.sort((a,b)=>a.ts-b.ts); S2.frq.sort((a,b)=>a.ts-b.ts); S2.sessions.sort((a,b)=>a.ts-b.ts);
@@ -656,7 +711,7 @@ function setStatus(kind){
 async function sha256(s){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 
 auth.onAuthStateChanged(async user=>{
-  if(unsub){unsub(); unsub=null;} SESS={}; rebuild();
+  if(unsub){unsub(); unsub=null;} if(unsubG){unsubG(); unsubG=null;} SESS={}; GRADES={}; rebuild();
   if(!user){ ROLE=null; document.body.classList.remove('viewer'); show('login'); setTimeout(()=>$('email').focus(),50); return; }
   ROLE = (await sha256((user.email||'').trim().toLowerCase()))===STUDENT_HASH ? 'student' : 'viewer';
   document.body.classList.toggle('viewer', ROLE!=='student');
@@ -664,6 +719,8 @@ auth.onAuthStateChanged(async user=>{
   $('viewerWho').textContent = ROLE==='student' ? '' : 'Signed in as '+user.email+'.';
   $('acctLine').textContent = 'Signed in as '+user.email+(ROLE==='student'?' · your progress saves to your account automatically.':' · read-only view.');
   show('loading');
+  // Claude's nightly grades for written answers (read-only here; written by the grading login)
+  unsubG = db.collection('students/ana/grades').onSnapshot(snap=>{ const g={}; snap.forEach(d=>{const x=d.data(); if(x&&x.f&&x.t) g[x.f+'|'+x.t]=x;}); GRADES=g; if(!$('home').classList.contains('hidden')) renderHome(); }, err=>console.warn('grades not readable yet',err&&err.code));
   unsub = db.collection(COL).onSnapshot({includeMetadataChanges:true}, snap=>{
     snap.docChanges().forEach(ch=>{ if(ch.type==='removed') delete SESS[ch.doc.id]; else SESS[ch.doc.id]=ch.doc.data(); });
     pendingWrites=snap.metadata.hasPendingWrites; if(!snap.metadata.fromCache) lastSync=Date.now();

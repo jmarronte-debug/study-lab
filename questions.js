@@ -499,15 +499,16 @@ const UNITS = {1:{name:"Unit 1 · Chemistry of Life"}, 2:{name:"Unit 2 · Cell S
 const CURRENT = {unit:2, newest:["u2mem","u2perm"], taughtThrough:"2.4", asOf:"Wed Sep 23"};
 // Daily plan: one guide idea per day, and that day's session practices exactly that idea.
 // guide = page + section anchor in the study guide. Update this list as new material arrives.
-const PLAN = [
-  {date:"2026-09-24", topic:"u2cells", idea:"Idea 1", title:"Cells: two basic designs",        guide:"unit2.html#i1"},
-  {date:"2026-09-25", topic:"u2endo",  idea:"Idea 2", title:"Follow one protein",               guide:"unit2.html#i2"},
-  {date:"2026-09-26", topic:"u2cyto",  idea:"Idea 3", title:"The cytoskeleton and junctions",   guide:"unit2.html#i3", extra:"<b>Weekend FRQ:</b> tap <b>FRQ practice</b> below the Today card, write your answer <b>on paper in pen</b>, then photograph it and send it to Dad for grading. (Any day this weekend.)"},
-  {date:"2026-09-27", topic:"u2size",  idea:"Idea 4", title:"Why cells stay small (SA:V)",      guide:"unit2.html#i4"},
-  {date:"2026-09-28", topic:"u2mem",   idea:"Idea 5", title:"The membrane is Unit 1 chemistry", guide:"unit2.html#i5"},
-  {date:"2026-09-29", topic:"u2perm",  idea:"Idea 6", title:"What gets through the membrane",   guide:"unit2.html#i6"},
-  {date:"2026-09-30", topic:"mix",     idea:"Review", title:"Cell Quiz review: all six ideas",  guide:"unit2.html#check", extra:"Tomorrow is the Cell Quiz (2.1–2.5). After the session, tap <b>Redo my misses</b> until it's empty."},
-  {date:"2026-10-01", topic:"quiz",    idea:"Quiz day", title:"Cell Quiz today (2.1–2.5)",     guide:"unit2.html#check", extra:"No full session needed. Before school, spend 5 minutes on the <b>self-check</b> questions at the bottom of the guide. Good luck!"}
+const PLAN = [   // every idea below was already TAUGHT in class 9/17–9/23; this is review before the Cell Quiz, one idea a day
+  {date:"2026-09-23", topic:"u2cells", idea:"Idea 1", title:"Cells: two basic designs",          guide:"unit2.html#i1", note:"2.1 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
+  {date:"2026-09-24", topic:"u2endo",  idea:"Idea 2", title:"Follow one protein",               guide:"unit2.html#i2", note:"2.1–2.2 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
+  {date:"2026-09-25", topic:"u2cyto",  idea:"Idea 3", title:"The cytoskeleton and junctions",   guide:"unit2.html#i3", note:"2.1 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
+  {date:"2026-09-26", topic:"u2size",  idea:"Idea 4", title:"Why cells stay small (SA:V)",      guide:"unit2.html#i4", note:"2.2 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1).", extra:"<b>Weekend FRQ (Sat or Sun, about 15 min):</b> tap <b>FRQ practice</b> below and type your answer. Claude grades it that night."},
+  {date:"2026-09-27", topic:"u2mem",   idea:"Idea 5", title:"The membrane is Unit 1 chemistry", guide:"unit2.html#i5", note:"2.3 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
+  {date:"2026-09-28", topic:"u2perm",  idea:"Idea 6", title:"What gets through the membrane",   guide:"unit2.html#i6", note:"2.4 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
+  {date:"2026-09-29", topic:"mix", idea:"Review 1", title:"All six ideas, mixed",               guide:"unit2.html#check", note:"Quiz review, day 1 of 2.", extra:"After the session, tap <b>Redo my misses</b> until it's empty."},
+  {date:"2026-09-30", topic:"mix", idea:"Review 2", title:"Final review before the Cell Quiz",  guide:"unit2.html#check", note:"Quiz review, day 2 of 2. The Cell Quiz is tomorrow.", extra:"Do the <b>self-check</b> at the bottom of the guide, then <b>Redo my misses</b> until it's empty."},
+  {date:"2026-10-01", topic:"quiz", idea:"Quiz day", title:"Cell Quiz today (2.1–2.5)", guide:"unit2.html#check", extra:"No full session needed. Before school, spend 5 minutes on the <b>self-check</b> questions at the bottom of the guide. Good luck!"}
 ];
 
 MCQ.push(
@@ -822,5 +823,138 @@ FRQ.push(
   {verb:"Identify",text:"which two substances will cross the bilayer.",pts:1,rubric:["O₂ and the steroid hormone"]},
   {verb:"Explain",text:"why glucose and Na⁺ do not cross.",pts:2,rubric:["The bilayer's interior is made of nonpolar/hydrophobic fatty-acid tails","Na⁺ is charged and glucose is large and polar, so they are repelled by / can't pass the hydrophobic core"]},
   {verb:"Describe",text:"one change to the artificial membrane that would allow glucose to cross, and the direction it would move.",pts:1,rubric:["Add a channel/transport protein (facilitated diffusion); glucose moves from high to low concentration"]}
+ ]}
+);
+
+// ---------- Daily short written questions (about 3–4 minutes each; graded by Claude, not self-scored) ----------
+FRQ.push(
+{id:"U2S1",t:"u2cells",short:true,title:"Prokaryote or eukaryote?",
+ stem:"A newly discovered single-celled organism has DNA located in a region of the cytoplasm with no membrane around it, has ribosomes, and has a plasma membrane.",
+ parts:[
+  {verb:"Identify",text:"whether the organism is a prokaryote or a eukaryote.",pts:1,rubric:["Prokaryote"]},
+  {verb:"Justify",text:"your answer using the evidence given.",pts:1,rubric:["Its DNA is not enclosed in a membrane-bound nucleus (it is in a nucleoid region); prokaryotes lack membrane-bound organelles. (Having ribosomes or a membrane does NOT distinguish them: all cells have those.)"]}
+ ]},
+{id:"U2S2",t:"u2cells",short:true,title:"What every cell has",
+ stem:"Bacteria, plant cells, and human cells look very different.",
+ parts:[
+  {verb:"Identify",text:"TWO structures that ALL cells have.",pts:1,rubric:["Any two of: plasma membrane, ribosomes, DNA, cytoplasm (both must be correct)"]},
+  {verb:"Explain",text:"why every cell must have ribosomes.",pts:1,rubric:["Every cell must make proteins (enzymes, membrane proteins, etc.), and ribosomes are where proteins are synthesized (amino acids joined by peptide bonds)"]}
+ ]},
+{id:"U2S3",t:"u2cells",short:true,title:"Plant cell or animal cell?",
+ stem:"Under a microscope, a cell shows a large central vacuole, chloroplasts, and a rigid outer layer outside its plasma membrane.",
+ parts:[
+  {verb:"Identify",text:"the type of cell and the name of the rigid outer layer.",pts:1,rubric:["Plant cell; the cell wall (made of cellulose). Both needed"]},
+  {verb:"Describe",text:"ONE function of the large central vacuole.",pts:1,rubric:["Stores water (and ions/nutrients/wastes) and/or maintains turgor pressure that keeps the plant cell firm and the plant upright"]}
+ ]},
+{id:"U2S4",t:"u2endo",short:true,title:"ER before Golgi",
+ stem:"A protein that will be secreted from the cell is made on a ribosome attached to the rough ER.",
+ parts:[
+  {verb:"Describe",text:"the path the protein takes AFTER the rough ER until it leaves the cell. Name each structure in order.",pts:2,rubric:["Transport vesicle → Golgi apparatus (where it is modified/packaged/sorted)","Secretory vesicle → fuses with the plasma membrane → released by exocytosis"]}
+ ]},
+{id:"U2S5",t:"u2endo",short:true,title:"Structure fits the job",
+ stem:"Cells in the liver break down drugs and toxins, and they also make lipids.",
+ parts:[
+  {verb:"Predict",text:"which organelle would be especially abundant in liver cells.",pts:1,rubric:["Smooth ER"]},
+  {verb:"Justify",text:"your prediction.",pts:1,rubric:["The smooth ER synthesizes lipids and detoxifies drugs/poisons, so a cell that does a lot of both needs more smooth ER (the structure matches the job)"]}
+ ]},
+{id:"U2S6",t:"u2endo",short:true,title:"Why the mitochondrion is folded",
+ stem:"The inner membrane of a mitochondrion is highly folded into cristae.",
+ parts:[
+  {verb:"Explain",text:"how this structure supports the function of the mitochondrion. Use the pattern: structure → feature → what it allows.",pts:2,rubric:["The folds increase the surface area of the inner membrane","More surface area holds more of the proteins/enzymes for the reactions of cellular respiration, so more ATP can be made"]}
+ ]},
+{id:"U2S7",t:"u2cyto",short:true,title:"Tracks inside the cell",
+ stem:"A drug stops tubulin from assembling into fibers.",
+ parts:[
+  {verb:"Identify",text:"the cytoskeleton fiber that would be affected.",pts:1,rubric:["Microtubules"]},
+  {verb:"Predict",text:"ONE effect on the cell, and explain why.",pts:1,rubric:["Any one with a reason: vesicles can't be moved along tracks (motor proteins like kinesin need microtubules); chromosomes can't be separated during cell division; cilia/flagella can't form or move (they are built from microtubules)"]}
+ ]},
+{id:"U2S8",t:"u2cyto",short:true,title:"Which junction?",
+ stem:"Cells lining the small intestine must keep digestive fluid from leaking between them into the body.",
+ parts:[
+  {verb:"Identify",text:"the type of cell junction that does this.",pts:1,rubric:["Tight junction"]},
+  {verb:"Contrast",text:"that junction with a gap junction.",pts:1,rubric:["Tight junctions seal neighboring cells so nothing passes between them, while gap junctions are open channels that let ions and small molecules pass directly from one cell to the next (both sides needed)"]}
+ ]},
+{id:"U2S9",t:"u2cyto",short:true,title:"Motor proteins and shape",
+ stem:"Dynein is a motor protein that bends cilia by sliding microtubules past each other.",
+ parts:[
+  {verb:"Explain",text:"how a motor protein produces movement. Connect your answer to protein structure from Unit 1.",pts:2,rubric:["The motor protein changes shape (conformational change), usually powered by ATP","Because a protein's shape determines its function (tertiary structure), a change in shape makes it 'walk' or pull, producing movement"]}
+ ]},
+{id:"U2S10",t:"u2size",short:true,title:"Calculate SA:V",
+ stem:"Cell A is a cube 1 µm on each side. Cell B is a cube 3 µm on each side.",
+ parts:[
+  {verb:"Calculate",text:"the surface area-to-volume ratio of each cell. Show your setup.",pts:1,rubric:["A: SA = 6 µm², V = 1 µm³, SA:V = 6; B: SA = 54 µm², V = 27 µm³, SA:V = 2 (setup shown for both)"]},
+  {verb:"Identify",text:"which cell exchanges materials with its surroundings more efficiently, and why.",pts:1,rubric:["Cell A, because its higher SA:V means more membrane surface per unit of volume for nutrients and wastes to cross"]}
+ ]},
+{id:"U2S11",t:"u2size",short:true,title:"Surface area goes up, ratio goes down",
+ stem:"A student writes: \"As a cell grows larger, its surface area decreases, so it can't get enough nutrients.\"",
+ parts:[
+  {verb:"Identify",text:"the error in the student's statement.",pts:1,rubric:["Surface area INCREASES as the cell grows; it is the surface area-to-volume RATIO that decreases"]},
+  {verb:"Explain",text:"why a larger cell has trouble getting enough nutrients.",pts:1,rubric:["Volume grows faster than surface area, so there is less membrane per unit of volume; exchange across the membrane can't keep up with the needs of the larger volume"]}
+ ]},
+{id:"U2S12",t:"u2size",short:true,title:"Folding to increase surface area",
+ stem:"Cells lining the small intestine have many tiny folds of their plasma membrane called microvilli.",
+ parts:[
+  {verb:"Explain",text:"how microvilli help these cells do their job.",pts:2,rubric:["Microvilli increase the surface area of the plasma membrane (without much increase in volume)","More surface area lets the cell absorb more nutrients from digested food"]}
+ ]},
+{id:"U2S13",t:"u2mem",short:true,title:"Why the bilayer forms",
+ stem:"When phospholipids are added to water, they arrange themselves into a bilayer without any energy input.",
+ parts:[
+  {verb:"Explain",text:"why phospholipids form a bilayer in water. Use the terms hydrophilic and hydrophobic.",pts:2,rubric:["Phospholipids are amphipathic: a hydrophilic (polar) phosphate head and hydrophobic (nonpolar) fatty-acid tails","The heads face the water on both sides and the tails face inward, away from water, because polar attracts polar and nonpolar avoids water"]}
+ ]},
+{id:"U2S14",t:"u2mem",short:true,title:"Cholesterol as a buffer",
+ stem:"A fish lives in water that changes from 5 °C in winter to 25 °C in summer.",
+ parts:[
+  {verb:"Explain",text:"how cholesterol in its cell membranes helps at BOTH temperatures.",pts:2,rubric:["At warm temperatures, cholesterol restrains phospholipid movement, reducing fluidity (keeps the membrane from becoming too fluid)","At cold temperatures, cholesterol keeps the tails from packing tightly, preventing the membrane from becoming too rigid"]}
+ ]},
+{id:"U2S15",t:"u2mem",short:true,title:"Where an integral protein sits",
+ stem:"An integral protein spans the whole plasma membrane.",
+ parts:[
+  {verb:"Predict",text:"whether the amino acids in the part of the protein inside the bilayer have polar or nonpolar R-groups.",pts:1,rubric:["Nonpolar (hydrophobic) R-groups"]},
+  {verb:"Justify",text:"your prediction.",pts:1,rubric:["That part of the protein is surrounded by the nonpolar fatty-acid tails; nonpolar R-groups interact with the nonpolar tails (like attracts like), while polar R-groups would face the water on either side"]}
+ ]},
+{id:"U2S16",t:"u2perm",short:true,title:"Charge beats size",
+ stem:"A sodium ion (Na⁺) is much smaller than a steroid hormone, yet the steroid crosses the phospholipid bilayer and Na⁺ does not.",
+ parts:[
+  {verb:"Explain",text:"why.",pts:2,rubric:["The interior of the bilayer is nonpolar/hydrophobic (fatty-acid tails)","The steroid is nonpolar and can dissolve through it; Na⁺ is charged, so it is repelled by the hydrophobic core and needs a channel/transport protein"]}
+ ]},
+{id:"U2S17",t:"u2perm",short:true,title:"Water and aquaporins",
+ stem:"Water is polar, but some water still crosses the bilayer directly. Most water, however, crosses through aquaporins.",
+ parts:[
+  {verb:"Explain",text:"why a small amount of water can cross the bilayer directly.",pts:1,rubric:["Water molecules are very small (and uncharged), so a few can slip between the phospholipids despite being polar"]},
+  {verb:"Describe",text:"what an aquaporin is.",pts:1,rubric:["An integral membrane (channel) protein that allows water to move rapidly across the membrane"]}
+ ]},
+{id:"U2S18",t:"u2perm",short:true,title:"Rank the crossers",
+ stem:"Consider O₂, glucose, and Cl⁻ on one side of a membrane.",
+ parts:[
+  {verb:"Identify",text:"which crosses the phospholipid bilayer most easily and which needs a protein.",pts:1,rubric:["O₂ crosses most easily; glucose AND Cl⁻ both need a protein (both parts needed)"]},
+  {verb:"Justify",text:"why glucose needs a protein.",pts:1,rubric:["Glucose is large and polar, so it cannot pass through the nonpolar/hydrophobic interior of the bilayer"]}
+ ]}
+);
+
+// ---------- More AP-style FRQs (data and experiment) ----------
+FRQ.push(
+{id:"U2F5",t:"u2size",title:"Cell size and diffusion data",
+ stem:"Students made agar cubes with a pink indicator that turns clear when acid diffuses in. After 10 minutes in acid: the 1 cm cube was 100% clear, the 2 cm cube was 58% clear, and the 3 cm cube was 30% clear.",
+ parts:[
+  {verb:"Identify",text:"the independent variable and the dependent variable.",pts:1,rubric:["Independent: cube size (side length or SA:V); dependent: percent of the cube that turned clear (percent diffused)"]},
+  {verb:"Calculate",text:"the SA:V ratio of the 3 cm cube. Show your setup.",pts:1,rubric:["SA = 6 × 3² = 54 cm²; V = 3³ = 27 cm³; SA:V = 2 (per cm), setup shown"]},
+  {verb:"Describe",text:"the relationship shown by the data.",pts:1,rubric:["As cube size increases (SA:V decreases), the percent of the cube reached by diffusion decreases; cite at least two data points"]},
+  {verb:"Explain",text:"how these results apply to real cells.",pts:1,rubric:["Cells rely on diffusion across the membrane for nutrients/wastes; larger cells (lower SA:V) cannot exchange materials fast enough for their volume, so cells stay small (or increase surface area with folds)"]}
+ ]},
+{id:"U2F6",t:"u2endo",title:"Tracking a labeled protein",
+ stem:"Researchers gave pancreatic cells radioactive amino acids for 3 minutes, then measured where the radioactivity was over time. At 3 min: mostly rough ER. At 20 min: mostly Golgi. At 90 min: mostly secretory vesicles and outside the cell.",
+ parts:[
+  {verb:"Explain",text:"why the researchers used radioactive AMINO ACIDS to follow a protein.",pts:1,rubric:["Amino acids are the monomers of proteins; newly made proteins incorporate the labeled amino acids, so the label shows where the new protein is"]},
+  {verb:"Describe",text:"the path of the protein shown by the data.",pts:1,rubric:["Rough ER → Golgi → secretory vesicles → outside the cell (exocytosis), using the times in the data"]},
+  {verb:"Predict",text:"where the radioactivity would stay if a drug blocked transport vesicles from leaving the ER.",pts:1,rubric:["It would remain in (build up in) the rough ER and not reach the Golgi"]},
+  {verb:"Justify",text:"your prediction.",pts:1,rubric:["Proteins move from the ER to the Golgi inside transport vesicles; without them the protein can't get to the Golgi to be modified and shipped"]}
+ ]},
+{id:"U2F7",t:"u2perm",title:"Artificial membrane permeability",
+ stem:"Researchers measured how fast molecules crossed an artificial phospholipid bilayer with no proteins. Relative rates: O₂ = 100, urea = 5, glucose = 0.01, K⁺ = 0.0001.",
+ parts:[
+  {verb:"Identify",text:"which molecule crossed fastest and which crossed slowest.",pts:1,rubric:["Fastest: O₂; slowest: K⁺"]},
+  {verb:"Explain",text:"why urea crossed faster than glucose even though both are polar.",pts:1,rubric:["Urea is smaller than glucose; once charge is ruled out, smaller polar molecules cross the bilayer more easily"]},
+  {verb:"Explain",text:"why K⁺ barely crossed.",pts:1,rubric:["K⁺ is charged (an ion), so it cannot pass the hydrophobic interior of the bilayer"]},
+  {verb:"Predict",text:"how adding potassium channel proteins to the membrane would change the K⁺ rate, and justify.",pts:1,rubric:["The rate would increase greatly, because the channel provides a hydrophilic path through the membrane for the ion"]}
  ]}
 );
