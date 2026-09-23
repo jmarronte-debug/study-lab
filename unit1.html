@@ -1,0 +1,493 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Unit 1 Game Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F6F7F4; --paper:#FFFFFF; --ink:#1A2230; --ink-2:#4A5568; --ink-3:#7A8494;
+  --line:#DDE1DA; --line-2:#C9CFC6;
+  --teal:#176B62; --teal-soft:#DDEFEA; --teal-ink:#0F4F48;
+  --hi:#FFE85C; --hi-ink:#4A3F00;
+  --polar:#BDEFF5; --polar-ink:#0A4A55;
+  --nonpolar:#F3E3C6; --nonpolar-ink:#5A3E0A;
+  --neg:#CDEFC8; --neg-ink:#1F4F1A;
+  --pos:#FFE1A8; --pos-ink:#5B3A00;
+  --acid:#F5CDEB; --acid-ink:#5A0F45;
+  --warn:#B4342B; --warn-soft:#FBE7E4;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D;
+    --line:#2C3841; --line-2:#3A4852;
+    --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+    --hi:#C9B23A; --hi-ink:#1E1900;
+    --polar:#15505A; --polar-ink:#BDEFF5;
+    --nonpolar:#5A4320; --nonpolar-ink:#F3E3C6;
+    --neg:#22502A; --neg-ink:#CDEFC8;
+    --pos:#5B3F0E; --pos-ink:#FFE1A8;
+    --acid:#5A1F4E; --acid-ink:#F5CDEB;
+    --warn:#F08A80; --warn-soft:#3A1F1C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D;
+  --line:#2C3841; --line-2:#3A4852;
+  --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+  --hi:#C9B23A; --hi-ink:#1E1900;
+  --polar:#15505A; --polar-ink:#BDEFF5;
+  --nonpolar:#5A4320; --nonpolar-ink:#F3E3C6;
+  --neg:#22502A; --neg-ink:#CDEFC8;
+  --pos:#5B3F0E; --pos-ink:#FFE1A8;
+  --acid:#5A1F4E; --acid-ink:#F5CDEB;
+  --warn:#F08A80; --warn-soft:#3A1F1C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.12}
+h1{font-size:clamp(34px,7vw,52px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(24px,4.5vw,32px);font-weight:700;letter-spacing:-.015em;margin-top:56px;padding-top:28px;border-top:2px solid var(--ink)}
+h3{font-size:20px;font-weight:700;margin-top:28px}
+h4{font-size:17px;font-weight:700;margin-top:18px}
+p{margin:12px 0;max-width:68ch}
+ul,ol{padding-left:22px;margin:10px 0}
+li{margin:6px 0}
+strong{font-weight:700}
+.eyebrow{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+header{padding-top:40px}
+header .sub{font-size:19px;color:var(--ink-2);max-width:60ch}
+mark{background:var(--hi);color:var(--hi-ink);padding:0 4px;border-radius:2px}
+code,.f{font-family:var(--mono);font-size:.93em;background:var(--teal-soft);color:var(--teal-ink);padding:1px 6px;border-radius:4px;white-space:nowrap}
+.lede{font-size:19px}
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:28px -18px 0;padding:10px 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink-2);text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid var(--line-2)}
+nav a:hover,nav a:focus-visible{color:var(--teal);border-color:var(--teal);outline:none}
+/* facts row */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.fact .n{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.fact .l{font-size:14px;color:var(--ink-2);margin-top:6px}
+/* callouts */
+.note{background:var(--paper);border-left:4px solid var(--teal);padding:14px 18px;border-radius:0 10px 10px 0;margin:18px 0}
+.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.note p:first-child{margin-top:0}.note p:last-child{margin-bottom:0}
+.teacher{font-style:italic;color:var(--ink-2)}
+.teacher::before{content:"Teacher's words: ";font-style:normal;font-weight:700;color:var(--ink)}
+/* schedule */
+.day{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px;margin-top:18px}
+.day h3{margin-top:0;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.day h3 .t{font-size:14px;color:var(--ink-3);font-weight:500;font-family:var(--body)}
+.task{display:grid;grid-template-columns:28px 64px 1fr;gap:10px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.task:first-of-type{border-top:0}
+.task input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--teal);cursor:pointer}
+.task .min{font-family:var(--mono);font-size:13px;color:var(--ink-3);padding-top:4px;font-variant-numeric:tabular-nums}
+.task label{cursor:pointer}
+.task label b{display:block;font-weight:700}
+.task label span{color:var(--ink-2);font-size:15.5px}
+.task input:checked ~ label{opacity:.55;text-decoration:line-through}
+.day .why{font-size:14.5px;color:var(--ink-3);margin:10px 0 6px;font-style:italic}
+/* big ideas */
+.idea{margin-top:36px;padding-top:8px}
+.idea .num{font-family:var(--display);font-weight:800;color:var(--teal);font-size:14px;letter-spacing:.1em}
+.idea h3{margin-top:4px;font-size:24px}
+.plain{background:var(--teal-soft);color:var(--teal-ink);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:16.5px}
+.plain b{color:inherit}
+/* tags */
+.tag{display:inline-block;font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.04em;padding:2px 8px;border-radius:999px;line-height:1.5;white-space:nowrap}
+.tag.polar{background:var(--polar);color:var(--polar-ink)}
+.tag.nonpolar{background:var(--nonpolar);color:var(--nonpolar-ink)}
+.tag.neg{background:var(--neg);color:var(--neg-ink)}
+.tag.pos{background:var(--pos);color:var(--pos-ink)}
+.tag.acid{background:var(--acid);color:var(--acid-ink)}
+/* tables */
+.tbl{overflow-x:auto;margin:16px -18px;padding:0 18px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td .f{white-space:nowrap}
+.tbl.narrow table{min-width:420px}
+/* mnemonic */
+.mn{display:flex;gap:12px;align-items:flex-start;margin:14px 0;padding:12px 14px;border:1.5px dashed var(--line-2);border-radius:10px}
+.mn .k{font-family:var(--display);font-weight:800;color:var(--teal);font-size:13px;letter-spacing:.1em;padding-top:3px;flex:none}
+/* trap */
+.trap{margin:14px 0;padding:12px 14px;border-radius:10px;background:var(--warn-soft);border:1px solid transparent}
+.trap b{color:var(--warn)}
+/* details quiz */
+details{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--mono);color:var(--teal);flex:none;width:14px}
+details[open] summary::before{content:"–"}
+details .a{padding:0 16px 14px 40px;color:var(--ink-2);font-size:16px}
+details .a b{color:var(--ink)}
+/* verbs */
+.verbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+.verb{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.verb .v{font-family:var(--display);font-weight:800;font-size:19px}
+.verb .len{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-left:6px}
+.verb p{margin:6px 0 0;font-size:15px}
+.check li{list-style:none;position:relative;padding-left:26px}
+.check li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border:2px solid var(--teal);border-radius:3px}
+.foot{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-3);font-size:14px}
+@media (prefers-reduced-motion:no-preference){details .a{animation:fade .18s ease-out}}
+@keyframes fade{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+@media (max-width:480px){
+  .task{grid-template-columns:26px 1fr}
+  .task .min{grid-column:2;padding-top:0;margin-top:-4px}
+  .task label{grid-column:2}
+}
+h2,.idea{scroll-margin-top:64px}</style></head><body>
+
+<div class="wrap">
+<header>
+  <a class="back" href="./" style="display:inline-block;margin-bottom:14px;font-weight:700;color:var(--teal);text-decoration:none">← Study Lab</a>
+  <div class="eyebrow">AP Biology · Unit 1 · Chemistry of Life · Test Tuesday</div>
+  <h1>Unit 1 Game Plan</h1>
+  <div class="small" style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:8px">Version 5 · updated Mon Sep 14, 4:30 pm · includes Practice Lab blocks + chemistry review. If you don't see this line, you're on an old copy — reload.</div>
+  <p class="sub">Two days, one test, no retests. Everything in Unit 1 comes down to six ideas and one writing recipe. Learn the six cold, practice the recipe in pen, and the A takes care of itself.</p>
+
+  <div class="facts">
+    <div class="fact"><div class="n">50 / 50</div><div class="l">MCQ and FRQ are weighted equally</div></div>
+    <div class="fact"><div class="n">40 + 40</div><div class="l">minutes per section, two class periods</div></div>
+    <div class="fact"><div class="n">0</div><div class="l">retests or resubmissions</div></div>
+    <div class="fact"><div class="n">1.1 – 1.7</div><div class="l">water, carbon, functional groups, the four macromolecules</div></div>
+  </div>
+
+  <div class="note">
+    <p><strong>Why half this plan is about writing.</strong> Most students study for the multiple choice and then improvise the FRQ. But the FRQ is half the grade, and your teacher has literally handed you the rubric: what each task verb wants, how graphs are scored, what earns zero. Doing exactly what the verb asks is the cheapest A-points on the test.</p>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <a href="#plan">The plan</a>
+  <a href="#ideas">Six big ideas</a>
+  <a href="#frq">FRQ recipe</a>
+  <a href="#patterns">What she'll ask</a>
+  <a href="#quiz">Self-test</a>
+  <a href="./">Practice Lab ↗</a>
+</nav>
+
+<!-- ============ PLAN ============ -->
+<h2 id="plan">The plan</h2>
+<p class="lede">The rule for the next two days: <mark>no rereading</mark>. Every block below makes you pull information <em>out</em> of your head (blurting, redoing homework cold, teaching it aloud, writing answers in pen). That's what actually moves scores; rereading slides feels productive and isn't. Check boxes as you go — they save on this device.</p>
+<div class="note"><p><strong>Your two tools.</strong> This page is the map: what to know and how to write it. The <a href="./"><strong>Unit 1 Practice Lab</strong></a> is the gym: 91 multiple-choice questions with an explanation for every miss, 12 FRQs you score against a rubric, and a topic-by-topic ranking of what's strong and what needs review. The blocks marked "Practice Lab" below are where the two meet.</p></div>
+
+<div class="day">
+  <h3>Sunday evening <span class="t">~2 hours · take a 5-minute break between blocks</span></h3>
+  <div class="task"><input type="checkbox" id="s1"><div class="min">20 min</div><label for="s1"><b>Read the chemistry-review table and the Six Big Ideas once, start to finish.</b><span>No notes, no highlighting. You're building the map before filling in the roads.</span></label></div>
+  <div class="task"><input type="checkbox" id="s2"><div class="min">30 min</div><label for="s2"><b>Functional groups from memory.</b><span>On blank paper, draw all 7 groups, their formula, and tag each polar/nonpolar/charged/acidic/basic. Check against the table in Idea 2. Redo only the ones you missed, twice.</span></label></div>
+  <div class="task"><input type="checkbox" id="s3"><div class="min">30 min</div><label for="s3"><b>Blurt the macromolecule chart.</b><span>Draw an empty grid: 4 rows (carb, lipid, protein, nucleic acid) × elements, monomer, polymer, bond, function, polarity, examples. Fill it cold. Compare to Idea 4 and to the teacher's Biomolecules Chart. Circle every gap.</span></label></div>
+  <div class="task"><input type="checkbox" id="s4"><div class="min">30 min</div><label for="s4"><b>Redo "Biochemistry Structure ID Practice" cold.</b><span>Cover the key. Match all 32 descriptions to the lettered structures. Then grade yourself with the key. Anything wrong goes on a "misses" list on the back page.</span></label></div>
+  <div class="task"><input type="checkbox" id="s6"><div class="min">10 min</div><label for="s6"><b>Practice Lab: Smart 10.</b><span>Open the <a href="./">Unit 1 Practice Lab</a> and run one Smart 10. Read every miss explanation twice. This is the baseline — tonight's score doesn't matter, the topic ranking it produces does.</span></label></div>
+  <div class="task"><input type="checkbox" id="s5"><div class="min">15 min</div><label for="s5"><b>Read the FRQ recipe, then write one answer in pen.</b><span>Prompt: "<em>Explain</em> why humans can digest starch but not cellulose." Time yourself: 4 minutes. Then check it against the Explain checklist.</span></label></div>
+  <p class="why">Why this order: groups and polarity come first because every other idea depends on them. Structure ID and Smart 10 come late because they test everything at once — together with your paper misses list, the Lab's "Needs review" topics are Monday's agenda.</p>
+</div>
+
+<div class="day">
+  <h3>Monday <span class="t">~3 hours total · split it up, don't marathon</span></h3>
+  <div class="task"><input type="checkbox" id="m1"><div class="min">10 min</div><label for="m1"><b>Morning or lunch: Practice Lab → "Redo my misses."</b><span>Just the questions you got wrong last night. Then glance at your paper misses list. That's it.</span></label></div>
+  <div class="task"><input type="checkbox" id="m7"><div class="min">30 min</div><label for="m7"><b>Practice Lab: Topic drill on your two weakest topics.</b><span>The home screen ranks topics weakest-first. Pick the bottom two and drill them. If Proteins or Nucleic acids is one of them, the next two blocks will hit it again from a different angle.</span></label></div>
+  <div class="task"><input type="checkbox" id="m2"><div class="min">40 min</div><label for="m2"><b>Proteins block (paper).</b><span>Redo POGIL questions 16–29 cold (the tertiary/quaternary, denaturing, hair straightening and egg questions). Then, without notes, teach the four levels of structure out loud in under 2 minutes — what holds each together and why 1° survives denaturing. If you can't say it, you don't have it yet.</span></label></div>
+  <div class="task"><input type="checkbox" id="m3"><div class="min">30 min</div><label for="m3"><b>Nucleic acids + water block (paper).</b><span>From memory: write the DNA vs RNA table (strands, sugar, bases), draw a nucleotide and label its 3 parts, write purines vs pyrimidines. Then list the 5 properties of water with the biological example your teacher used for each (Idea 1). Check, fix, redo misses.</span></label></div>
+  <div class="task"><input type="checkbox" id="m4"><div class="min">35 min</div><label for="m4"><b>Practice Lab: FRQ set — in pen, on paper, timed.</b><span>Start an FRQ set in the Lab (3 FRQs, 30 min). Write your answers on paper the way you will Tuesday, then reveal each rubric and honestly check off the points you earned. Look for the four classic leaks: restating the prompt, missing units, comparing only one group, and a Describe-length answer to an Explain.</span></label></div>
+  <div class="task"><input type="checkbox" id="m5"><div class="min">35 min</div><label for="m5"><b>Practice Lab: Full MCQ test.</b><span>25 questions, timed — the dress rehearsal for period one. Aim to finish under 35 minutes with 80%+. Read every miss explanation, then check your topic ranking on the Study Lab home screen.</span></label></div>
+  <div class="task"><input type="checkbox" id="m6"><div class="min">—</div><label for="m6"><b>Pack: calculator, two pens, a pencil. Sleep on time.</b><span>Sleep is when today's practice gets filed. A late cram night costs more MCQ points than it gains.</span></label></div>
+</div>
+
+<div class="day">
+  <h3>Tuesday morning <span class="t">20 minutes, no new material</span></h3>
+  <div class="task"><input type="checkbox" id="t1"><div class="min">10 min</div><label for="t1"><b>Functional groups table, the mnemonics, and the chemistry-review table.</b><span>Just look. Ag pure silver. Don't get CUT on the pyramid. Just say NO to polarity. Protons identify, neutrons weigh, electrons bond.</span></label></div>
+  <div class="task"><input type="checkbox" id="t2"><div class="min">5 min</div><label for="t2"><b>The seven task verbs.</b><span>Identify / Describe / Explain / Justify / Predict / Construct / Compare. Know which are short and which are long.</span></label></div>
+  <div class="task"><input type="checkbox" id="t3"><div class="min">5 min</div><label for="t3"><b>Practice Lab: "Redo my misses" — whatever is left.</b><span>If it says "No saved misses — nice," you're done. Close everything. You know more than you think you do.</span></label></div>
+</div>
+
+<!-- ============ IDEAS ============ -->
+<h2 id="ideas">The six big ideas</h2>
+<p class="lede">Every slide in Unit 1 is a special case of one of these. If a question stumps you, ask "which of the six is this really about?" — the answer is almost always hiding there.</p>
+
+<!-- IDEA 0 -->
+<div class="idea">
+  <div class="num">BEFORE THE SIX · 5 MINUTES</div>
+  <h3>The chemistry review, boiled down.</h3>
+  <div class="plain"><b>In plain English:</b> Her first deck was a chemistry refresher. It's prerequisite material, not a core Unit 1 idea, but it's in the folder with her handwriting on it — so expect a question or two. Know these cold and move on.</div>
+  <div class="tbl narrow"><table>
+    <tr><th>Term</th><th>What it is</th><th>Fast check</th></tr>
+    <tr><td><strong>Atom</strong></td><td>Basic unit of an element: protons (+), neutrons (0), electrons (−)</td><td>Protons = electrons in a neutral atom</td></tr>
+    <tr><td><strong>Ion</strong></td><td>An atom that lost or gained <strong>electrons</strong>, so it carries a charge</td><td>Lose e⁻ → positive; gain e⁻ → negative</td></tr>
+    <tr><td><strong>Isotope</strong></td><td>Same element, different number of <strong>neutrons</strong>, so different mass</td><td>⁷⁹Br and ⁸¹Br: both 35 protons</td></tr>
+  </table></div>
+  <p><strong>Which particle does what:</strong> the number of <strong>protons</strong> identifies the element; <strong>neutrons</strong> add mass; <strong>electrons</strong> determine charge and do the bonding. <strong>Valence electrons</strong> — the ones in the outer shell — decide how an atom bonds. <strong>Electronegativity</strong> is an atom's ability to attract shared electrons in a bond (that's what makes O pull electrons from H in water).</p>
+  <p><strong>Elements of life:</strong> <strong>C, H, O, N</strong> make up ~96% of living matter; <strong>P, S, Ca, K</strong> cover most of the rest. Bond counts she wrote on the periodic table: C makes 4, N makes 3, O makes 2, H makes 1.</p>
+  <p class="teacher">"Life depends on molecules interacting. Energy transfer depends on molecular interactions." And: you do not need to draw Lewis dot structures for the AP exam.</p>
+</div>
+
+<!-- IDEA 1 -->
+<div class="idea">
+  <div class="num">IDEA 1</div>
+  <h3>Like attracts like. Polarity decides who hangs out with whom.</h3>
+  <div class="plain"><b>In plain English:</b> Some molecules have lopsided charge (polar) and some don't (nonpolar). Polar sticks to polar, nonpolar sticks to nonpolar, and they avoid each other — that's why oil separates from water. Almost everything about water, membranes, and protein folding follows from this one sentence.</div>
+  <p><strong>Why water is polar.</strong> Oxygen is highly electronegative — it pulls the shared electrons toward itself, so the O end is partly negative (δ−) and the H ends are partly positive (δ+). That lets each water molecule form <strong>hydrogen bonds</strong> with up to four others. Covalent bonds are <em>within</em> a molecule; hydrogen bonds are the (weak, individually) attraction <em>between</em> molecules. H-bonds are the strongest kind of intermolecular force but still far weaker than covalent bonds.</p>
+  <p class="teacher">"Presence of O and N are quick clues of polar molecules or polar areas of molecules." Hydrocarbons (just C and H) are nonpolar.</p>
+  <div class="mn"><div class="k">MNEMONIC</div><div>Just say <strong>NO</strong> to polarity — <strong>N</strong> and <strong>O</strong> make things polar. Get your polarity <strong>ON</strong>.</div></div>
+
+  <h4>The five properties of water — each one traces back to H-bonding</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Property</th><th>What it means</th><th>Her example</th></tr>
+    <tr><td><strong>Cohesion</strong> → surface tension</td><td>Water sticks to water</td><td>Water strider walking on a pond</td></tr>
+    <tr><td><strong>Adhesion</strong></td><td>Water sticks to other polar things</td><td>Capillary action pulling water up xylem in plants (cohesion + adhesion together)</td></tr>
+    <tr><td><strong>High specific heat</strong></td><td>Takes a lot of energy to raise its temperature, because H-bonds must be broken first</td><td>Coastal cities cooler than inland; the water-vs-ethanol heating graph</td></tr>
+    <tr><td><strong>Evaporative cooling</strong></td><td>Highest-energy molecules leave first, cooling what's left</td><td>Sweating</td></tr>
+    <tr><td><strong>Floating ice</strong></td><td>Solid is less dense than liquid; water densest at 4 °C</td><td>Polar bear on ice; lake turnover redistributing O₂ and nutrients</td></tr>
+    <tr><td><strong>Versatile solvent</strong></td><td>Dissolves ionic and polar solutes by surrounding them</td><td>Salt water; K⁺ and Cl⁻ surrounded by water shells</td></tr>
+  </table></div>
+  <div class="trap"><b>Trap she used in class:</b> the water-vs-ethanol graph. Water heats more slowly because its <em>hydrogen bonds absorb energy before the temperature rises</em> — not because ethanol has stronger bonds. Answer: water's H-bonds absorb more energy before temperature increases.</div>
+
+  <h4>pH in one breath</h4>
+  <p>pH measures H⁺ concentration. Acids <strong>donate</strong> H⁺ → low pH. Bases <strong>take up</strong> H⁺ → high pH. Living things tolerate only a narrow range and use <strong>buffers</strong> to resist pH change. <span class="teacher">"You will NOT need to calculate pH in this class."</span></p>
+
+  <h4>Bond strength ladder (she'll ask)</h4>
+  <p><strong>Covalent</strong> (electrons shared; strongest; within molecules; broken by enzymes, not by heat at life temps) &nbsp;›&nbsp; <strong>Ionic</strong> (electrons transferred; salts like NaCl; she calls them weak because they ionize — fall apart — in water) &nbsp;›&nbsp; <strong>Hydrogen bond</strong> (weak individually, powerful in numbers; between molecules). Polar covalent = shared unequally; nonpolar covalent = shared equally. Double bonds are stronger, shorter, and "kinky" compared to single.</p>
+</div>
+
+<!-- IDEA 2 -->
+<div class="idea">
+  <div class="num">IDEA 2</div>
+  <h3>Seven functional groups tell you how a molecule behaves.</h3>
+  <div class="plain"><b>In plain English:</b> A functional group is a small cluster of atoms bolted onto a carbon skeleton. Spot the group and you instantly know whether that part of the molecule is polar, charged, acidic or basic — and therefore what it'll do. Your teacher said to practice these until you recognize them <em>quickly</em>. This is the single highest-yield table on the page.</div>
+  <div class="tbl"><table>
+    <tr><th>Group</th><th>Formula</th><th>Properties</th><th>Where you'll see it</th></tr>
+    <tr><td><strong>Methyl</strong></td><td><span class="f">–CH₃</span></td><td><span class="tag nonpolar">nonpolar</span></td><td>Ends of fatty-acid tails; alanine's R-group</td></tr>
+    <tr><td><strong>Hydroxyl</strong></td><td><span class="f">–OH</span></td><td><span class="tag polar">polar</span></td><td>All over sugars; alcohols. Gives up H in dehydration synthesis</td></tr>
+    <tr><td><strong>Carbonyl</strong></td><td><span class="f">C=O</span></td><td><span class="tag polar">polar</span></td><td><strong>A</strong>ldehyde = <strong>a</strong>t the end; <strong>K</strong>etone = <strong>k</strong>aptured in the middle</td></tr>
+    <tr><td><strong>Carboxyl</strong></td><td><span class="f">–COOH / –COO⁻</span></td><td><span class="tag polar">polar</span> <span class="tag neg">− charged</span> <span class="tag acid">acidic</span></td><td>Fatty acids, amino acids. Donates H⁺. Carbonyl + hydroxyl = carboxyl — an <em>emergent property</em>, recognize it as one group</td></tr>
+    <tr><td><strong>Amino</strong></td><td><span class="f">–NH₂ / –NH₃⁺</span></td><td><span class="tag polar">polar</span> <span class="tag pos">+ charged</span> basic</td><td>Amino acids. Takes up H⁺. Forms the peptide bond</td></tr>
+    <tr><td><strong>Sulfhydryl</strong></td><td><span class="f">–SH</span></td><td>forms disulfide bridges</td><td>Cysteine's R-group; stabilizes 3° and 4° protein structure</td></tr>
+    <tr><td><strong>Phosphate</strong></td><td><span class="f">–PO₄</span></td><td><span class="tag polar">polar</span> <span class="tag neg">− charged</span> <span class="tag acid">acidic</span></td><td>Nucleotides (phosphodiester bond), phospholipid heads, ATP. Hydrolysis releases lots of energy</td></tr>
+  </table></div>
+  <div class="trap"><b>Grading trap from her slides:</b> when circling groups, circle <em>only the atoms in the group</em>. On a nucleotide, circle the phosphate; don't scoop up the sugar's –OH groups with it.</div>
+  <h4>Skeletal drawings (she tested this)</h4>
+  <p>In a zig-zag line drawing, <strong>every corner is a carbon</strong>, and any bonds not drawn are filled with hydrogens. Count corners to count carbons; then fill each carbon to 4 bonds to count H. Carbon is the backbone of all macromolecules because it makes <strong>4 stable covalent bonds</strong> — chains, branches, rings, single/double/triple bonds — and forms <strong>isomers</strong> (same formula, different shape, different function; thalidomide's two mirror forms: one a sedative, one caused birth defects).</p>
+</div>
+
+<!-- IDEA 3 -->
+<div class="idea">
+  <div class="num">IDEA 3</div>
+  <h3>Build by removing water. Break by adding water.</h3>
+  <div class="plain"><b>In plain English:</b> Big molecules (polymers) are chains of small repeating units (monomers). To link two monomers, the cell pulls an –H off one and an –OH off the other — that's a water molecule leaving — and a covalent bond forms where they were. To break the chain, add water back. That's it. Two reactions explain how every macromolecule is made and digested.</div>
+  <div class="tbl narrow"><table>
+    <tr><th></th><th>Dehydration synthesis (condensation)</th><th>Hydrolysis</th></tr>
+    <tr><td>Does what</td><td>Joins monomers → polymer</td><td>Splits polymer → monomers</td></tr>
+    <tr><td>Water</td><td>One H₂O <strong>removed</strong> per bond formed</td><td>One H₂O <strong>added</strong> per bond broken</td></tr>
+    <tr><td>Word clue</td><td>de-hydrate = lose water</td><td>hydro-lysis = water split</td></tr>
+    <tr><td>Example</td><td>glucose + fructose → sucrose + H₂O</td><td>digesting maltose → 2 glucose</td></tr>
+  </table></div>
+  <p><strong>The formula trick she asked for:</strong> glucose C₆H₁₂O₆ + fructose C₆H₁₂O₆ − H₂O = <span class="f">C₁₂H₂₂O₁₁</span> (sucrose). Two monomers, subtract one water. A triglyceride releases <strong>3</strong> waters (three ester bonds).</p>
+  <h4>The bond has a specific name for each macromolecule — she asks for the specific name</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Between</th><th>Bond</th><th>Makes</th></tr>
+    <tr><td>Monosaccharide + monosaccharide</td><td><strong>Glycosidic</strong> linkage</td><td>Disaccharides, polysaccharides</td></tr>
+    <tr><td>Glycerol + fatty acid</td><td><strong>Ester</strong> linkage</td><td>Fats, phospholipids</td></tr>
+    <tr><td>Amino acid + amino acid</td><td><strong>Peptide</strong> bond (between the carboxyl C and the amino N)</td><td>Polypeptides / proteins</td></tr>
+    <tr><td>Nucleotide + nucleotide</td><td><strong>Phosphodiester</strong> bond</td><td>DNA, RNA</td></tr>
+  </table></div>
+  <p>All of these are <strong>covalent</strong> bonds — which is why they need enzymes to form or break, and why heat alone doesn't take a protein's 1° structure apart (see Idea 5).</p>
+</div>
+
+<!-- IDEA 4 -->
+<div class="idea">
+  <div class="num">IDEA 4</div>
+  <h3>Four macromolecules. One chart. Know it cold.</h3>
+  <div class="plain"><b>In plain English:</b> This is the teacher's Biomolecules Chart, condensed. If you can rebuild this grid from memory on Sunday night, you have the skeleton of Unit 1. Everything in Ideas 5 and 6 just adds detail to the protein and nucleic-acid rows.</div>
+  <div class="tbl"><table>
+    <tr><th></th><th>Carbohydrates</th><th>Lipids</th><th>Proteins</th><th>Nucleic acids</th></tr>
+    <tr><td><strong>Elements</strong></td><td>C H O in 2H:1O — <span class="f">(CH₂O)ₙ</span></td><td>C H O, <em>not</em> 2:1 (very little O); P in phospholipids</td><td>C H O N (S in some R-groups)</td><td>C H O N P</td></tr>
+    <tr><td><strong>Monomer</strong></td><td>Monosaccharide</td><td>No true monomer — built from glycerol + fatty acids*</td><td>Amino acid (20 kinds)</td><td>Nucleotide</td></tr>
+    <tr><td><strong>Polymer</strong></td><td>Polysaccharide</td><td>—</td><td>Polypeptide</td><td>DNA, RNA</td></tr>
+    <tr><td><strong>Bond</strong></td><td>Glycosidic</td><td>Ester</td><td>Peptide</td><td>Phosphodiester</td></tr>
+    <tr><td><strong>Polarity</strong></td><td><span class="tag polar">always polar</span> (all those –OH)</td><td><span class="tag nonpolar">nonpolar</span> (phospholipid head is polar)</td><td>Depends on R-groups</td><td><span class="tag polar">polar</span></td></tr>
+    <tr><td><strong>Jobs</strong></td><td>Quick energy; energy storage; structure</td><td>Long-term energy; membranes; insulation, cushioning; signaling (steroid hormones)</td><td>Enzymes, structure, movement, immune, signaling — "and more"</td><td>Store and transmit genetic info; direct protein synthesis; RNA can catalyze</td></tr>
+    <tr><td><strong>Examples</strong></td><td>Glucose (blood sugar), fructose, galactose · sucrose, lactose, maltose · starch, glycogen, cellulose, chitin</td><td>Triglycerides (fats), phospholipids, steroids (cholesterol, estrogen, testosterone, cortisol)</td><td>Enzymes, hemoglobin (4 subunits), keratin, albumin (egg white)</td><td>DNA, RNA, ATP</td></tr>
+  </table></div>
+  <p style="font-size:14px;color:var(--ink-3)">*Her slide flags lipids with a red asterisk: "it is a little more complicated than this." If asked, say lipids don't have a true monomer/polymer structure.</p>
+
+  <h4>Carbohydrate details she emphasized</h4>
+  <ul>
+    <li><strong>-ose</strong> means sugar. Triose C₃H₆O₃, pentose C₅H₁₀O₅ (ribose, deoxyribose), hexose C₆H₁₂O₆ (glucose, fructose, galactose). Names ending in -ose are always carbs, but not all carbs end in -ose (starch).</li>
+    <li>Disaccharides: <strong>sucrose</strong> = glucose + fructose (table sugar); <strong>lactose</strong> = glucose + galactose (milk); <strong>maltose</strong> = glucose + glucose.</li>
+    <li>Polysaccharides are all chains of glucose. <strong>Storage:</strong> starch (plants), glycogen (animals — liver and muscle). <strong>Structure:</strong> cellulose (plant cell walls), chitin (insect shells, fungal cell walls).</li>
+    <li><strong>Structure → function #1:</strong> starch has <em>alpha</em> linkages, cellulose has <em>beta</em> linkages. We have enzymes for alpha, not beta, so cellulose is indigestible fiber. Cows manage it only because <strong>bacteria</strong> in their gut do it for them.</li>
+    <li><strong>Structure → function #2:</strong> glycogen is more <em>branched</em> than starch → more free ends → enzymes can hydrolyze it faster → quicker energy release.</li>
+    <li>Number sugar carbons starting to the right of the ring oxygen. Deoxyribose is missing an O on the 2′ carbon.</li>
+  </ul>
+
+  <h4>Lipid details she emphasized</h4>
+  <ul>
+    <li><strong>Triglyceride</strong> = glycerol (3 C, each with –OH) + 3 fatty acids (long hydrocarbon chain ending in –COOH). Three ester bonds, three waters released.</li>
+    <li><strong>Saturated</strong> = all single C–C bonds, straight, packs tightly, solid at room temp, animal fats (butter). <strong>Unsaturated</strong> = one or more double bonds, kinked, liquid, plant oils. Diversity of fats comes from varying chain length, saturation, and which fatty acids sit on the glycerol.</li>
+    <li><strong>Phospholipid</strong> = glycerol + 2 fatty acids + phosphate group. <strong>Amphipathic</strong>: polar hydrophilic head, nonpolar hydrophobic tails. That's why they self-assemble into a <strong>bilayer</strong> (heads out toward water, tails in) — the basis of every cell membrane.</li>
+    <li><strong>Steroids</strong> = four fused carbon rings + functional groups. Changing the functional groups changes the function: cholesterol (membrane fluidity, precursor to the others), cortisol (stress), estrogen and testosterone (sex hormones).</li>
+  </ul>
+</div>
+
+<!-- IDEA 5 -->
+<div class="idea">
+  <div class="num">IDEA 5</div>
+  <h3>A protein's shape is its job — and four levels of bonds hold the shape.</h3>
+  <div class="plain"><b>In plain English:</b> A protein is a chain of amino acids that folds into a specific 3-D shape, and the shape is what lets it do its job. The chain's <em>order</em> is locked in by strong covalent bonds; the <em>folding</em> is held by weaker interactions. So heat or acid can unfold a protein (and kill its function) without breaking the chain itself.</div>
+  <p><strong>Amino acid anatomy:</strong> a central carbon with an <strong>amino</strong> group, a <strong>carboxyl</strong> group, a hydrogen, and an <strong>R-group</strong>. All 20 share the same backbone; only the R-group differs, and the R-group's chemistry (nonpolar / polar uncharged / polar charged) drives folding. Peptide bonds form between one amino acid's carboxyl and the next one's amino group, so chains have <strong>one-way directionality</strong>: amino (N) terminus → carboxyl (C) terminus.</p>
+  <div class="tbl"><table>
+    <tr><th>Level</th><th>What it is</th><th>Held by</th><th>Involves</th></tr>
+    <tr><td><strong>Primary 1°</strong></td><td>The sequence (order) of amino acids — determined by DNA</td><td><strong>Covalent peptide bonds</strong></td><td>Backbone</td></tr>
+    <tr><td><strong>Secondary 2°</strong></td><td>Local folding into <strong>α-helix</strong> (spiral) or <strong>β-pleated sheet</strong> (zig-zag)</td><td><strong>Hydrogen bonds</strong> between C=O and N–H of the backbone</td><td>Backbone only — R-groups NOT involved</td></tr>
+    <tr><td><strong>Tertiary 3°</strong></td><td>Overall 3-D shape of one polypeptide</td><td>H-bonds, ionic bonds, hydrophobic interactions, <strong>disulfide bridges</strong> (the only covalent one, so the strongest)</td><td><strong>R-groups</strong></td></tr>
+    <tr><td><strong>Quaternary 4°</strong></td><td>Two or more polypeptides assembled into one protein (hemoglobin = 4 subunits). Not all proteins have it</td><td>Same interactions as 3°</td><td>R-groups of <em>different</em> chains</td></tr>
+  </table></div>
+  <p><strong>Which R-groups do what:</strong> polar R-groups → hydrogen bonds. Charged (acidic/basic) R-groups → ionic bonds. Nonpolar R-groups → hydrophobic interactions (cluster inside, away from water). Cysteine's –SH → disulfide bridges.</p>
+  <h4>Denaturing — the FRQ favorite</h4>
+  <p>Heat, pH change, or salinity break the weak interactions → 2°, 3°, 4° unfold → <strong>structural change → functional change</strong>. The 1° sequence survives because peptide bonds are covalent and need an enzyme (hydrolysis) to break. Her examples: cooking an egg (heat denatures albumin), vinegar on a raw egg (pH denatures it — looks cooked), hair straightening (chemicals break and re-form <em>disulfide bonds</em>, changing 3°/4°; it grows out because new hair is made and the chemicals wear off), an enzyme in the wrong pH losing its shape and therefore its function.</p>
+  <div class="trap"><b>Trap:</b> a mutation swapping a polar R-group for a nonpolar one changes 1° for certain, <em>may or may not</em> change 2° (depends on location), and most likely changes 3°/4° because R-group interactions stabilize those levels.</div>
+</div>
+
+<!-- IDEA 6 -->
+<div class="idea">
+  <div class="num">IDEA 6</div>
+  <h3>Nucleic acids store information in the order of four bases.</h3>
+  <div class="plain"><b>In plain English:</b> DNA and RNA are chains of nucleotides. The sugar-phosphate parts form a repeating backbone; the bases stick out and their <em>sequence</em> is the message. Bases on opposite strands pair by hydrogen bonds — weak enough that the cell can unzip the strands to read them.</div>
+  <p><strong>A nucleotide has three parts:</strong> a phosphate group, a 5-carbon sugar (deoxyribose in DNA, ribose in RNA), and a nitrogenous base. Nucleotides link by <strong>phosphodiester</strong> bonds (covalent) into a strand with a <strong>5′ phosphate end</strong> and a <strong>3′ hydroxyl end</strong>; new nucleotides are added to the 3′ end. DNA is an <strong>antiparallel double helix</strong> — the two strands run in opposite 5′→3′ directions.</p>
+  <div class="tbl narrow"><table>
+    <tr><th></th><th>Purines</th><th>Pyrimidines</th></tr>
+    <tr><td>Rings</td><td><strong>Two</strong> fused rings</td><td><strong>One</strong> ring</td></tr>
+    <tr><td>Bases</td><td><strong>A</strong>denine, <strong>G</strong>uanine</td><td><strong>C</strong>ytosine, <strong>U</strong>racil (RNA), <strong>T</strong>hymine (DNA)</td></tr>
+    <tr><td>Pairing</td><td colspan="2">A pairs with T (U in RNA) via <strong>2</strong> hydrogen bonds · C pairs with G via <strong>3</strong> hydrogen bonds · a purine always pairs with a pyrimidine, so the helix stays a constant width</td></tr>
+  </table></div>
+  <div class="mn"><div class="k">MNEMONIC</div><div><strong>Ag = pure silver</strong> → Adenine and Guanine are the <strong>pur</strong>ines. <strong>Don't get CUT on the pyramid</strong> → Cytosine, Uracil, Thymine are the <strong>pyr</strong>imidines.</div></div>
+  <div class="tbl narrow"><table>
+    <tr><th></th><th>DNA</th><th>RNA</th></tr>
+    <tr><td>Strands</td><td>2 (double helix)</td><td>Usually 1 — folds into many shapes</td></tr>
+    <tr><td>Sugar</td><td>Deoxyribose (no O on 2′ carbon)</td><td>Ribose</td></tr>
+    <tr><td>Bases</td><td>A, T, C, G</td><td>A, <strong>U</strong>, C, G</td></tr>
+  </table></div>
+  <p><strong>Central dogma:</strong> DNA → RNA (<em>transcription</em>, same nucleic-acid "language") → protein (<em>translation</em>, into amino-acid language) → trait. Reading DNA to make a protein is called <em>gene expression</em>. She said "much more in Unit 6," so know the vocabulary, not the mechanism. Complementary strand practice: ACTGGCTAC → TGACCGATG.</p>
+</div>
+
+<!-- ============ FRQ ============ -->
+<h2 id="frq">The FRQ recipe</h2>
+<p class="lede">Your teacher's slides are unusually explicit about how FRQs are scored. Follow the recipe exactly and you collect points that most of the class will leave behind.</p>
+
+<h3>Step 1 — Read the prompt three times</h3>
+<ol>
+  <li><strong>First</strong>, look at any data, table or model. Ask: what am I seeing and what does it mean?</li>
+  <li><strong>Then</strong> read the prompt for the <strong>bold task verbs</strong>. What exactly am I being asked to do?</li>
+  <li><strong>Last</strong>, read it again and ask: which biology concept is this really about? (Usually one of the six ideas.)</li>
+</ol>
+<p class="teacher">"MOST IMPORTANT: READ THE PROMPT!" and "ANSWER the question being asked, not the one you thought should have been asked."</p>
+
+<h3>Step 2 — Match your answer's length to the verb</h3>
+<div class="verbs">
+  <div class="verb"><span class="v">Identify</span><span class="len">SHORT</span><p>Name it. One phrase. No explanation needed — extra words earn nothing and cost time.</p></div>
+  <div class="verb"><span class="v">Predict</span><span class="len">SHORT</span><p>State the expected cause or effect. Quick.</p></div>
+  <div class="verb"><span class="v">Describe</span><span class="len">SHORTER</span><p>Give the relevant characteristics. Do NOT explain how or why.</p></div>
+  <div class="verb"><span class="v">Explain</span><span class="len">LONGER</span><p>Say <strong>how</strong> (the process) or <strong>why</strong> (the reason) using evidence or reasoning. This is where points live.</p></div>
+  <div class="verb"><span class="v">Justify</span><span class="len">LONGER</span><p>Point to specific evidence (data) that supports a claim, then explain <strong>why/how</strong> that evidence supports it.</p></div>
+  <div class="verb"><span class="v">Construct</span><span class="len">GRAPH</span><p>Graph the data. Scored on graph type, labels, and data + error bars. Pencil for the graph, pen for everything else.</p></div>
+</div>
+<div class="note"><p><strong>The 2-minute drill.</strong> If you're running out of time, skip to every remaining <strong>Identify</strong> and <strong>Predict</strong> part first. They're 1 point each and take seconds.</p></div>
+
+<h3>Step 3 — Write like the rubric is reading</h3>
+<ul class="check">
+  <li><strong>Be specific.</strong> Never "it" — name the molecule, the group, the population.</li>
+  <li><strong>Complete sentences in paragraph form.</strong> No bullets.</li>
+  <li><strong>Don't restate the prompt.</strong> Zero credit, wasted time.</li>
+  <li><strong>Units with every number.</strong> No unit, no credit.</li>
+  <li><strong>Direction of trends.</strong> Increasing, decreasing, or constant — say which.</li>
+  <li><strong>Compare BOTH sides.</strong> If asked to compare two groups, address both explicitly.</li>
+  <li><strong>Cause before effect.</strong> "Because heat breaks H-bonds, the protein unfolds and loses function" — not the other way round.</li>
+  <li><strong>Connect concepts.</strong> Questions are built to make you link two ideas (e.g., functional groups → polarity → protein folding).</li>
+  <li><strong>Answer every part.</strong> A blank is a guaranteed zero; an attempt might score.</li>
+</ul>
+
+<h3>Step 4 — If there's a graph</h3>
+<ul class="check">
+  <li><strong>Bar</strong> graph for discontinuous data (categories, e.g. three plant populations); <strong>line</strong> graph for continuous data (time, temperature).</li>
+  <li>X-axis = independent variable, Y-axis = dependent variable, <strong>both labeled with units copied exactly from the data table.</strong></li>
+  <li>Scale intervals simple and even; anchor the scale at a number (usually 0).</li>
+  <li>Plot accurately; draw error bars (95% CI = mean ± 2 SEM — calculate them on scratch paper first so they fit on the grid) and don't shade over the lower bars.</li>
+  <li>No points for a title. Don't rely on color — FRQs are scanned in black and white.</li>
+</ul>
+
+<h3>Timing for a 40-minute section</h3>
+<p>Spend the first minute scanning every question and marking the short verbs. Then work in order, but leave any part you're stuck on and come back. Save the last 3 minutes to scan for blanks and to add units you forgot. A blank part is the only unfixable mistake.</p>
+
+<!-- ============ PATTERNS ============ -->
+<h2 id="patterns">What she's likely to ask</h2>
+<p class="lede">Based on the homework she assigned and the practice questions embedded in her slides. All of these (and more) are in the Practice Lab with full point-by-point rubrics; the versions here are for reading through so you recognize the shapes.</p>
+
+<h3>MCQ-style patterns to expect</h3>
+<ul>
+  <li>Given a structure drawing: which macromolecule is it, which functional groups are present, is this region polar or nonpolar? (Her Structure ID homework, exactly.)</li>
+  <li>Count carbons and hydrogens in a skeletal (zig-zag) drawing.</li>
+  <li>Write or pick the formula: a hexose, a pentose, a disaccharide (subtract water!).</li>
+  <li>Name the <em>specific</em> bond: glycosidic / ester / peptide / phosphodiester — and know they're all covalent.</li>
+  <li>Which property of water explains this observation? (strider, sweating, coastal climate, xylem, floating ice)</li>
+  <li>Which level of protein structure is affected by… (heat / a mutation / breaking disulfide bonds)?</li>
+  <li>Saturated vs unsaturated: which is solid at room temperature and why?</li>
+  <li>Purine vs pyrimidine; DNA vs RNA differences; complementary base sequence.</li>
+  <li>Data interpretation with a small graph, like the water-vs-ethanol heating curve.</li>
+</ul>
+
+<h3>FRQ prompts to practice (with what a full answer needs)</h3>
+<details><summary><em>Explain</em> how the structure of a phospholipid enables it to form cell membranes.</summary><div class="a">Needs: phospholipid = glycerol + 2 fatty acids + phosphate → <b>amphipathic</b>: polar/hydrophilic phosphate head, nonpolar/hydrophobic fatty-acid tails. <b>Because</b> like attracts like, in water the heads face outward toward water and tails face inward away from it, so phospholipids spontaneously form a <b>bilayer</b> — a stable barrier between the watery inside and outside of the cell.</div></details>
+<details><summary><em>Describe</em> the difference between starch and cellulose, then <em>explain</em> why humans can digest one but not the other.</summary><div class="a">Describe (short): both are polysaccharides of glucose; starch has <b>alpha</b> glycosidic linkages, cellulose has <b>beta</b> linkages, so they have different shapes. Explain (longer): humans have enzymes shaped to fit and hydrolyze alpha linkages but <b>lack enzymes for beta linkages</b>, so cellulose passes through as fiber. Herbivores manage because gut bacteria produce the needed enzyme.</div></details>
+<details><summary>An enzyme is placed in a solution with a much lower pH than its normal environment. <em>Predict</em> the effect on the enzyme and <em>justify</em> your prediction.</summary><div class="a">Predict (short): the enzyme will <b>denature</b> and lose its function. Justify: the low pH (high H⁺) disrupts the <b>hydrogen bonds and ionic bonds between R-groups</b> that hold the 2°, 3° (and 4°) structure; the protein unfolds → structural change → functional change. The 1° structure is unaffected because peptide bonds are covalent.</div></details>
+<details><summary>A mutation replaces a polar amino acid with a nonpolar one. <em>Explain</em> how each level of protein structure might be affected.</summary><div class="a">1° — definitely changed (new sequence). 2° — may or may not change; depends on where it sits, since 2° is backbone H-bonding. 3° and 4° — most likely changed, because R-group interactions stabilize them: a nonpolar R-group can't form the H-bond the polar one did and will be pulled toward the hydrophobic interior, altering the fold and therefore the function.</div></details>
+<details><summary><em>Explain</em> why water has a higher specific heat than ethanol, using the heating-curve data.</summary><div class="a">Water's temperature rose more slowly per unit energy (state the direction of the trend, with units from the graph). Water forms more/stronger <b>hydrogen bonds</b> between molecules; the added energy is first used to <b>break H-bonds</b> before it can increase molecular motion (temperature). So more energy is needed per degree — high specific heat.</div></details>
+<details><summary><em>Identify</em> the type of bond formed between two amino acids, and <em>describe</em> the reaction that forms it.</summary><div class="a">Identify: a <b>peptide bond</b> (covalent). Describe: <b>dehydration synthesis</b> — the carboxyl group of one amino acid and the amino group of the next lose an –OH and an –H, releasing a water molecule, and a C–N bond forms.</div></details>
+<details><summary>Saturated vs unsaturated fats: <em>describe</em> the structural difference and <em>explain</em> why one is solid at room temperature.</summary><div class="a">Describe: saturated fatty acids have only single C–C bonds and are straight; unsaturated have one or more double bonds that put kinks in the chain. Explain: straight saturated chains pack tightly together, allowing more intermolecular attraction, so they're solid at room temperature (butter, animal fat). Kinked unsaturated chains can't pack tightly, so they stay liquid (plant oils).</div></details>
+
+<!-- ============ QUIZ ============ -->
+<h2 id="quiz">Rapid self-test</h2>
+<p class="lede">Twenty-three quick-recall checks for any spare five minutes — a bus ride, a lunch line. Say the answer out loud <em>before</em> tapping; if you hesitated, it goes on the misses list. For scored practice with explanations, use the <a href="./">Practice Lab</a>.</p>
+
+<details><summary>Which particle identifies the element? Which changes in an ion? Which changes between isotopes?</summary><div class="a"><b>Protons</b> identify the element. An <b>ion</b> has gained or lost <b>electrons</b>. <b>Isotopes</b> differ in <b>neutrons</b>.</div></details>
+<details><summary>Which four elements make up about 96% of living matter, and which four cover most of the rest?</summary><div class="a"><b>C, H, O, N</b>; then <b>P, S, Ca, K</b>.</div></details>
+<details><summary>What is electronegativity?</summary><div class="a">An atom's ability to <b>attract shared electrons</b> in a bond. Oxygen's high electronegativity is why water is polar.</div></details>
+<details><summary>Which two elements are the quick clue that a molecule (or region) is polar?</summary><div class="a"><b>N and O.</b> Just say NO to polarity.</div></details>
+<details><summary>Hydrogen bonds form <em>within</em> or <em>between</em> water molecules?</summary><div class="a"><b>Between.</b> Polar covalent bonds are within. One water molecule = 3 atoms and up to 4 H-bonds.</div></details>
+<details><summary>General formula for carbohydrates? Formula for a hexose?</summary><div class="a"><b>(CH₂O)ₙ</b>; hexose = <b>C₆H₁₂O₆</b>.</div></details>
+<details><summary>Sucrose is made of which two monosaccharides, and what's its formula?</summary><div class="a"><b>Glucose + fructose</b>; C₆H₁₂O₆ + C₆H₁₂O₆ − H₂O = <b>C₁₂H₂₂O₁₁</b>.</div></details>
+<details><summary>Name the bond between: two sugars / glycerol and a fatty acid / two amino acids / two nucleotides.</summary><div class="a"><b>Glycosidic / ester / peptide / phosphodiester.</b> All covalent, all formed by dehydration synthesis.</div></details>
+<details><summary>Which functional group is polar, negatively charged, AND acidic — name both.</summary><div class="a"><b>Carboxyl (–COOH)</b> and <b>phosphate (–PO₄)</b>. Amino is polar, positively charged, basic.</div></details>
+<details><summary>Aldehyde vs ketone?</summary><div class="a">Both are carbonyls (C=O). <b>A</b>ldehyde: <b>a</b>t the end of the chain. <b>K</b>etone: <b>k</b>aptured in the middle.</div></details>
+<details><summary>Storage polysaccharide in plants? In animals? Structural in plants? In animals/fungi?</summary><div class="a">Starch / glycogen / cellulose / chitin.</div></details>
+<details><summary>Why is glycogen digested faster than starch?</summary><div class="a">It's <b>more branched</b> → more free ends → enzymes hydrolyze at more sites at once.</div></details>
+<details><summary>Fat vs phospholipid — what's the same, what's different?</summary><div class="a">Both have glycerol + fatty acids joined by ester bonds. Fat has <b>3</b> fatty acids; phospholipid has <b>2</b> fatty acids + a <b>phosphate</b> group, making it amphipathic.</div></details>
+<details><summary>What makes a steroid a steroid? Name the precursor steroid.</summary><div class="a"><b>Four fused carbon rings</b> + functional groups. <b>Cholesterol</b> is the precursor (also keeps membranes fluid).</div></details>
+<details><summary>Which protein level uses hydrogen bonds between the backbone only?</summary><div class="a"><b>Secondary (2°)</b> — α-helix and β-pleated sheet. R-groups NOT involved.</div></details>
+<details><summary>Which bond in tertiary structure is covalent, and which amino acid makes it?</summary><div class="a"><b>Disulfide bridge</b>, from the –SH (sulfhydryl) groups of two <b>cysteines</b>.</div></details>
+<details><summary>Heat denatures a protein. Which level is NOT affected and why?</summary><div class="a"><b>Primary</b> — peptide bonds are covalent and require an enzyme (hydrolysis) to break; heat only disrupts the weaker interactions holding 2°, 3°, 4°.</div></details>
+<details><summary>Three parts of a nucleotide?</summary><div class="a"><b>Phosphate group, 5-carbon sugar, nitrogenous base.</b></div></details>
+<details><summary>Purines vs pyrimidines — which are which, and how many H-bonds in A–T vs C–G?</summary><div class="a">Purines (2 rings): <b>A, G</b>. Pyrimidines (1 ring): <b>C, U, T</b>. A–T: <b>2</b> H-bonds. C–G: <b>3</b>.</div></details>
+<details><summary>Three structural differences between DNA and RNA?</summary><div class="a">Deoxyribose vs <b>ribose</b>; thymine vs <b>uracil</b>; double-stranded vs usually <b>single</b>-stranded.</div></details>
+<details><summary>Which direction are new nucleotides added to a growing strand?</summary><div class="a">To the <b>3′ end</b>. Strands run 5′→3′ and the two DNA strands are <b>antiparallel</b>.</div></details>
+<details><summary>Which two water properties together move water up a plant's xylem?</summary><div class="a"><b>Cohesion</b> (water to water) and <b>adhesion</b> (water to xylem walls) → capillary action.</div></details>
+<details><summary>A FRQ says "Describe." Do you explain why?</summary><div class="a"><b>No.</b> Describe = characteristics only, shorter answer. Save the how/why for Explain and Justify.</div></details>
+
+<div class="foot">Built from the teacher's Unit 1 notes (1.1–1.7), Chemistry Review &amp; Functional Groups, the Biochemistry Practice and Structure ID keys, the Protein Structure POGIL key, and her "How to write an FRQ in AP Biology" slides. Checkboxes save on this device only.</div>
+</div>
+
+<script>
+(function(){
+  var boxes=document.querySelectorAll('.task input[type=checkbox]');
+  boxes.forEach(function(b){
+    try{ if(localStorage.getItem('u1:'+b.id)==='1') b.checked=true; }catch(e){}
+    b.addEventListener('change',function(){
+      try{ localStorage.setItem('u1:'+b.id, b.checked?'1':'0'); }catch(e){}
+    });
+  });
+})();
+</script>
+</body></html>

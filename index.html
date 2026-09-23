@@ -119,6 +119,7 @@ textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
 .chip{background:var(--paper);border:1.5px solid var(--line-2);border-radius:999px;padding:6px 12px;font-size:14.5px;color:var(--ink)}
 .chip.on{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-ink)}
 a{color:var(--teal)}
+a.btn{display:inline-block;text-decoration:none}
 .field{width:100%;font:inherit;font-size:17px;padding:11px 12px;border:1.5px solid var(--line-2);border-radius:10px;background:var(--paper);color:var(--ink)}
 .field:focus{outline:2px solid var(--teal);border-color:var(--teal)}
 .student-only{}
@@ -127,6 +128,9 @@ body.viewer .student-only{display:none!important}
 .today .big{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.2}
 .today .status{margin-top:6px;color:var(--ink-2)}
 .today .status.done{color:var(--good);font-weight:700}
+.steps{margin:10px 0 0;padding-left:22px;color:var(--ink-2)}
+.steps li{margin:4px 0}
+.steps a{font-weight:700}
 .strip{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:14px}
 .strip .d{aspect-ratio:1;border-radius:5px;background:var(--line);display:flex;align-items:flex-end;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--ink-3);padding-bottom:2px}
 .strip .d.on{background:var(--teal);color:var(--paper)}
@@ -145,7 +149,7 @@ body.viewer .student-only{display:none!important}
     <div>
       <div class="eyebrow">AP Biology · all units · 2026–27</div>
       <h1>AP Bio Practice Lab</h1>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 7 · Unit 2 through 2.4 · saved to your account, works on any device</div>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 9 · Unit 2 through 2.4 · saved to your account, works on any device</div>
       <p class="sub">A short session every day, explanations for every miss, FRQs scored against the rubric, and a running picture of what's strong and what needs another pass.</p>
     </div>
   </div>
@@ -176,6 +180,7 @@ body.viewer .student-only{display:none!important}
     <div class="today student-only">
       <div class="eyebrow" id="todayEyebrow">Today</div>
       <div class="big" id="todayTitle">Today's session</div>
+      <ol class="steps hidden" id="todaySteps"></ol>
       <div class="status" id="todayStatus"></div>
       <div class="row" style="margin-top:14px">
         <button class="btn" id="todayBtn">Start today's session</button>
@@ -183,6 +188,15 @@ body.viewer .student-only{display:none!important}
       </div>
       <div class="strip" id="strip" aria-label="Last 14 days"></div>
       <div class="streak" id="streak"></div>
+    </div>
+
+    <div class="card guides" style="margin-top:14px">
+      <div class="eyebrow">Study guides</div>
+      <p class="small" style="margin:4px 0 10px">Read one idea, then practice it. Understanding first, then the questions stick.</p>
+      <div class="row">
+        <a class="btn" href="unit2.html">Unit 2 guide · Cells</a>
+        <a class="btn quiet" href="unit1.html">Unit 1 guide · Chemistry of Life</a>
+      </div>
     </div>
 
     <div class="units" id="unitChips" role="tablist" aria-label="Unit"></div>
@@ -276,7 +290,7 @@ body.viewer .student-only{display:none!important}
 <script src="vendor/firebase-app-compat.js"></script>
 <script src="vendor/firebase-auth-compat.js"></script>
 <script src="vendor/firebase-firestore-compat.js"></script>
-<script src="questions.js?v=7"></script>
+<script src="questions.js?v=9"></script>
 <script>
 (function(){
 "use strict";
@@ -470,6 +484,17 @@ function finishFRQ(partial){
 }
 
 // ---------- today ----------
+function planDone(item){ return S.sessions.some(x=>isTodayLabel(x.label)&&!/partial|written/.test(x.label)&&x.label.indexOf(item.idea+':')>-1); }
+function todayFocus(){
+  if(typeof PLAN==='undefined'||!PLAN.length) return null;
+  const today=dayKey(Date.now());
+  const due=PLAN.filter(p=>p.date<=today);
+  const behind=due.find(p=>p.date<today&&!planDone(p));       // oldest missed idea first
+  if(behind) return Object.assign({catchup:true},behind);
+  const cur=due.find(p=>p.date===today); if(cur) return cur;
+  if(!due.length) return Object.assign({early:true},PLAN[0]);    // before the plan starts
+  return null;                                                  // plan finished: general mixed practice
+}
 function streakCount(){
   const days=new Set(S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial/.test(x.label)).map(x=>dayKey(x.ts)));
   let n=0, t=Date.now(); if(!days.has(dayKey(t))) t-=864e5; // today not done yet doesn't break the streak
@@ -481,7 +506,15 @@ function renderToday(){
   const mcq=done.find(x=>!/written/.test(x.label)), wr=done.find(x=>/written/.test(x.label));
   const wd=new Date().getDay(), writtenDay=(wd===2||wd===4);
   $('todayEyebrow').textContent='Today · '+new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
-  $('todayTitle').textContent=`10 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review`+(writtenDay?' · + 1 written':'');
+  const fc=todayFocus();
+  if(fc){
+    $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':''}${fc.idea}: ${fc.title}`;
+    $('todaySteps').innerHTML=`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li><li><b>Practice</b> 10 questions: ${fc.topic==='mix'?'a mix of all six ideas':'6 on this idea, 2 from earlier ideas, 2 Unit 1 review'}.</li>`+(writtenDay?'<li><b>Write</b> one short FRQ (Tue & Thu).</li>':'');
+    $('todaySteps').classList.remove('hidden');
+  } else {
+    $('todayTitle').textContent=`10 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review`+(writtenDay?' · + 1 written':'');
+    $('todaySteps').classList.add('hidden');
+  }
   const st=$('todayStatus');
   if(mcq){ const tm=new Date(mcq.ts).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
     st.className='status done'; st.textContent=`Done at ${tm} · ${mcq.score}/${mcq.max}`+(writtenDay?(wr?` · written ${wr.score}/${wr.max}`:' · written question still to do'):'');
@@ -496,18 +529,40 @@ function renderToday(){
   $('streak').textContent=`${n}-day streak · ${last7} of the last 7 days`;
 }
 function startToday(){
+  const fc=todayFocus();
+  if(fc){
+    const cur=inUnit(CURRENT.unit), review=MCQ.filter(q=>unitOf(q)!==CURRENT.unit);
+    let list;
+    if(fc.topic==='mix'){ list=[...pickSmart(8,cur),...pickSmart(2,review)]; }
+    else {
+      const order=PLAN.map(p=>p.topic), idx=order.indexOf(fc.topic);
+      const focus=cur.filter(q=>q.t===fc.topic), earlier=cur.filter(q=>order.slice(0,idx).includes(q.t));
+      list=[...pickSmart(6,focus),...pickSmart(2,earlier.length?earlier:review),...pickSmart(2,review)];
+      const seen=new Set(); list=list.filter(q=>!seen.has(q.id)&&seen.add(q.id));
+    }
+    return startMCQ(shuffle(list),'Today · '+fc.idea+': '+fc.title,false);
+  }
   const cur=inUnit(CURRENT.unit), newest=cur.filter(q=>CURRENT.newest.includes(q.t)), older=cur.filter(q=>!CURRENT.newest.includes(q.t)), review=MCQ.filter(q=>unitOf(q)!==CURRENT.unit);
   const a=pickSmart(5,newest), b=pickSmart(3,older), c=pickSmart(2,review.length?review:older.filter(q=>!b.includes(q)));
   const list=[...a,...b,...c]; startMCQ(list,'Today · Unit '+CURRENT.unit,false);
 }
 function startTodayWritten(){
   const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
-  const pool=frqInUnit(CURRENT.unit).sort((a,b)=>{const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
+  const fc=todayFocus();
+  const pool=frqInUnit(CURRENT.unit).sort((a,b)=>{const fa=fc&&a.t===fc.topic?0:1, fb=fc&&b.t===fc.topic?0:1; if(fa!==fb)return fa-fb; const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
   if(!pool.length){toast('No written questions for this unit yet');return}
   startFRQ([pool[0]],'Today written · Unit '+CURRENT.unit);
 }
 $('todayBtn').addEventListener('click',()=>startMode('today'));
 $('todayWritten').addEventListener('click',startTodayWritten);
+
+// ---------- deep link from the study guide: #drill=<topic> ----------
+function handleDrillLink(){
+  const m=location.hash.match(/drill=([a-z0-9]+)/); if(!m||!TOPICS[m[1]]) return false;
+  history.replaceState(null,'',location.pathname+location.search);
+  const list=shuffle(MCQ.filter(q=>q.t===m[1])).slice(0,10); if(!list.length) return false;
+  SEL_UNIT=TOPICS[m[1]].unit; startMCQ(list,'Drill: '+TOPICS[m[1]].short,false); return true;
+}
 
 // ---------- modes ----------
 let lastMode='smart'; let chosenTopics=new Set();
@@ -604,7 +659,7 @@ auth.onAuthStateChanged(async user=>{
     snap.docChanges().forEach(ch=>{ if(ch.type==='removed') delete SESS[ch.doc.id]; else SESS[ch.doc.id]=ch.doc.data(); });
     pendingWrites=snap.metadata.hasPendingWrites; if(!snap.metadata.fromCache) lastSync=Date.now();
     rebuild();
-    if(!$('loading').classList.contains('hidden')) show('home');
+    if(!$('loading').classList.contains('hidden')){ show('home'); if(ROLE==='student'&&!window.__drillDone){ window.__drillDone=true; if(handleDrillLink()) return; } }
     if(!$('home').classList.contains('hidden')) renderHome();
     setStatus(snap.metadata.fromCache && !navigator.onLine ? 'offline' : 'ok');
   }, err=>{ console.error(err); $('loading').innerHTML='<p style="margin-top:28px;color:var(--bad)">This account can\'t open Ana\'s progress. Check that the sign-in email matches the one in Firebase, then sign out and try again.</p><button class="btn quiet" onclick="firebase.auth().signOut()">Sign out</button>'; show('loading'); });

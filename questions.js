@@ -497,6 +497,17 @@ Object.assign(TOPICS, {
 const UNITS = {1:{name:"Unit 1 · Chemistry of Life"}, 2:{name:"Unit 2 · Cell Structure & Function"}};
 // Which unit is being taught now, and which topics were taught most recently (Today session leans on these)
 const CURRENT = {unit:2, newest:["u2mem","u2perm"], taughtThrough:"2.4", asOf:"Wed Sep 23"};
+// Daily plan: one guide idea per day, and that day's session practices exactly that idea.
+// guide = page + section anchor in the study guide. Update this list as new material arrives.
+const PLAN = [
+  {date:"2026-09-24", topic:"u2cells", idea:"Idea 1", title:"Cells: two basic designs",        guide:"unit2.html#i1"},
+  {date:"2026-09-25", topic:"u2endo",  idea:"Idea 2", title:"Follow one protein",               guide:"unit2.html#i2"},
+  {date:"2026-09-26", topic:"u2cyto",  idea:"Idea 3", title:"The cytoskeleton and junctions",   guide:"unit2.html#i3"},
+  {date:"2026-09-27", topic:"u2size",  idea:"Idea 4", title:"Why cells stay small (SA:V)",      guide:"unit2.html#i4"},
+  {date:"2026-09-28", topic:"u2mem",   idea:"Idea 5", title:"The membrane is Unit 1 chemistry", guide:"unit2.html#i5"},
+  {date:"2026-09-29", topic:"u2perm",  idea:"Idea 6", title:"What gets through the membrane",   guide:"unit2.html#i6"},
+  {date:"2026-09-30", topic:"mix",     idea:"Review", title:"Cell Quiz review: all six ideas",  guide:"unit2.html#check"}
+];
 
 MCQ.push(
 // ---------- 2.1 CELLS & ORGANELLES ----------

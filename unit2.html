@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unit 2 Study Guide</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#176B62">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧫</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F6F7F4; --paper:#FFFFFF; --ink:#1A2230; --ink-2:#4A5568; --ink-3:#7A8494;
+  --line:#DDE1DA; --line-2:#C9CFC6;
+  --teal:#176B62; --teal-soft:#DDEFEA; --teal-ink:#0F4F48;
+  --hi:#FFE85C; --hi-ink:#4A3F00;
+  --polar:#BDEFF5; --polar-ink:#0A4A55;
+  --nonpolar:#F3E3C6; --nonpolar-ink:#5A3E0A;
+  --neg:#CDEFC8; --neg-ink:#1F4F1A;
+  --pos:#FFE1A8; --pos-ink:#5B3A00;
+  --acid:#F5CDEB; --acid-ink:#5A0F45;
+  --warn:#B4342B; --warn-soft:#FBE7E4;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D;
+    --line:#2C3841; --line-2:#3A4852;
+    --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+    --hi:#C9B23A; --hi-ink:#1E1900;
+    --polar:#15505A; --polar-ink:#BDEFF5;
+    --nonpolar:#5A4320; --nonpolar-ink:#F3E3C6;
+    --neg:#22502A; --neg-ink:#CDEFC8;
+    --pos:#5B3F0E; --pos-ink:#FFE1A8;
+    --acid:#5A1F4E; --acid-ink:#F5CDEB;
+    --warn:#F08A80; --warn-soft:#3A1F1C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D;
+  --line:#2C3841; --line-2:#3A4852;
+  --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+  --hi:#C9B23A; --hi-ink:#1E1900;
+  --polar:#15505A; --polar-ink:#BDEFF5;
+  --nonpolar:#5A4320; --nonpolar-ink:#F3E3C6;
+  --neg:#22502A; --neg-ink:#CDEFC8;
+  --pos:#5B3F0E; --pos-ink:#FFE1A8;
+  --acid:#5A1F4E; --acid-ink:#F5CDEB;
+  --warn:#F08A80; --warn-soft:#3A1F1C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.12}
+h1{font-size:clamp(34px,7vw,52px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(24px,4.5vw,32px);font-weight:700;letter-spacing:-.015em;margin-top:56px;padding-top:28px;border-top:2px solid var(--ink)}
+h3{font-size:20px;font-weight:700;margin-top:28px}
+h4{font-size:17px;font-weight:700;margin-top:18px}
+p{margin:12px 0;max-width:68ch}
+ul,ol{padding-left:22px;margin:10px 0}
+li{margin:6px 0}
+strong{font-weight:700}
+.eyebrow{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+header{padding-top:40px}
+header .sub{font-size:19px;color:var(--ink-2);max-width:60ch}
+mark{background:var(--hi);color:var(--hi-ink);padding:0 4px;border-radius:2px}
+code,.f{font-family:var(--mono);font-size:.93em;background:var(--teal-soft);color:var(--teal-ink);padding:1px 6px;border-radius:4px;white-space:nowrap}
+.lede{font-size:19px}
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:28px -18px 0;padding:10px 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink-2);text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid var(--line-2)}
+nav a:hover,nav a:focus-visible{color:var(--teal);border-color:var(--teal);outline:none}
+/* facts row */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.fact .n{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.fact .l{font-size:14px;color:var(--ink-2);margin-top:6px}
+/* callouts */
+.note{background:var(--paper);border-left:4px solid var(--teal);padding:14px 18px;border-radius:0 10px 10px 0;margin:18px 0}
+.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.note p:first-child{margin-top:0}.note p:last-child{margin-bottom:0}
+.teacher{font-style:italic;color:var(--ink-2)}
+.teacher::before{content:"Teacher's words: ";font-style:normal;font-weight:700;color:var(--ink)}
+/* schedule */
+.day{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px;margin-top:18px}
+.day h3{margin-top:0;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.day h3 .t{font-size:14px;color:var(--ink-3);font-weight:500;font-family:var(--body)}
+.task{display:grid;grid-template-columns:28px 64px 1fr;gap:10px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.task:first-of-type{border-top:0}
+.task input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--teal);cursor:pointer}
+.task .min{font-family:var(--mono);font-size:13px;color:var(--ink-3);padding-top:4px;font-variant-numeric:tabular-nums}
+.task label{cursor:pointer}
+.task label b{display:block;font-weight:700}
+.task label span{color:var(--ink-2);font-size:15.5px}
+.task input:checked ~ label{opacity:.55;text-decoration:line-through}
+.day .why{font-size:14.5px;color:var(--ink-3);margin:10px 0 6px;font-style:italic}
+/* big ideas */
+.idea{margin-top:36px;padding-top:8px}
+.idea .num{font-family:var(--display);font-weight:800;color:var(--teal);font-size:14px;letter-spacing:.1em}
+.idea h3{margin-top:4px;font-size:24px}
+.plain{background:var(--teal-soft);color:var(--teal-ink);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:16.5px}
+.plain b{color:inherit}
+/* tags */
+.tag{display:inline-block;font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.04em;padding:2px 8px;border-radius:999px;line-height:1.5;white-space:nowrap}
+.tag.polar{background:var(--polar);color:var(--polar-ink)}
+.tag.nonpolar{background:var(--nonpolar);color:var(--nonpolar-ink)}
+.tag.neg{background:var(--neg);color:var(--neg-ink)}
+.tag.pos{background:var(--pos);color:var(--pos-ink)}
+.tag.acid{background:var(--acid);color:var(--acid-ink)}
+/* tables */
+.tbl{overflow-x:auto;margin:16px -18px;padding:0 18px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td .f{white-space:nowrap}
+.tbl.narrow table{min-width:420px}
+/* mnemonic */
+.mn{display:flex;gap:12px;align-items:flex-start;margin:14px 0;padding:12px 14px;border:1.5px dashed var(--line-2);border-radius:10px}
+.mn .k{font-family:var(--display);font-weight:800;color:var(--teal);font-size:13px;letter-spacing:.1em;padding-top:3px;flex:none}
+/* trap */
+.trap{margin:14px 0;padding:12px 14px;border-radius:10px;background:var(--warn-soft);border:1px solid transparent}
+.trap b{color:var(--warn)}
+/* details quiz */
+details{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--mono);color:var(--teal);flex:none;width:14px}
+details[open] summary::before{content:"–"}
+details .a{padding:0 16px 14px 40px;color:var(--ink-2);font-size:16px}
+details .a b{color:var(--ink)}
+/* verbs */
+.verbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+.verb{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.verb .v{font-family:var(--display);font-weight:800;font-size:19px}
+.verb .len{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-left:6px}
+.verb p{margin:6px 0 0;font-size:15px}
+.check li{list-style:none;position:relative;padding-left:26px}
+.check li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border:2px solid var(--teal);border-radius:3px}
+.foot{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-3);font-size:14px}
+@media (prefers-reduced-motion:no-preference){details .a{animation:fade .18s ease-out}}
+@keyframes fade{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+@media (max-width:480px){
+  .task{grid-template-columns:26px 1fr}
+  .task .min{grid-column:2;padding-top:0;margin-top:-4px}
+  .task label{grid-column:2}
+}
+</style>
+<style>
+.back{display:inline-block;margin-bottom:14px;font-family:var(--display);font-weight:700;color:var(--teal);text-decoration:none}
+.ver{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:8px}
+.u1{display:block;margin-top:4px;color:var(--teal-ink);background:var(--teal-soft);border-radius:6px;padding:4px 8px;font-size:15px}
+p.u1{padding:8px 12px}
+.route li{margin:10px 0}
+.idea,h2{scroll-margin-top:64px}
+.practice{display:inline-block;margin-top:16px;background:var(--teal);color:#fff;font-family:var(--display);font-weight:700;padding:11px 16px;border-radius:10px;text-decoration:none}
+.mn-inline{display:block;margin-top:6px;color:var(--ink-2)}
+</style></head><body>
+<div class="wrap">
+<header>
+  <a class="back" href="./">← Study Lab</a>
+  <div class="eyebrow">AP Biology · Unit 2 · Cell Structure &amp; Function</div>
+  <h1>Unit 2 Study Guide</h1>
+  <div class="ver">Covers 2.1–2.4 (taught through Sep 23) · 2.5 onward is added as it's taught</div>
+  <p class="sub">Unit 2 isn't a pile of new facts. It's Unit 1 put to work: the same molecules, now built into a cell. If you understand <em>why</em> each part is shaped the way it is, most of this unit explains itself.</p>
+
+  <div class="facts">
+    <div class="fact"><div class="n">Thu 10/1</div><div class="l">Cell Quiz · covers 2.1–2.5</div></div>
+    <div class="fact"><div class="n">Mon 10/5</div><div class="l">Do the AP Classroom progress check + reflection (free +1 point)</div></div>
+    <div class="fact"><div class="n">Wed 10/7</div><div class="l">Unit 2 Test · 50% MCQ / 50% FRQ</div></div>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <a href="#bigpicture">Big picture</a>
+  <a href="#plan">Daily plan</a>
+  <a href="#i1">1 · Cells</a>
+  <a href="#i2">2 · Protein path</a>
+  <a href="#i3">3 · Skeleton</a>
+  <a href="#i4">4 · Size</a>
+  <a href="#i5">5 · Membrane</a>
+  <a href="#i6">6 · What crosses</a>
+  <a href="#writing">FRQ writing</a>
+  <a href="#check">Self-check</a>
+</nav>
+
+<!-- ================= BIG PICTURE ================= -->
+<h2 id="bigpicture">The big picture</h2>
+<p class="lede">One sentence for the whole unit: <mark>a cell is a bag of Unit 1 molecules, divided into compartments, with a membrane that decides what gets in and out.</mark></p>
+<p>Every topic in Unit 2 answers one of three questions:</p>
+<ol>
+  <li><strong>What's inside?</strong> The organelles, and what each one does (2.1–2.2).</li>
+  <li><strong>How big can it be?</strong> Surface area to volume (2.2).</li>
+  <li><strong>What's the wall made of, and what gets through?</strong> The membrane (2.3–2.4), and next, how things cross it (2.5–2.8).</li>
+</ol>
+
+<h3>Where Unit 1 shows up in Unit 2</h3>
+<p>This is the table to understand, not memorize. Almost every Unit 2 answer is a Unit 1 idea wearing a new outfit.</p>
+<div class="tbl"><table>
+  <tr><th>Unit 1 idea</th><th>Where it shows up now</th></tr>
+  <tr><td><strong>Like attracts like</strong> (polar with polar, nonpolar with nonpolar)</td><td>Why phospholipids form a bilayer. Why oxygen slips through a membrane but sodium ions can't. Why the middle of a membrane protein is nonpolar.</td></tr>
+  <tr><td><strong>Phospholipids</strong> (polar head, nonpolar tails)</td><td>They <em>are</em> the membrane: every cell and every organelle.</td></tr>
+  <tr><td><strong>Proteins and R-groups</strong></td><td>Membrane proteins, channels, receptors, motor proteins. Where a protein sits in the membrane depends on its R-groups.</td></tr>
+  <tr><td><strong>Dehydration synthesis</strong></td><td>Ribosomes build proteins this way (peptide bonds). The Golgi attaches sugars this way.</td></tr>
+  <tr><td><strong>Hydrolysis</strong></td><td>Lysosomes. Their "hydrolytic enzymes" break polymers apart by adding water.</td></tr>
+  <tr><td><strong>Carbohydrates</strong></td><td>Glycoproteins and glycolipids (the cell's ID tags). Cell walls: cellulose in plants, chitin in fungi.</td></tr>
+  <tr><td><strong>Steroids</strong> (lipids)</td><td>Made in the smooth ER. Cholesterol sits in the membrane and controls fluidity.</td></tr>
+  <tr><td><strong>Nucleic acids</strong></td><td>DNA lives in the nucleus (or nucleoid). Ribosomes are made of rRNA.</td></tr>
+  <tr><td><strong>Structure → function</strong></td><td>The theme of the whole unit. Folded membranes, branched shapes, and double membranes all exist for a reason.</td></tr>
+</table></div>
+
+<div class="note"><p><strong>How to use this guide.</strong> Follow the <a href="#plan">daily plan</a>: read one idea, then do the Study Lab's "Today" session, which practices that same idea. Tuesdays and Thursdays include a written question: write it on paper, photograph it, and send it to Dad for Claude to grade. The self-check questions at the bottom work anywhere, including in line or in the car.</p></div>
+
+
+<!-- ================= DAILY PLAN ================= -->
+<h2 id="plan">The daily plan to the Cell Quiz</h2>
+<p class="lede">One idea a day. <strong>Read it here, then do the "Today" session in the Study Lab</strong>, which practices exactly that idea (6 questions on it, 2 from earlier ideas, 2 Unit 1 review). About 20 minutes total.</p>
+<div class="tbl narrow"><table>
+  <tr><th>Day</th><th>Read</th><th>Then practice</th></tr>
+  <tr><td>Thu 9/24</td><td><a href="#i1">Idea 1 · Cells</a></td><td>Today session</td></tr>
+  <tr><td>Fri 9/25</td><td><a href="#i2">Idea 2 · Protein path</a></td><td>Today session</td></tr>
+  <tr><td>Sat 9/26</td><td><a href="#i3">Idea 3 · Cytoskeleton</a></td><td>Today session + one FRQ on paper, photographed for grading</td></tr>
+  <tr><td>Sun 9/27</td><td><a href="#i4">Idea 4 · Cell size</a></td><td>Today session (includes typed-answer calculations)</td></tr>
+  <tr><td>Mon 9/28</td><td><a href="#i5">Idea 5 · Membrane</a></td><td>Today session</td></tr>
+  <tr><td>Tue 9/29</td><td><a href="#i6">Idea 6 · What crosses</a></td><td>Today session + written question</td></tr>
+  <tr><td>Wed 9/30</td><td><a href="#check">Self-check</a> + 2.5 once it's added</td><td>Today session: a mix of all six ideas</td></tr>
+  <tr><td><b>Thu 10/1</b></td><td colspan="2"><b>Cell Quiz (2.1–2.5)</b></td></tr>
+</table></div>
+<p class="small">Missed a day? The Study Lab doesn't skip ahead. It shows the missed idea first as "Catch-up," so nothing gets left out.</p>
+
+<!-- ================= IDEA 1 ================= -->
+<div class="idea" id="i1">
+  <div class="num">IDEA 1 · 2.1</div>
+  <h3>Every living thing is made of cells, and cells come in two basic designs.</h3>
+  <div class="plain"><b>In plain English:</b> A cell is the smallest thing that can do <em>everything</em> life does. Some cells are simple, with everything floating together in one open room (prokaryotes: bacteria). Others are divided into rooms with walls, each room with its own job (eukaryotes: plants, animals, fungi). Those "rooms" are organelles, and their walls are membranes.</div>
+
+  <h4>Cell theory, three parts</h4>
+  <p>All living things are made of one or more cells. The cell is the basic unit of life. Cells only come from other cells. The last one is why the teacher says "life is continuous": every cell in you traces back, unbroken, to earlier cells.</p>
+
+  <h4>Prokaryote vs. eukaryote</h4>
+  <div class="tbl narrow"><table>
+    <tr><th></th><th>Prokaryote</th><th>Eukaryote</th></tr>
+    <tr><td>Who</td><td>Bacteria, archaea</td><td>Plants, animals, fungi, protists</td></tr>
+    <tr><td>DNA</td><td>In the <strong>nucleoid region</strong> (no membrane around it)</td><td>Inside a <strong>nucleus</strong> (double membrane)</td></tr>
+    <tr><td>Membrane-bound organelles</td><td>None</td><td>Many</td></tr>
+    <tr><td>Ribosomes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Plasma membrane</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Size</td><td>Much smaller</td><td>Larger</td></tr>
+  </table></div>
+  <div class="trap"><b>Tripping point:</b> "Prokaryotes have no organelles" is a trap answer. They have <strong>ribosomes</strong>, which count as organelles in many textbooks. What they lack is <em>membrane-bound</em> organelles. When in doubt, say "membrane-bound." Every cell, even the simplest, has a plasma membrane, ribosomes, DNA, and cytoplasm, because every cell has to make proteins.</div>
+
+  <h4>Plant vs. animal cells</h4>
+  <p>Plants have three things animals don't: a <strong>cell wall</strong> (cellulose, the β-glucose polymer from Unit 1), <strong>chloroplasts</strong>, and a <strong>large central vacuole</strong>. Both have mitochondria. Plants need mitochondria too, because photosynthesis makes sugar but the plant still has to turn that sugar into ATP.</p>
+  <div class="trap"><b>Tripping point:</b> "Plants have chloroplasts <em>instead of</em> mitochondria" is wrong. Plants have both.</div>
+
+  <h4>Microscopes (one quick fact each)</h4>
+  <p><strong>Light microscope:</strong> uses light, sees living cells, limited detail. <strong>TEM</strong> (transmission electron): electrons pass <em>through</em> a thin slice, so it shows the <strong>inside</strong>. <strong>SEM</strong> (scanning electron): electrons bounce off the <strong>surface</strong>, so it gives a 3-D look at the outside. <span class="mn-inline">Memory hook: <b>T</b>EM = <b>T</b>hrough, <b>S</b>EM = <b>S</b>urface.</span></p>
+
+  <a class="practice" href="./#drill=u2cells">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 2 ================= -->
+<div class="idea" id="i2">
+  <div class="num">IDEA 2 · 2.1–2.2</div>
+  <h3>Follow one protein and you've learned half the organelles.</h3>
+  <div class="plain"><b>In plain English:</b> Instead of memorizing a list of organelles, follow a protein from the moment it's made until it leaves the cell. The organelles it passes through in order are the <strong>endomembrane system</strong>. Once you know the route, each organelle's job is obvious from where it sits on the route.</div>
+
+  <h4>The route of a secreted protein, like a digestive enzyme</h4>
+  <ol class="route">
+    <li><strong>Nucleus</strong>: holds the DNA instructions for the protein. <span class="u1">Unit 1: nucleic acids store information.</span></li>
+    <li><strong>Ribosome on the rough ER</strong>: reads the instructions and links amino acids with peptide bonds. <span class="u1">Unit 1: dehydration synthesis.</span></li>
+    <li><strong>Rough ER</strong>: the new protein goes inside, starts folding, and gets its first sugar tags. It's "rough" because it's studded with ribosomes.</li>
+    <li><strong>Transport vesicle</strong>: a small bubble of membrane buds off and carries the protein to the Golgi.</li>
+    <li><strong>Golgi apparatus</strong>: modifies (adds or trims carbohydrates to make glycoproteins), <strong>packages</strong> and <strong>sorts</strong> proteins by destination.</li>
+    <li><strong>Secretory vesicle → plasma membrane</strong>: the vesicle fuses with the membrane and releases the protein outside (exocytosis).</li>
+  </ol>
+  <div class="mn"><div class="k">ORDER</div><div><strong>N</strong>ucleus → <strong>R</strong>ibosome/Rough ER → <strong>V</strong>esicle → <strong>G</strong>olgi → <strong>V</strong>esicle → <strong>M</strong>embrane. The key point: <strong>ER before Golgi</strong>. The most common mistake is swapping them.</div></div>
+
+  <h4>The other organelles, each tied to Unit 1</h4>
+  <div class="tbl"><table>
+    <tr><th>Organelle</th><th>Structure</th><th>Function</th><th>Unit 1 link</th></tr>
+    <tr><td><strong>Smooth ER</strong></td><td>Tubular membranes, <em>no</em> ribosomes</td><td>Makes lipids and steroids; detoxifies drugs (liver); glycogen metabolism</td><td>Lipids, steroids, glycogen</td></tr>
+    <tr><td><strong>Lysosome</strong></td><td>Membrane sac of hydrolytic enzymes; made by the Golgi</td><td>Digests food particles and recycles worn-out organelles</td><td>Hydrolysis: breaking polymers by adding water</td></tr>
+    <tr><td><strong>Ribosome</strong></td><td>rRNA + protein, two subunits, <em>no membrane</em></td><td>Builds proteins</td><td>RNA can act like an enzyme</td></tr>
+    <tr><td><strong>Nucleolus</strong></td><td>Dense spot inside the nucleus</td><td>Makes rRNA and assembles ribosomes</td><td>Nucleic acids</td></tr>
+    <tr><td><strong>Vacuole / vesicle</strong></td><td>Membrane sacs</td><td>Store and move materials</td><td>—</td></tr>
+    <tr><td><strong>Large central vacuole</strong> (plants)</td><td>One huge sac</td><td>Stores water; pushes out on the cell wall so the plant stays firm</td><td>Properties of water</td></tr>
+    <tr><td><strong>Mitochondrion</strong></td><td>Double membrane; inner one folded</td><td>Converts the energy in glucose into ATP</td><td>Carbohydrates → energy</td></tr>
+    <tr><td><strong>Chloroplast</strong> (plants)</td><td>Double membrane with internal stacks</td><td>Converts light energy into sugar</td><td>Glucose, the monomer of starch/cellulose</td></tr>
+  </table></div>
+
+  <h4>The idea that answers "predict" questions: a cell's organelles match its job</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>If a cell…</th><th>it has a lot of…</th><th>because…</th></tr>
+    <tr><td>secretes lots of protein (pancreas: digestive enzymes)</td><td>Rough ER + Golgi</td><td>That's the protein-export route</td></tr>
+    <tr><td>makes steroid hormones (adrenal gland)</td><td>Smooth ER</td><td>Steroids are lipids</td></tr>
+    <tr><td>detoxifies drugs and alcohol (liver)</td><td>Smooth ER</td><td>Detox enzymes live there</td></tr>
+    <tr><td>uses lots of energy (muscle, sperm)</td><td>Mitochondria</td><td>ATP production</td></tr>
+    <tr><td>digests invaders (white blood cells)</td><td>Lysosomes</td><td>Hydrolytic enzymes</td></tr>
+  </table></div>
+
+  <div class="trap"><b>The teacher's #1 rule for Unit 2 answers:</b> <em>no analogies</em>. Analogies are fine for <strong>understanding</strong> (thinking of the Golgi as a shipping department really does help), but on a test they earn <strong>zero</strong>. Her own examples: "the Golgi is NOT a stack of pancakes" and "the mitochondria is NOT the powerhouse of the cell."
+  <br><br><b>Instead of:</b> "The mitochondria is the powerhouse of the cell."
+  <br><b>Write:</b> "The mitochondrion converts the chemical energy in glucose into ATP through aerobic respiration; its folded inner membrane increases the surface area for these reactions."</div>
+
+  <a class="practice" href="./#drill=u2endo">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 3 ================= -->
+<div class="idea" id="i3">
+  <div class="num">IDEA 3 · 2.1</div>
+  <h3>The cytoskeleton is the cell's frame, and its tracks.</h3>
+  <div class="plain"><b>In plain English:</b> Inside the cell is a network of protein fibers. Some give it shape, some hold things in place, and some are highways that motor proteins "walk" along, carrying cargo.</div>
+  <div class="tbl"><table>
+    <tr><th>Fiber</th><th>Made of</th><th>Shape</th><th>Job</th></tr>
+    <tr><td><strong>Microtubules</strong> ⭐</td><td>Tubulin (globular protein)</td><td>Hollow tubes, the thickest</td><td>Tracks for vesicles; move chromosomes during cell division; form cilia and flagella</td></tr>
+    <tr><td><strong>Microfilaments</strong></td><td>Actin</td><td>Solid thin rods</td><td>Change cell shape; muscle contraction</td></tr>
+    <tr><td><strong>Intermediate filaments</strong></td><td>Fibrous proteins</td><td>Rope-like</td><td>Resist pulling (tension); anchor organelles in place</td></tr>
+  </table></div>
+  <p><strong>Cilia and flagella</strong> are both built from microtubules in a <strong>9 + 2</strong> pattern (nine pairs in a ring, two in the middle). Cilia are short and many; flagella are long and few.</p>
+  <p><strong>Motor proteins:</strong> <em>dynein</em> bends cilia and flagella by sliding the microtubule pairs; <em>kinesin</em> carries vesicles along microtubules. <span class="u1">Unit 1 link: both work by changing shape (a "conformational change"). That's the tertiary structure idea again: a protein's shape <em>is</em> its function, so changing its shape makes it move.</span></p>
+
+  <h4>Cell junctions: how neighbor cells connect</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Junction</th><th>What it does</th><th>Example</th></tr>
+    <tr><td><strong>Tight junction</strong></td><td>Seals cells together so nothing leaks between them</td><td>Intestine and bladder lining</td></tr>
+    <tr><td><strong>Desmosome</strong></td><td>Rivets cells together; strong, but not sealed</td><td>Skin, heart muscle</td></tr>
+    <tr><td><strong>Gap junction</strong> ⭐ (animals) / <strong>Plasmodesmata</strong> ⭐ (plants)</td><td>Open channels between cells; water, ions, small molecules pass through</td><td>Heart cells signaling each other</td></tr>
+  </table></div>
+  <div class="trap"><b>Tripping point:</b> tight junctions <em>seal</em>; gap junctions <em>connect</em>. If a question mentions "leak-proof," it's tight. If it mentions "communication" or "passing molecules," it's gap junctions (or plasmodesmata in plants).</div>
+
+  <a class="practice" href="./#drill=u2cyto">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 4 ================= -->
+<div class="idea" id="i4">
+  <div class="num">IDEA 4 · 2.2</div>
+  <h3>Why cells stay small: surface area vs. volume.</h3>
+  <div class="plain"><b>In plain English:</b> Everything a cell needs comes in through its surface, and all its waste goes out the same way. The surface is the "doors"; the volume is the "people inside." As a cell grows, the number of people grows much faster than the number of doors. Eventually there aren't enough doors to keep everyone fed. So cells stay small, or fold their surface, or divide.</div>
+
+  <h4>Watch the numbers (cubes, the way the lab did it)</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Side</th><th>Surface area (6s²)</th><th>Volume (s³)</th><th>SA : V</th></tr>
+    <tr><td>1 cm</td><td>6 cm²</td><td>1 cm³</td><td><strong>6</strong></td></tr>
+    <tr><td>2 cm</td><td>24 cm²</td><td>8 cm³</td><td><strong>3</strong></td></tr>
+    <tr><td>4 cm</td><td>96 cm²</td><td>64 cm³</td><td><strong>1.5</strong></td></tr>
+  </table></div>
+  <p>Double the size → the SA:V ratio is <strong>cut in half</strong>. For a cube, SA:V is just 6 ÷ side length, so bigger always means a smaller ratio.</p>
+  <div class="trap"><b>Tripping points:</b>
+  <br>• "As a cell grows, its surface area decreases." <strong>Wrong.</strong> The surface area goes <em>up</em>; the <em>ratio</em> goes down. Read carefully for the word "ratio."
+  <br>• Don't memorize the formulas. They're on the AP formula sheet. Know how to use them, and <strong>always include units</strong> (cm², cm³).
+  <br>• A <em>higher</em> SA:V is <em>better</em> for exchange. Small cells win.</div>
+
+  <h4>The same idea, everywhere in biology (big-picture thread)</h4>
+  <p>Whenever living things need <em>more exchange</em>, they <strong>increase surface area</strong>: the <strong>villi and microvilli</strong> of the intestine (absorbing food), the <strong>folded inner membrane</strong> of mitochondria (more room for reactions), the <strong>folded ER</strong>, and later root hairs and lungs. <span class="u1">You've already seen this in Unit 1: glycogen is highly branched, and more branches means more ends where enzymes can work at once. Same principle.</span></p>
+  <p><strong>Why not infinitely small?</strong> A cell still has to fit its DNA, ribosomes, and everything needed to carry out life. That sets the lower limit.</p>
+
+  <a class="practice" href="./#drill=u2size">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 5 ================= -->
+<div class="idea" id="i5">
+  <div class="num">IDEA 5 · 2.3</div>
+  <h3>The membrane is Unit 1 chemistry, assembled.</h3>
+  <div class="plain"><b>In plain English:</b> A membrane is two layers of phospholipids with proteins floating in it. Water is on both sides of a cell (inside and out), so the water-loving heads face out on both sides and the water-fearing tails hide in the middle. Nobody has to build it: phospholipids arrange themselves this way automatically because of <em>like attracts like</em>.</div>
+
+  <h4>"Fluid mosaic model," decoded</h4>
+  <p><strong>Fluid:</strong> the phospholipids and most proteins drift sideways; the membrane is more like olive oil than plastic wrap. <strong>Mosaic:</strong> it's made of many different pieces (phospholipids, proteins, cholesterol, carbohydrate chains) fitted together.</p>
+
+  <div class="tbl"><table>
+    <tr><th>Part</th><th>What it does</th><th>Unit 1 link</th></tr>
+    <tr><td><strong>Phospholipids</strong></td><td>Form the bilayer, the basic barrier</td><td>Amphipathic: polar head, nonpolar tails</td></tr>
+    <tr><td><strong>Cholesterol</strong></td><td>Keeps fluidity steady as temperature changes</td><td>A steroid (four fused rings)</td></tr>
+    <tr><td><strong>Integral proteins</strong></td><td>Go <em>into</em> or all the way <em>through</em> the membrane: channels, transporters, receptors</td><td>R-groups decide where they sit</td></tr>
+    <tr><td><strong>Peripheral proteins</strong></td><td>Sit on the surface</td><td>—</td></tr>
+    <tr><td><strong>Glycoproteins / glycolipids</strong></td><td>Carbohydrate chains on the outside that act as "ID tags" for cell recognition</td><td>Carbohydrates + glycosidic bonds</td></tr>
+  </table></div>
+
+  <h4>Cholesterol: the "fluidity buffer"</h4>
+  <p>This trips up nearly everyone, because cholesterol does <em>opposite</em> things at different temperatures. Think of it as a <strong>buffer</strong>, the same idea as pH buffers in Unit 1: it keeps things from swinging too far either way.</p>
+  <div class="tbl narrow"><table>
+    <tr><th>Temperature</th><th>Problem without cholesterol</th><th>What cholesterol does</th></tr>
+    <tr><td>Warm</td><td>Membrane gets too runny</td><td><strong>Decreases</strong> fluidity (holds the tails back)</td></tr>
+    <tr><td>Cold</td><td>Membrane gets too stiff (tails pack tightly)</td><td><strong>Increases</strong> fluidity (acts as a spacer between tails)</td></tr>
+  </table></div>
+  <p class="u1">Unit 1 link: the cold problem is the saturated-fat problem. Straight tails pack tightly and go solid, like butter. Cholesterol wedges in between them, the same way the kinks of unsaturated fats keep oil liquid.</p>
+
+  <h4>Membrane proteins: which parts face where</h4>
+  <p>A protein that crosses the membrane has a middle section inside the oily tail layer and ends sticking out into the water on each side. So its middle has <strong>nonpolar (hydrophobic) R-groups</strong> and its ends have <strong>polar (hydrophilic) R-groups</strong>. This is the slide 11 "label the protein" question, and it's pure Unit 1.</p>
+
+  <h4>The phospholipid "orientation" question (slide 9)</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Setup</th><th>What forms</th></tr>
+    <tr><td>Water above, water below</td><td>A <strong>bilayer</strong>: tails face each other in the middle</td></tr>
+    <tr><td>Oil above, oil below</td><td>A reversed bilayer: <strong>heads</strong> in the middle, tails out toward the oil</td></tr>
+    <tr><td>Water above, oil below</td><td>A <strong>single layer</strong>: heads up into the water, tails down into the oil</td></tr>
+  </table></div>
+  <p>You don't need to memorize these. In every case, heads go toward water and tails go toward oil, and the answer follows.</p>
+
+  <a class="practice" href="./#drill=u2mem">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 6 ================= -->
+<div class="idea" id="i6">
+  <div class="num">IDEA 6 · 2.4</div>
+  <h3>What gets through: size and charge decide.</h3>
+  <div class="plain"><b>In plain English:</b> The middle of the membrane is oily. Anything that can dissolve in oil (small, nonpolar things) slips right through. Anything charged or large and polar gets stuck and needs a protein doorway. That's what "selectively permeable" means.</div>
+  <div class="tbl"><table>
+    <tr><th>Kind of molecule</th><th>Examples</th><th>Crosses the bilayer by itself?</th></tr>
+    <tr><td>Small, nonpolar</td><td>O₂, CO₂, N₂</td><td><strong>Yes</strong>, easily</td></tr>
+    <tr><td>Large, nonpolar</td><td>Steroid hormones</td><td><strong>Yes</strong>, slowly</td></tr>
+    <tr><td>Small, polar, uncharged</td><td>Water, urea</td><td>A little; most water goes through <strong>aquaporins</strong> (water channels)</td></tr>
+    <tr><td>Large, polar</td><td>Glucose</td><td><strong>No</strong>: needs a protein</td></tr>
+    <tr><td>Ions (any size)</td><td>Na⁺, K⁺, Cl⁻, Ca²⁺</td><td><strong>No</strong>: needs a protein</td></tr>
+  </table></div>
+  <div class="mn"><div class="k">RULE</div><div><strong>Charge beats size.</strong> A sodium ion is tiny, but it's charged, so it can't cross the oily middle. A steroid is big, but it's nonpolar, so it can. Ask "Is it charged?" first, then "Is it polar?", then "Is it small?"</div></div>
+  <div class="trap"><b>Tripping points:</b>
+  <br>• <strong>CO₂ is nonpolar</strong>, even though its bonds are polar. The two C=O bonds pull equally in opposite directions and cancel out. It crosses easily.
+  <br>• <strong>Water is polar but still crosses</strong>, because it's so small. Most of it uses aquaporins, though.
+  <br>• In the POGIL, <strong>urea crossed more easily than glucose</strong>. Both are polar; urea is smaller. Size matters once charge is ruled out.</div>
+
+  <h4>The cell wall</h4>
+  <p>Plants, fungi, and bacteria have a wall <em>outside</em> the plasma membrane. All cell walls are made of <strong>complex carbohydrates</strong>, and all give <strong>structure</strong> and help regulate what enters. They differ in which carbohydrate: <strong>cellulose</strong> in plants, <strong>chitin</strong> in fungi, <strong>peptidoglycan</strong> in bacteria. <span class="u1">Unit 1 link: cellulose is the β-glucose polymer humans can't digest, and chitin is the same material as insect exoskeletons.</span></p>
+  <div class="trap"><b>Tripping point:</b> the cell wall does <em>not</em> replace the membrane. Plant cells have both; the wall is outside it.</div>
+
+  <a class="practice" href="./#drill=u2perm">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= COMING NEXT ================= -->
+<div class="note" style="margin-top:36px"><p><strong>Coming next: 2.5–2.8 (on the Cell Quiz through 2.5).</strong> The next lessons are about <em>how</em> things cross: passive transport (no energy, downhill), active transport (uses ATP, uphill), and osmosis (water moving toward where there's more stuff dissolved). Water potential is the one math-heavy topic. This guide will be updated as soon as those slides are in the folder. The big-picture thread: everything in Idea 6 about <em>what</em> can cross decides <em>how</em> it has to cross.</p></div>
+
+<!-- ================= FRQ WRITING ================= -->
+<h2 id="writing">Writing Unit 2 FRQs</h2>
+<p class="lede">Unit 2 FRQs are almost always <strong>structure → function</strong>. One sentence pattern earns most of the points:</p>
+<div class="plain"><b>"The [specific structure] [has this feature], which allows it to [do this job]."</b><br><br>Example: "The inner membrane of the mitochondrion is highly folded, which increases its surface area and allows more of the reactions that produce ATP to occur."</div>
+<ul class="check">
+  <li><strong>Name the actual structure.</strong> "The rough ER," not "it" or "that organelle."</li>
+  <li><strong>No analogies.</strong> They score zero (her rule).</li>
+  <li><strong>Describe = what it is. Explain = how or why.</strong> "Describe the path of a protein" wants the steps in order. "Explain why the protein can't leave without the Golgi" wants the reason.</li>
+  <li><strong>For "predict" questions</strong> about a cell type, match organelles to the job (the table in Idea 2).</li>
+  <li><strong>For SA:V calculations</strong>, show the setup, and include units on every number.</li>
+  <li><strong>Connect to Unit 1 when it fits.</strong> "Nonpolar R-groups face the hydrophobic tails" shows understanding and often earns the explanation point.</li>
+</ul>
+
+<!-- ================= SELF-CHECK ================= -->
+<h2 id="check">Self-check</h2>
+<p class="lede">Answer out loud before tapping. Hesitating counts as a miss; mark it and come back tomorrow.</p>
+<details><summary>What do ALL cells have, even bacteria?</summary><div class="a">A plasma membrane, ribosomes, DNA, and cytoplasm. Every cell has to make proteins, and ribosomes do that.</div></details>
+<details><summary>Put in order: Golgi, rough ER, secretory vesicle, ribosome, transport vesicle.</summary><div class="a">Ribosome (on the rough ER) → rough ER → transport vesicle → Golgi → secretory vesicle → plasma membrane.</div></details>
+<details><summary>A cell makes lots of steroid hormone. Which organelle will be abundant, and why?</summary><div class="a"><b>Smooth ER</b>: steroids are lipids, and lipid synthesis happens in the smooth ER.</div></details>
+<details><summary>Lysosomes use "hydrolytic" enzymes. What does that word tell you they do?</summary><div class="a">They break polymers apart by <b>adding water</b> (hydrolysis, from Unit 1).</div></details>
+<details><summary>Why is "the mitochondria is the powerhouse of the cell" worth zero points?</summary><div class="a">It's an analogy. Say what it actually does: it converts the chemical energy in glucose into ATP.</div></details>
+<details><summary>Tight junction or gap junction: which lets small molecules pass between cells?</summary><div class="a"><b>Gap junction</b> (plasmodesmata in plants). Tight junctions seal.</div></details>
+<details><summary>A cube goes from 1 cm to 3 cm on a side. What happens to its SA:V ratio?</summary><div class="a">From 6 to 2. It drops to a third, because SA:V = 6 ÷ side.</div></details>
+<details><summary>At low temperature, what does cholesterol do to a membrane, and how?</summary><div class="a">It <b>increases</b> fluidity by acting as a spacer that keeps the tails from packing tightly.</div></details>
+<details><summary>Why is the middle of a transmembrane protein made of nonpolar amino acids?</summary><div class="a">It sits among the nonpolar fatty-acid tails. Like attracts like, so its R-groups there must be nonpolar (hydrophobic).</div></details>
+<details><summary>Rank how easily these cross a bare bilayer: glucose, O₂, Na⁺, water.</summary><div class="a">O₂ (small, nonpolar) → water (small, polar; a little) → glucose (large, polar; no) and Na⁺ (charged; no). The last two need proteins.</div></details>
+<details><summary>What do all cell walls have in common, and what differs?</summary><div class="a">All are complex carbohydrates that give structure. They differ in the carbohydrate: cellulose (plants), chitin (fungi), peptidoglycan (bacteria).</div></details>
+<details><summary>Why is a folded membrane an advantage? Give two examples.</summary><div class="a">More surface area means more exchange or more reactions. Examples: microvilli in the intestine, the inner membrane of mitochondria (also the ER).</div></details>
+
+<div class="foot">Built from the teacher's Unit 2 slides (#1 Cell Structure &amp; Organelles, #2 Plasma Membrane), the Membrane Function POGIL, and the cell-size (Decocube) lab. Updated as new material arrives.</div>
+</div>
+
+</body></html>
