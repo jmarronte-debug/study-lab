@@ -157,7 +157,7 @@ body.viewer .student-only{display:none!important}
     <div>
       <div class="eyebrow">AP Biology · all units · 2026–27</div>
       <h1>AP Bio Practice Lab</h1>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 11 · Unit 2 through 2.10 · saved to your account, works on any device</div>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 12 · Unit 2 through 2.10 · saved to your account, works on any device</div>
       <p class="sub">A short session every day, explanations for every miss, FRQs scored against the rubric, and a running picture of what's strong and what needs another pass.</p>
     </div>
   </div>
@@ -307,7 +307,7 @@ body.viewer .student-only{display:none!important}
 <script src="vendor/firebase-app-compat.js"></script>
 <script src="vendor/firebase-auth-compat.js"></script>
 <script src="vendor/firebase-firestore-compat.js"></script>
-<script src="questions.js?v=11"></script>
+<script src="questions.js?v=12"></script>
 <script>
 (function(){
 "use strict";
@@ -428,7 +428,7 @@ function renderQ(){
   $('qtopic').textContent=TOPICS[q.t].name+(q.type==='num'?' · type your answer':''); $('stem').textContent=q.q; $('qfig').innerHTML=q.fig||'';
   const o=$('opts'); o.innerHTML='';
   const nr=$('numrow'); nr.classList.toggle('hidden',q.type!=='num'); o.classList.toggle('hidden',q.type==='num');
-  if(q.type==='num'){ const inp=$('numIn'); inp.value=''; inp.disabled=false; $('numUnit').textContent=q.unit||'';
+  if(q.type==='num'){ const inp=$('numIn'); inp.value=''; inp.disabled=false; $('numUnit').textContent=q.unit||''; inp.inputMode=(q.ratio||q.answer<0)?'text':'decimal'; inp.placeholder=q.ratio?'e.g. 5:1':(q.answer<0?'include the − sign':'Your answer');
     inp.oninput=()=>{Q.picked=inp.value.trim()===''?null:inp.value.trim(); $('next').disabled=Q.picked===null;};
     inp.onkeydown=e=>{if(e.key==='Enter'&&!$('next').disabled)$('next').click();};
     $('fb').classList.add('hidden'); $('fb').innerHTML='';
@@ -440,13 +440,14 @@ function renderQ(){
   $('fb').classList.add('hidden'); $('fb').innerHTML='';
   const n=$('next'); n.textContent='Check answer'; n.disabled=true; n.dataset.state='pick';
 }
-function parseNum(v){ v=String(v).replace(/,/g,'').replace(/[%×x]/g,'').trim(); if(/^[-+]?\d*\.?\d+\s*\/\s*\d*\.?\d+$/.test(v)){const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b);} return parseFloat(v); }
+function parseNum(v){ v=String(v).replace(/[−–]/g,'-').replace(/,/g,'').replace(/[%×x]/g,'').replace(/\s*bars?\s*$/i,'').trim(); if(/^[-+]?\d*\.?\d+\s*:\s*\d*\.?\d+$/.test(v)){const [a,b]=v.split(':'); return parseFloat(a)/parseFloat(b);} if(/^[-+]?\d*\.?\d+\s*\/\s*\d*\.?\d+$/.test(v)){const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b);} return parseFloat(v); }
 function checkNum(){
-  const q=Q.list[Q.i]; const val=parseNum(Q.picked); const ok=isFinite(val)&&Math.abs(val-q.answer)<=q.tol;
+  const q=Q.list[Q.i]; const val=parseNum(Q.picked); const close=isFinite(val)&&Math.abs(val-q.answer)<=q.tol; const fmtBad=close&&q.ratio&&!/:\s*1\s*$/.test(String(Q.picked)); const ok=close&&!fmtBad;
   $('numIn').disabled=true;
   const fb=$('fb'); fb.className='fb '+(ok?'ok':'no'); fb.classList.remove('hidden');
   fb.innerHTML = ok ? `<div class="h">Correct</div><p>${q.why}</p>`
-    : `<div class="h">Not quite</div><p>You entered <b>${Q.picked}</b>. The answer is <b>${q.answer} ${q.unit||''}</b>.</p><div class="lbl">Where it goes wrong</div><p>${q.hint||''}</p><div class="lbl">Worked solution</div><p>${q.why}</p>`;
+    : fmtBad ? `<div class="h">Right number, wrong format</div><p>Your teacher wants ratios written as <b>SA:1</b>. Write <b>${q.answer}:1</b>, not ${Q.picked}. On her test, the format costs the point, so it counts here too.</p><div class="lbl">Worked solution</div><p>${q.why}</p>`
+    : `<div class="h">Not quite</div><p>You entered <b>${Q.picked}</b>. The answer is <b>${q.ratio?q.answer+':1':q.answer+' '+(q.unit||'')}</b>.</p><div class="lbl">Where it goes wrong</div><p>${q.hint||''}</p><div class="lbl">Worked solution</div><p>${q.why}</p>`;
   Q.results.push({q:q.id,ok,chosen:Q.picked}); logAttempt(q.id,ok);
   const n=$('next'); n.dataset.state='checked'; n.textContent = Q.i+1<Q.list.length?'Next question →':'See results'; n.focus();
 }
@@ -607,7 +608,7 @@ function startToday(){
     const ft=topicsOf(fc);
     if(fc.topic==='mix'||fc.topic==='quiz'){
       const pool=fc.pool?cur.filter(q=>fc.pool.includes(q.t)):cur;
-      list=[...take(reviewQueue(pool),6)]; list.push(...take(pickSmart(24,pool),14-list.length));
+      list=[...take(reviewQueue(pool),5)]; list.push(...take(shuffle(pool.filter(q=>q.pair)),3)); list.push(...take(pickSmart(24,pool),14-list.length));   // review days always include word pairs
     } else {
       const focus=MCQ.filter(q=>ft.includes(q.t));
       list=take(reviewQueue(focus),3); list.push(...take(pickSmart(12,focus),6-list.length));   // this idea's due misses first
@@ -640,7 +641,11 @@ $('todayWritten').addEventListener('click',startTodayWritten);
 function handleDrillLink(){
   const fm=location.hash.match(/frq=([A-Za-z0-9]+)/);
   if(fm&&frqById[fm[1]]){ history.replaceState(null,'',location.pathname+location.search); const f=frqById[fm[1]]; SEL_UNIT=TOPICS[f.t].unit; startFRQ([f],(f.short?'Written':'FRQ practice')+' · '+f.title); return true; }
-  const m=location.hash.match(/drill=([a-z0-9]+)/); if(!m||!TOPICS[m[1]]) return false;
+  const qm=location.hash.match(/[#&]q=([A-Za-z0-9,]+)/);
+  if(qm){ const list=qm[1].split(',').map(i=>byId[i]).filter(Boolean); if(list.length){ history.replaceState(null,'',location.pathname+location.search); SEL_UNIT=TOPICS[list[0].t].unit; startMCQ(list,'Practice',false); return true; } }
+  const m=location.hash.match(/drill=([a-z0-9]+)/);
+  if(m&&m[1]==='u2pairs'){ history.replaceState(null,'',location.pathname+location.search); SEL_UNIT=2; startMCQ(shuffle(MCQ.filter(q=>q.pair)).slice(0,10),'Drill: Word pairs',false); return true; }
+  if(!m||!TOPICS[m[1]]) return false;
   history.replaceState(null,'',location.pathname+location.search);
   const list=shuffle(MCQ.filter(q=>q.t===m[1])).slice(0,10); if(!list.length) return false;
   SEL_UNIT=TOPICS[m[1]].unit; startMCQ(list,'Drill: '+TOPICS[m[1]].short,false); return true;

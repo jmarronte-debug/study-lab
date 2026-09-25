@@ -778,17 +778,17 @@ MCQ.push(
  wrong:{0:"Small nonpolar gas — crosses freely.",1:"Small nonpolar gas — crosses freely.",3:"Small nonpolar gas — crosses freely."}},
 
 // ---------- NUMERIC (type in the answer) ----------
-{id:"u2n1",t:"u2size",type:"num",q:"A cube-shaped cell is 2 cm on each side. What is its surface-area-to-volume ratio? (Formula sheet: SA = 6s², V = s³)",
- answer:3, tol:0.05, unit:"(per cm)",
- why:"SA = 6 × 2² = 24 cm². V = 2³ = 8 cm³. SA:V = 24 ÷ 8 = 3.",
+{id:"u2n1",t:"u2size",type:"num",q:"A cube-shaped cell is 2 cm on each side. What is its surface-area-to-volume ratio? Write it the way your teacher wants: SA:1 (for example 5:1). (Formula sheet: SA = 6s², V = s³)",
+ answer:3, tol:0.05, unit:"", ratio:true,
+ why:"SA = 6 × 2² = 24 cm². V = 2³ = 8 cm³. SA:V = 24 ÷ 8 = 3, written 3:1.",
  hint:"Compute SA and V separately first, then divide SA by V."},
-{id:"u2n2",t:"u2size",type:"num",q:"A cube-shaped cell is 0.5 cm on each side. What is its SA:V ratio?",
- answer:12, tol:0.05, unit:"(per cm)",
- why:"SA = 6 × 0.5² = 1.5 cm². V = 0.5³ = 0.125 cm³. SA:V = 1.5 ÷ 0.125 = 12. That's 4× the 2 cm cube, which is why it diffuses so much faster in the Decocube lab.",
+{id:"u2n2",t:"u2size",type:"num",q:"A cube-shaped cell is 0.5 cm on each side. What is its SA:V ratio? (Write it as SA:1.)",
+ answer:12, tol:0.05, unit:"", ratio:true,
+ why:"SA = 6 × 0.5² = 1.5 cm². V = 0.5³ = 0.125 cm³. SA:V = 1.5 ÷ 0.125 = 12, written 12:1. That's 4× the 2 cm cube, which is why it diffuses so much faster in the Decocube lab.",
  hint:"0.5² = 0.25 and 0.5³ = 0.125."},
-{id:"u2n3",t:"u2size",type:"num",q:"A spherical cell has a radius of 3 µm. What is its SA:V ratio? (SA = 4πr², V = 4/3 πr³)",
- answer:1, tol:0.02, unit:"(per µm)",
- why:"SA = 4π(9) ≈ 113.1 µm². V = 4/3 π(27) ≈ 113.1 µm³. SA:V = 1. Shortcut: for a sphere SA:V = 3/r = 3/3 = 1.",
+{id:"u2n3",t:"u2size",type:"num",q:"A spherical cell has a radius of 3 µm. What is its SA:V ratio? Write it as SA:1. (SA = 4πr², V = 4/3 πr³)",
+ answer:1, tol:0.02, unit:"", ratio:true,
+ why:"SA = 4π(9) ≈ 113.1 µm². V = 4/3 π(27) ≈ 113.1 µm³. SA:V = 1:1. Shortcut: for a sphere SA:V = 3/r = 3/3 = 1.",
  hint:"Divide the formulas before plugging in: (4πr²)/(4/3 πr³) = 3/r."},
 {id:"u2n4",t:"u2size",type:"num",q:"A 2 cm Decocube soaks in vinegar and the vinegar penetrates 0.5 cm in from every face. What percent of the cube's volume has the vinegar reached?",
  answer:87.5, tol:0.5, unit:"%",
@@ -816,7 +816,7 @@ FRQ.push(
  stem:"Students soaked a 2 cm Decocube and a 0.5 cm Decocube in vinegar for 15 minutes. Vinegar reached 87.5% of the 2 cm cube's volume and 100% of the 0.5 cm cube's volume.",
  parts:[
   {verb:"Identify",text:"the independent and dependent variables.",pts:1,rubric:["Independent: cube size / SA:V ratio. Dependent: % of volume diffused (or penetration distance in mm)"]},
-  {verb:"Calculate",text:"the SA:V ratio of each cube.",pts:1,rubric:["2 cm: 24/8 = 3; 0.5 cm: 1.5/0.125 = 12 (with units per cm)"]},
+  {verb:"Calculate",text:"the SA:V ratio of each cube.",pts:1,rubric:["2 cm: 24/8 = 3:1; 0.5 cm: 1.5/0.125 = 12:1 (expressed as SA:1, her teacher's format)"]},
   {verb:"Explain",text:"how the data support the claim that cells must remain small.",pts:2,rubric:["The smaller cube, with the higher SA:V (12 vs 3), was more completely diffused (100% vs 87.5%) — cite the data for BOTH cubes","Cells exchange nutrients and wastes across the membrane; as size increases SA:V decreases, so exchange can't keep up with the cell's volume"]}
  ]},
 {id:"U2F3",t:"u2mem",title:"Cholesterol and temperature",
@@ -891,7 +891,7 @@ FRQ.push(
 {id:"U2S10",t:"u2size",short:true,title:"Calculate SA:V",
  stem:"Cell A is a cube 1 µm on each side. Cell B is a cube 3 µm on each side.",
  parts:[
-  {verb:"Calculate",text:"the surface area-to-volume ratio of each cell. Show your setup.",pts:1,rubric:["A: SA = 6 µm², V = 1 µm³, SA:V = 6; B: SA = 54 µm², V = 27 µm³, SA:V = 2 (setup shown for both)"]},
+  {verb:"Calculate",text:"the surface area-to-volume ratio of each cell. Show your setup.",pts:1,rubric:["A: SA = 6 µm², V = 1 µm³, SA:V = 6:1; B: SA = 54 µm², V = 27 µm³, SA:V = 2:1 (setup shown for both; ratios written as SA:1)"]},
   {verb:"Identify",text:"which cell exchanges materials with its surroundings more efficiently, and why.",pts:1,rubric:["Cell A, because its higher SA:V means more membrane surface per unit of volume for nutrients and wastes to cross"]}
  ]},
 {id:"U2S11",t:"u2size",short:true,title:"Surface area goes up, ratio goes down",
@@ -946,7 +946,7 @@ FRQ.push(
  stem:"Students made agar cubes with a pink indicator that turns clear when acid diffuses in. After 10 minutes in acid: the 1 cm cube was 100% clear, the 2 cm cube was 58% clear, and the 3 cm cube was 30% clear.",
  parts:[
   {verb:"Identify",text:"the independent variable and the dependent variable.",pts:1,rubric:["Independent: cube size (side length or SA:V); dependent: percent of the cube that turned clear (percent diffused)"]},
-  {verb:"Calculate",text:"the SA:V ratio of the 3 cm cube. Show your setup.",pts:1,rubric:["SA = 6 × 3² = 54 cm²; V = 3³ = 27 cm³; SA:V = 2 (per cm), setup shown"]},
+  {verb:"Calculate",text:"the SA:V ratio of the 3 cm cube. Show your setup.",pts:1,rubric:["SA = 6 × 3² = 54 cm²; V = 3³ = 27 cm³; SA:V = 2:1 (written as SA:1), setup shown"]},
   {verb:"Describe",text:"the relationship shown by the data.",pts:1,rubric:["As cube size increases (SA:V decreases), the percent of the cube reached by diffusion decreases; cite at least two data points"]},
   {verb:"Explain",text:"how these results apply to real cells.",pts:1,rubric:["Cells rely on diffusion across the membrane for nutrients/wastes; larger cells (lower SA:V) cannot exchange materials fast enough for their volume, so cells stay small (or increase surface area with folds)"]}
  ]},
@@ -1456,5 +1456,142 @@ FRQ.push(
   {verb:"Predict",text:"the direction of net water movement and justify.",pts:1,rubric:["Water moves into the cell, from the hypotonic beaker (higher water concentration/higher Ψ) to the hypertonic cell"]},
   {verb:"Describe",text:"the movement of glucose and of fructose.",pts:1,rubric:["Glucose moves out of the cell (0.02 M → 0.01 M) and fructose moves into the cell (0.01 M → 0 M), each down its own concentration gradient until equal on both sides"]},
   {verb:"Explain",text:"why sucrose, not glucose, determines the direction of water movement at equilibrium.",pts:1,rubric:["Glucose and fructose even out on both sides, so they create no lasting difference; sucrose can't cross, so its concentration difference remains and sets the water gradient"]}
+ ]}
+);
+
+// ================= REVIEW-SHEET COVERAGE (Sep 26 audit) =================
+const FIG_BAG = `<svg viewBox="0 0 360 220" role="img" aria-label="Line graph: percent change in mass of glucose-filled dialysis bags versus molarity of glucose in the beaker" style="width:100%;max-width:520px;font:11px sans-serif">
+<text x="195" y="14" text-anchor="middle" font-weight="700">% change in mass of dialysis bags vs. glucose in beaker</text>
+<g stroke="rgba(120,120,120,.35)">${[40,30,20,10,0,-10,-20,-30].map(v=>`<line x1="50" x2="340" y1="${110-v*2.5}" y2="${110-v*2.5}"/>`).join('')}${[0,0.2,0.4,0.6,0.8,1,1.2].map(v=>`<line y1="10" y2="185" x1="${50+v*240}" x2="${50+v*240}"/>`).join('')}</g>
+<line x1="50" x2="340" y1="110" y2="110" stroke="currentColor" stroke-width="1.5"/>
+${[40,30,20,10,0,-10,-20,-30].map(v=>`<text x="44" y="${114-v*2.5}" text-anchor="end">${v}</text>`).join('')}
+${[0,0.2,0.4,0.6,0.8,1,1.2].map(v=>`<text x="${50+v*240}" y="198" text-anchor="middle">${v}</text>`).join('')}
+<polyline fill="none" stroke="currentColor" stroke-width="2.5" points="${[[0,30],[0.1,27],[0.2,22],[0.3,20],[0.4,14],[0.5,10],[0.6,5],[0.7,2],[0.75,0],[0.8,-7],[0.9,-10],[1.0,-18]].map(([x,y])=>`${50+x*240},${110-y*2.5}`).join(' ')}"/>
+<text x="195" y="214" text-anchor="middle">Molarity of glucose in beaker (M)</text>
+<text x="12" y="110" transform="rotate(-90 12 110)" text-anchor="middle">% change in mass</text>
+</svg>`;
+
+MCQ.push(
+{id:"u2r1",t:"u2endo",pair:true,q:"How do free ribosomes and bound ribosomes differ?",
+ opts:["Free ribosomes are larger","Free ribosomes make proteins used in the cytosol; bound ribosomes (on the rough ER) make proteins that are secreted, put in membranes, or sent to lysosomes","Bound ribosomes are found only in prokaryotes","Free ribosomes make lipids"],a:1,
+ why:"The ribosomes themselves are identical. What differs is where the protein ends up: cytosol (free) vs. the endomembrane route (bound).",
+ wrong:{0:"They're the same ribosomes.",2:"Prokaryotes have no ER to bind to.",3:"Ribosomes only make proteins; the smooth ER makes lipids."}},
+{id:"u2r2",t:"u2endo",q:"Where is an enzyme that works in the cytosol typically made?",
+ opts:["On ribosomes bound to the rough ER","On free ribosomes in the cytosol","In the Golgi","In the nucleolus"],a:1,
+ why:"Proteins that stay in the cytosol are made on free ribosomes and never enter the ER–Golgi route. This is practice problem 6 on her review sheet.",
+ wrong:{0:"Bound ribosomes make proteins for secretion, membranes, or lysosomes.",2:"The Golgi modifies proteins; it doesn't make them.",3:"The nucleolus makes ribosomes, not enzymes."}},
+{id:"u2r3",t:"u2cells",pair:true,q:"Which statement correctly contrasts the nucleus and the nucleolus?",
+ opts:["They are two names for the same thing","The nucleus is the double-membrane compartment holding the DNA; the nucleolus is a region inside it (no membrane) where ribosomes are made","The nucleolus surrounds the nucleus","The nucleolus stores the cell's DNA and the nucleus makes ribosomes"],a:1,
+ why:"Nucleolus = inside the nucleus, the ribosome factory (rRNA). Nucleus = the whole DNA compartment with its nuclear envelope.",
+ wrong:{0:"They're different.",2:"It's inside, not around.",3:"Reversed."}},
+{id:"u2r4",t:"u2mem",pair:true,q:"How does an integral protein differ from a peripheral protein?",
+ opts:["Integral proteins are embedded in or span the bilayer; peripheral proteins sit loosely on the surface","Peripheral proteins span the membrane","Integral proteins are carbohydrates","Only peripheral proteins act as channels"],a:0,
+ why:"Integral proteins have nonpolar R-groups where they pass through the nonpolar tails (Unit 1 link). Channels and pumps are integral. Peripheral proteins attach to the surface.",
+ wrong:{1:"Reversed.",2:"Both are proteins.",3:"Channels must span the membrane, so they're integral."}},
+{id:"u2r5",t:"u2mem",pair:true,q:"Match: receptor protein, channel protein, glycoprotein.",
+ opts:["Receptor = passage for ions; channel = ID tag; glycoprotein = binds signals","Receptor = binds a specific signal molecule; channel = passage for specific ions/molecules; glycoprotein = carbohydrate-tagged protein for cell recognition","All three do the same job","Receptor = pump; channel = pump; glycoprotein = pump"],a:1,
+ why:"Receptor → signal. Channel → passage. Glycoprotein → recognition (the carbohydrate 'ID tag', Unit 1 carbohydrates).",
+ wrong:{0:"Mixed up.",2:"Each has a different job.",3:"None of them is a pump."}},
+{id:"u2r6",t:"u2endo",pair:true,q:"How do lysosomes and secretory vesicles differ?",
+ opts:["Lysosomes release their contents outside the cell","Both come from the Golgi, but lysosomes keep hydrolytic enzymes inside to digest material, while secretory vesicles carry products to the plasma membrane to be released (exocytosis)","Secretory vesicles digest bacteria","Lysosomes are found only in plants"],a:1,
+ why:"Same origin (the Golgi), opposite fates: one keeps and digests, one ships out.",
+ wrong:{0:"That's the secretory vesicle.",2:"That's the lysosome's job.",3:"Lysosomes are typical of animal cells."}},
+{id:"u2r7",t:"u2endo",pair:true,q:"Which correctly contrasts ribosomes and the Golgi apparatus?",
+ opts:["Both are membrane-bound","Ribosomes build polypeptides (peptide bonds) and have no membrane; the Golgi modifies, packages and ships proteins and is membrane-bound","The Golgi builds proteins; ribosomes package them","Ribosomes are found only in eukaryotes"],a:1,
+ why:"Build (ribosome) vs. finish and ship (Golgi). All cells have ribosomes; only eukaryotes have a Golgi.",
+ wrong:{0:"Ribosomes have no membrane.",2:"Reversed.",3:"All cells have ribosomes."}},
+{id:"u2r8",t:"u2comp",pair:true,q:"Which is TRUE of both mitochondria and chloroplasts, but NOT of the Golgi?",
+ opts:["They have a single membrane","They have a double membrane, their own circular DNA, and their own ribosomes","They package proteins","They are found in all prokaryotes"],a:1,
+ why:"These features point to endosymbiotic origin. The difference between the two: mitochondria carry out cellular respiration in all eukaryotes; chloroplasts carry out photosynthesis in plants and algae.",
+ wrong:{0:"Both have double membranes; the Golgi has one.",2:"That's the Golgi.",3:"Prokaryotes have neither."}},
+{id:"u2r9",t:"u2tonic",q:"A solution has HIGH osmolarity compared to a cell. That means the solution",
+ opts:["has fewer dissolved particles and is hypotonic","has more dissolved particles and is hypertonic, so water leaves the cell","is pure water","is isotonic"],a:1,
+ why:"Osmolarity = total concentration of dissolved particles. Water moves from low osmolarity (hypotonic) to high osmolarity (hypertonic).",
+ wrong:{0:"Reversed.",2:"Pure water has zero osmolarity.",3:"Isotonic means equal osmolarity."}},
+{id:"u2r10",t:"u2perm",pair:true,q:"Which correctly contrasts the cell membrane and the cell wall?",
+ opts:["The wall is selectively permeable; the membrane is rigid","The membrane is a selectively permeable phospholipid bilayer found in all cells; the wall is a rigid carbohydrate layer outside the membrane in plants, fungi and bacteria","Animal cells have a wall but no membrane","They are the same structure"],a:1,
+ why:"Every cell has a membrane. Only some have a wall, which sits outside the membrane and gives structure.",
+ wrong:{0:"Reversed.",2:"Animal cells have a membrane and no wall.",3:"Different structures, different jobs."}},
+{id:"u2r11",t:"u2trans",pair:true,q:"How is osmosis different from diffusion in general?",
+ opts:["Osmosis requires ATP","Osmosis is specifically the diffusion of WATER across a selectively permeable membrane; diffusion can be any substance","Diffusion goes from low to high","There is no difference"],a:1,
+ why:"Both are passive and go from high to low concentration (of the thing moving). Osmosis is the water-only case.",
+ wrong:{0:"Both are passive.",2:"Diffusion goes high → low.",3:"Osmosis is the special case."}},
+{id:"u2r12",t:"u2wp",pair:true,q:"How do solute potential (Ψs) and pressure potential (Ψp) differ?",
+ opts:["Ψs is always positive; Ψp is always negative","Ψs comes from dissolved solute and is 0 or negative; Ψp comes from physical pressure (like the cell wall pushing back) and is 0 in open beakers and animal cells but positive in turgid plant cells","They are the same thing","Ψp depends on the ionization constant"],a:1,
+ why:"Ψ = Ψs + Ψp. Solute pulls Ψ down; wall pressure pushes it up.",
+ wrong:{0:"Reversed.",2:"Two separate parts of Ψ.",3:"i is in the Ψs equation."}},
+{id:"u2r13",t:"u2tonic",pair:true,q:"How are 'isotonic' and 'dynamic equilibrium' related?",
+ opts:["They mean water has stopped moving","Isotonic is the condition (equal solute on both sides); dynamic equilibrium is the result (water still moves both ways, with no net movement)","Isotonic means water moves in only","They are unrelated"],a:1,
+ why:"Molecules never stop moving. Equal solute → equal movement each way → no NET change.",
+ wrong:{0:"Water keeps moving.",2:"No net direction.",3:"One leads to the other."}},
+{id:"u2r14",t:"u2comp",pair:true,q:"Which organelles are explained by membrane infolding, and which by endosymbiosis?",
+ opts:["Infolding: mitochondria and chloroplasts; endosymbiosis: nucleus and ER","Infolding: nucleus, ER, Golgi; endosymbiosis: mitochondria and chloroplasts","Both explain all organelles","Neither explains the nucleus"],a:1,
+ why:"Infolding of the plasma membrane → the endomembrane system. Engulfed prokaryotes → mitochondria and chloroplasts (double membrane, own DNA).",
+ wrong:{0:"Reversed.",2:"Each explains a different group.",3:"Infolding explains the nucleus."}},
+{id:"u2r15",t:"u2lab",fig:FIG_BAG,q:"Students forgot to record the glucose concentration inside their dialysis bags. Using the graph, which molarity was inside the bags?",
+ opts:["About 0.30 M","About 0.75 M","About 1.00 M","0 M"],a:1,
+ why:"Where the line crosses 0% change, the bag neither gained nor lost water, so the beaker matched the bag: about 0.75 M. This is practice problem 1 on her review sheet.",
+ wrong:{0:"At 0.3 M the bags still gained about 20%.",2:"At 1.0 M they lost about 18%.",3:"At 0 M they gained the most."}}
+);
+for (const id of ["u2w4","u2t11","u2o2","u2o5","u2t4","u2t6"]) { const q=MCQ.find(x=>x.id===id); if(q) q.pair=true; }
+
+MCQ.push(
+{id:"u2n16",t:"u2lab",type:"num",fig:FIG_BAG,q:"From the graph, determine the molarity of glucose that was inside the dialysis bags. Round to two decimal places.",
+ answer:0.75, tol:0.03, unit:"M",
+ why:"The line crosses 0% change at about 0.75 M. That's the concentration where the beaker and the bag were isotonic, so it must be the bag's concentration.",
+ hint:"Find where the line crosses the horizontal 0 line, then read straight down to the x-axis."},
+{id:"u2n17",t:"u2wp",type:"num",q:"Using 0.75 M glucose (from the dialysis-bag graph), calculate the solute potential of the dialysis bag at 20 °C.",
+ answer:-18.26, tol:0.08, unit:"bars",
+ why:"i = 1 (glucose), T = 293 K. Ψs = −(1)(0.75)(0.0831)(293) = −18.26 bars. In a sentence: 'The solute potential of the dialysis bag is −18.26 bars.' This is practice problem 2 on her review sheet.",
+ hint:"20 °C + 273 = 293 K. Keep the negative sign."}
+);
+
+FRQ.push(
+{id:"U2S37",t:"u2tonic",short:true,title:"Snail in the Great Salt Lake",
+ stem:"A freshwater snail is accidentally put into an aquarium filled with water from the Great Salt Lake (far saltier than the snail's cells).",
+ parts:[
+  {verb:"Describe",text:"the direction of water movement in terms of tonicity (hypotonic, hypertonic, isotonic).",pts:1,rubric:["The salt water is hypertonic compared to the snail's cells (the cells are hypotonic compared to the water), so water moves out of the snail's cells into the salt water"]},
+  {verb:"Predict",text:"the likely outcome for the snail.",pts:1,rubric:["The snail's cells lose water and shrivel/dehydrate, and the snail is likely to die"]}
+ ]},
+{id:"U2S38",t:"u2perm",short:true,title:"Getting straight through the membrane",
+ stem:"In a model of a cell's response to infection, an inactive signaling protein (interleukin) is activated and then leaves the cell. Suppose a version of active interleukin could pass directly through the phospholipid bilayer without any protein or vesicle.",
+ parts:[
+  {verb:"Predict",text:"TWO characteristics this molecule would need.",pts:1,rubric:["Small AND nonpolar/hydrophobic (uncharged); both characteristics needed"]},
+  {verb:"Justify",text:"your prediction.",pts:1,rubric:["The interior of the bilayer is made of nonpolar/hydrophobic fatty-acid tails, so only small, nonpolar molecules can pass through without a protein; charged or large polar molecules are blocked"]}
+ ]},
+{id:"U2S39",t:"u2lab",short:true,title:"Holes in the dialysis tubing",
+ stem:"A dialysis bag with 3% starch and 3% glucose sits in distilled water. Bacteria that release plastic-digesting enzymes get into the water and quickly create large openings in the tubing.",
+ parts:[
+  {verb:"Predict",text:"what you would find in the water outside the bag the next day.",pts:1,rubric:["Both glucose and starch outside the bag"]},
+  {verb:"Justify",text:"your prediction.",pts:1,rubric:["Glucose is small enough to pass through the normal pores anyway; the large openings now let starch (normally too large to cross) out as well, so both diffuse from high concentration in the bag to low concentration in the water"]}
+ ]},
+{id:"U2S40",t:"u2wp",short:true,title:"Onion cells in salt",
+ stem:"A student views onion cells in water, then adds 15% NaCl to the slide. The cell contents shrink away from the cell walls.",
+ parts:[
+  {verb:"Explain",text:"why water left the cells, using water potential.",pts:1,rubric:["Adding 15% NaCl lowered the water potential outside the cells (more negative Ψs), so water moved from the cells (higher Ψ) to the salt solution (lower Ψ) by osmosis"]},
+  {verb:"Explain",text:"how the water potential of the cells changed as they lost water.",pts:1,rubric:["As water left, the solute concentration inside increased (Ψs more negative) and turgor pressure dropped (Ψp toward 0), so the cells' water potential decreased until it matched the solution; the cells plasmolyzed"]}
+ ]},
+{id:"U2S41",t:"u2endo",short:true,title:"When lysosomes don't work",
+ stem:"A phagocytic cell engulfs a bacterium into a vesicle, which fuses with a lysosome, and the bacterium is digested. In lysosomal storage diseases, lysosomes don't function properly.",
+ parts:[
+  {verb:"Describe",text:"how this process would look different in a person with a lysosomal storage disease.",pts:1,rubric:["The engulfed material (bacterium/molecules) would not be broken down; it would build up inside the vesicles/lysosomes instead of being digested"]},
+  {verb:"Explain",text:"why, connecting to lysosome function.",pts:1,rubric:["Lysosomes normally use hydrolytic enzymes to break down polymers by hydrolysis; without working enzymes, macromolecules can't be broken into monomers, so material accumulates"]}
+ ]},
+{id:"U2S42",t:"u2endo",short:true,title:"Who else is on the team?",
+ stem:"A diagram of a cell labels only the rough ER, the Golgi apparatus, and a vesicle.",
+ parts:[
+  {verb:"Identify",text:"ONE additional organelle that works with these to make and export a protein.",pts:1,rubric:["Any one: nucleus, ribosomes, plasma membrane (or lysosome, for proteins sent there)"]},
+  {verb:"Explain",text:"its function in relation to the labeled organelles.",pts:1,rubric:["A correct role tied to the pathway, e.g., the nucleus holds the DNA instructions (mRNA sent to ribosomes); ribosomes on the rough ER synthesize the polypeptide; the plasma membrane fuses with the vesicle to release the protein by exocytosis"]}
+ ]},
+{id:"U2S43",t:"u2endo",short:true,title:"Word pair: free vs. bound ribosomes",
+ stem:"One cell makes two proteins: an enzyme that works in the cytosol, and a hormone released into the blood.",
+ parts:[
+  {verb:"Identify",text:"where each protein is synthesized.",pts:1,rubric:["Cytosolic enzyme: free ribosomes in the cytosol; hormone: ribosomes bound to the rough ER (both needed)"]},
+  {verb:"Describe",text:"the path the hormone takes to leave the cell.",pts:1,rubric:["Rough ER → transport vesicle → Golgi (modified/packaged) → secretory vesicle → fuses with the plasma membrane → released by exocytosis"]}
+ ]},
+{id:"U2S44",t:"u2mem",short:true,title:"Word pair: three membrane proteins",
+ stem:"The plasma membrane contains receptor proteins, channel proteins, and glycoproteins.",
+ parts:[
+  {verb:"Describe",text:"the function of each.",pts:2,rubric:["Receptor: binds a specific signal molecule; channel: provides a passage for specific ions/molecules to cross (two correct = 1 pt)","Glycoprotein: a protein with a carbohydrate chain used for cell recognition/identification (1 pt; all three needed for full credit)"]}
  ]}
 );
