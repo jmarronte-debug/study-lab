@@ -147,6 +147,8 @@ body.viewer .student-only{display:none!important}
 .wr .ans{white-space:pre-wrap;background:var(--bg);border-radius:8px;padding:8px 10px;margin-top:6px;font-size:15.5px}
 .wr .gr{margin-top:8px;font-size:15.5px}
 .wr .pend{color:var(--ink-3);font-size:14px;margin-top:6px}
+.fig{margin:0 0 14px;overflow-x:auto}
+.fig:empty{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -155,7 +157,7 @@ body.viewer .student-only{display:none!important}
     <div>
       <div class="eyebrow">AP Biology · all units · 2026–27</div>
       <h1>AP Bio Practice Lab</h1>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 10 · Unit 2 through 2.4 · saved to your account, works on any device</div>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 11 · Unit 2 through 2.10 · saved to your account, works on any device</div>
       <p class="sub">A short session every day, explanations for every miss, FRQs scored against the rubric, and a running picture of what's strong and what needs another pass.</p>
     </div>
   </div>
@@ -266,6 +268,7 @@ body.viewer .student-only{display:none!important}
     <div class="prog"><span id="qnum"></span><div class="bar"><i id="qbar" style="width:0%"></i></div><span class="timer" id="timer"></span></div>
     <div class="qtopic eyebrow" id="qtopic"></div>
     <div class="stem" id="stem"></div>
+    <div id="qfig" class="fig"></div>
     <div class="opts" id="opts"></div>
     <div class="numrow hidden" id="numrow"><input id="numIn" inputmode="decimal" autocomplete="off" placeholder="Your answer"><span class="u" id="numUnit"></span></div>
     <div id="fb" class="fb hidden"></div>
@@ -281,6 +284,7 @@ body.viewer .student-only{display:none!important}
     <div class="qtopic eyebrow" id="ftopic"></div>
     <h2 id="ftitle" style="margin-top:6px"></h2>
     <div class="frq-stem" id="fstem"></div>
+    <div id="ffig" class="fig"></div>
     <div id="fparts"></div>
     <div class="actions">
       <button class="btn quiet" id="fquit">Quit</button>
@@ -303,7 +307,7 @@ body.viewer .student-only{display:none!important}
 <script src="vendor/firebase-app-compat.js"></script>
 <script src="vendor/firebase-auth-compat.js"></script>
 <script src="vendor/firebase-firestore-compat.js"></script>
-<script src="questions.js?v=10"></script>
+<script src="questions.js?v=11"></script>
 <script>
 (function(){
 "use strict";
@@ -319,8 +323,10 @@ const frqById=Object.fromEntries(FRQ.map(f=>[f.id,f]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 let SEL_UNIT=CURRENT.unit; try{const u=localStorage.getItem('lab:unit'); if(u&&UNITS[u]) SEL_UNIT=+u;}catch(e){}
 const unitOf=q=>TOPICS[q.t].unit;
-const inUnit=u=>MCQ.filter(q=>unitOf(q)===u);
-const frqInUnit=u=>FRQ.filter(f=>TOPICS[f.t].unit===u);
+const taughtYet=t=>!(CURRENT.taughtOn&&CURRENT.taughtOn[t]&&CURRENT.taughtOn[t]>dayKey(Date.now()));   // don't quiz on lessons not taught yet
+const inUnit=u=>MCQ.filter(q=>unitOf(q)===u&&taughtYet(q.t));
+const topicsOf=p=>p.topics||[p.topic];
+const frqInUnit=u=>FRQ.filter(f=>TOPICS[f.t].unit===u&&taughtYet(f.t));
 const dayKey=ts=>{const d=new Date(ts); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const isTodayLabel=l=>/^Today/.test(l||'');
 let GRADES={};                                   // Claude's grades, keyed by FRQ id + answer time
@@ -419,7 +425,7 @@ function tick(){const s=Math.floor((Date.now()-Q.start)/1000); const el=$('timer
 function renderQ(){
   const q=Q.list[Q.i]; Q.picked=null; Q.order=shuffle([0,1,2,3]);
   $('qnum').textContent=`${Q.i+1} / ${Q.list.length}`; $('qbar').style.width=`${100*Q.i/Q.list.length}%`;
-  $('qtopic').textContent=TOPICS[q.t].name+(q.type==='num'?' · type your answer':''); $('stem').textContent=q.q;
+  $('qtopic').textContent=TOPICS[q.t].name+(q.type==='num'?' · type your answer':''); $('stem').textContent=q.q; $('qfig').innerHTML=q.fig||'';
   const o=$('opts'); o.innerHTML='';
   const nr=$('numrow'); nr.classList.toggle('hidden',q.type!=='num'); o.classList.toggle('hidden',q.type==='num');
   if(q.type==='num'){ const inp=$('numIn'); inp.value=''; inp.disabled=false; $('numUnit').textContent=q.unit||'';
@@ -474,7 +480,7 @@ function finishMCQ(partial){
   const misses=Q.results.filter(r=>!r.ok);
   if(misses.length){rm.insertAdjacentHTML('beforeend',`<h3>Review your ${misses.length} miss${misses.length===1?'':'es'}</h3>`);
     misses.forEach(r=>{const q=byId[r.q]; const mine=q.type==='num'?r.chosen:q.opts[r.chosen]; const ans=q.type==='num'?(q.answer+' '+(q.unit||'')):q.opts[q.a]; rm.insertAdjacentHTML('beforeend',`<div class="miss"><b>${q.q}</b><span class="small">You ${q.type==='num'?'entered':'chose'}: ${mine}</span><div class="why"><strong>Answer:</strong> ${ans}. ${q.why}</div></div>`);});}
-  const fcw=todayFocus(); const wantWritten=isTodayLabel(Q.label)&&!partial&&!(fcw&&fcw.topic==='quiz');
+  const fcw=lastDoneToday()||todayFocus(); const wantWritten=isTodayLabel(Q.label)&&!partial&&!(fcw&&fcw.topic==='quiz');
   if(wantWritten) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · every day</div><p style="margin:6px 0 12px">One short written answer on today's idea, about 4 minutes. Type it in full sentences. Claude grades it tonight.</p><button class="btn" id="goWritten">Start the written question →</button></div>`);
   if(wantWritten) setTimeout(()=>{const b=$('goWritten'); if(b) b.onclick=startTodayWritten;},0);
   $('ragain').onclick=()=>startMode(lastMode); $('ragain').textContent=isTodayLabel(Q.label)?'Another round':'Go again';
@@ -491,7 +497,7 @@ function ftick(){const s=Math.floor((Date.now()-F.start)/1000); const el=$('ftim
 function renderF(){
   const f=F.list[F.i];
   $('fnum').textContent=`${F.i+1} / ${F.list.length}`; $('fbar').style.width=`${100*F.i/F.list.length}%`;
-  $('ftopic').textContent=TOPICS[f.t].name; $('ftitle').textContent=f.title; $('fstem').textContent=f.stem;
+  $('ftopic').textContent=TOPICS[f.t].name; $('ftitle').textContent=f.title; $('fstem').textContent=f.stem; $('ffig').innerHTML=f.fig||'';
   const p=$('fparts'); p.innerHTML='';
   f.parts.forEach((pt,k)=>{
     p.insertAdjacentHTML('beforeend',`<div class="part"><div><span class="v">(${'abcdefgh'[k]}) ${pt.verb}</span> ${pt.text}<span class="pts">${pt.pts} pt${pt.pts>1?'s':''}</span></div>
@@ -534,17 +540,24 @@ function todayFocus(){
   if(typeof PLAN==='undefined'||!PLAN.length) return null;
   const today=dayKey(Date.now());
   const cur=PLAN.find(p=>p.date===today);
-  if(cur&&cur.topic==='quiz') return cur;                           // quiz day: the quiz reminder comes first
-  // already did a planned session today → keep showing that one (card shows "Done")
-  const doneToday=S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial|written/.test(x.label)&&dayKey(x.ts)===today).pop();
-  if(doneToday){ const it=PLAN.find(p=>doneToday.label.indexOf(p.idea+':')>-1); if(it) return it; }
+  if(cur&&cur.topic==='quiz') return cur;                           // test/quiz day: the reminder comes first
+  const doneTodayItems=S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial|written/.test(x.label)&&dayKey(x.ts)===today)
+    .map(x=>PLAN.find(p=>x.label.indexOf(p.idea+':')>-1)).filter(Boolean);
   const lastQuiz=PLAN.filter(p=>p.topic==='quiz'&&p.date<today).map(p=>p.date).pop()||'';
-  const pending=PLAN.filter(p=>p.date>lastQuiz&&p.topic!=='quiz'&&!planDone(p));
-  const overdue=pending.find(p=>p.date<today); if(overdue) return Object.assign({catchup:true},overdue);   // oldest missed idea first
-  const todays=pending.find(p=>p.date===today); if(todays) return todays;
-  const ahead=pending.find(p=>p.date>today);
-  if(ahead) return Object.assign({ahead:true},ahead);               // before the plan's first day: start it early
-  return null;
+  const pending=PLAN.filter(p=>p.date>lastQuiz&&p.topic!=='quiz'&&!(p.topic==='mix'&&p.date!==today)&&!planDone(p)&&!doneTodayItems.includes(p));
+  const overdue=pending.filter(p=>p.date<today);
+  // review days right before a quiz/test come first; missed ideas are offered after
+  if(cur&&cur.topic==='mix'&&!doneTodayItems.includes(cur)&&!planDone(cur)) return Object.assign({behind:overdue.length},cur);
+  if(!doneTodayItems.length){
+    if(overdue.length) return Object.assign({catchup:true,behind:overdue.length},overdue[0]);   // oldest missed idea first
+    const todays=pending.find(p=>p.date===today); if(todays) return todays;
+    const ahead=pending.find(p=>p.date>today); if(ahead) return Object.assign({ahead:true},ahead);   // only before the plan starts
+    return null;
+  }
+  // already did a session today: another round goes to the next missed idea, then today's idea; never past today
+  const next=overdue[0]||pending.find(p=>p.date===today);
+  if(next) return Object.assign({catchup:next.date<today,behind:overdue.length,another:true},next);
+  return Object.assign({doneAll:true},doneTodayItems[doneTodayItems.length-1]);
 }
 function streakCount(){
   const days=new Set(S.sessions.filter(x=>isTodayLabel(x.label)&&!/partial/.test(x.label)).map(x=>dayKey(x.ts)));
@@ -561,11 +574,11 @@ function renderToday(){
   if(fc){
     const wdName=d=>new Date(d+'T12:00').toLocaleDateString(undefined,{weekday:'long'});
     $('todayTitle').innerHTML=`${fc.catchup?'Catch-up · ':''}${fc.idea}: ${fc.title}`;
-    $('todayNote').innerHTML=fc.catchup?`This was ${wdName(fc.date)}'s idea. Finish it first; today's idea comes next.`:(fc.note||'');
+    $('todayNote').innerHTML=fc.catchup?`Scheduled for ${wdName(fc.date)}. ${fc.behind>1?fc.behind+' missed ideas to catch up; each round does the next one.':'Do this one, then today\'s idea.'}`:((fc.note||'')+(fc.topic==='mix'&&fc.behind?` <b>${fc.behind} missed idea${fc.behind>1?'s':''}</b> will come up after this review.`:''));
     const extra=fc.catchup?'':(fc.extra||'');
     $('todaySteps').innerHTML = fc.topic==='quiz'
       ? `<li>${extra}</li><li>Optional: <a href="${fc.guide}">self-check</a> or a short session below.</li>`
-      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 14 questions (about 10 min): ${fc.topic==='mix'?'8 from all of Unit 2 so far':'6 on this idea'}, plus 6 review questions due from earlier days (misses come back until they stick), plus ${fc.topic==='mix'?'none':'2'} from Unit 1.</li><li><b>Write</b> one short answer (about 4 min), typed. Claude grades it tonight.</li>`+(extra?`<li>${extra}</li>`:'');
+      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 14 questions (about 10 min): ${fc.topic==='mix'?'8 from '+(fc.poolName||'all of Unit 2 so far'):(fc.topics?'6 on these ideas':'6 on this idea')}, plus 6 review questions due from earlier days (misses come back until they stick), plus ${fc.topic==='mix'?'none':'2'} from Unit 1.</li><li><b>Write</b> one short answer (about 4 min), typed. Claude grades it tonight.</li>`+(extra?`<li>${extra}</li>`:'');
     $('todaySteps').classList.remove('hidden');
   } else {
     $('todayTitle').textContent=`14 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review · + 1 written`;
@@ -575,7 +588,7 @@ function renderToday(){
   if(mcq){ const tm=new Date(mcq.ts).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
     st.className='status done'; st.textContent=`Questions done at ${tm} · ${mcq.score}/${mcq.max}`+(writtenDay?(wr?' · written answer submitted':' · written question still to do'):'');
     if(writtenDay&&!wr) st.className='status';
-    $('todayBtn').textContent='Do another round'; $('todayBtn').className='btn quiet';
+    $('todayBtn').textContent=fc&&fc.another?(fc.catchup?'Catch up: '+fc.idea+' →':'Next: '+fc.idea+' →'):'Do another round'; $('todayBtn').className=fc&&fc.another?'btn':'btn quiet';
   } else { st.className='status'; st.textContent='Not done yet today. About 20–25 minutes.'; $('todayBtn').textContent="Start today's session"; $('todayBtn').className='btn'; }
   $('todayWritten').classList.toggle('hidden',!(writtenDay&&mcq&&!wr));
   const days=new Set(todays.filter(x=>!/written/.test(x.label)).map(x=>dayKey(x.ts)));
@@ -591,14 +604,15 @@ function startToday(){
     const cur=inUnit(CURRENT.unit), review=MCQ.filter(q=>unitOf(q)!==CURRENT.unit);
     let list;
     const seen=new Set(), take=(arr,n)=>{const out=[]; for(const q of arr){ if(out.length>=n) break; if(!seen.has(q.id)){seen.add(q.id); out.push(q);} } return out;};
-    const planTopics=PLAN.map(p=>p.topic).filter(t=>TOPICS[t]);
+    const ft=topicsOf(fc);
     if(fc.topic==='mix'||fc.topic==='quiz'){
-      list=[...take(reviewQueue(),6)]; list.push(...take(pickSmart(20,cur),14-list.length));
+      const pool=fc.pool?cur.filter(q=>fc.pool.includes(q.t)):cur;
+      list=[...take(reviewQueue(pool),6)]; list.push(...take(pickSmart(24,pool),14-list.length));
     } else {
-      const focus=cur.filter(q=>q.t===fc.topic);
+      const focus=MCQ.filter(q=>ft.includes(q.t));
       list=take(reviewQueue(focus),3); list.push(...take(pickSmart(12,focus),6-list.length));   // this idea's due misses first
-      const due=take(reviewQueue().filter(q=>q.t!==fc.topic&&unitOf(q)===CURRENT.unit),6);   // due Unit 2 reviews first
-      const otherTaught=cur.filter(q=>q.t!==fc.topic&&planTopics.includes(q.t));             // all of 2.1–2.4 was taught already
+      const due=take(reviewQueue(cur).filter(q=>!ft.includes(q.t)),6);   // due Unit 2 reviews first
+      const otherTaught=cur.filter(q=>!ft.includes(q.t));                                          // anything already taught in this unit
       const fill=take(pickSmart(12,otherTaught),6-due.length);
       const u1=take(reviewQueue(review),2); u1.push(...take(pickSmart(6,review),2-u1.length));
       list.push(...due,...fill,...u1);
@@ -609,11 +623,13 @@ function startToday(){
   const a=pickSmart(5,newest), b=pickSmart(3,older), c=pickSmart(2,review.length?review:older.filter(q=>!b.includes(q)));
   const list=[...a,...b,...c]; startMCQ(list,'Today · Unit '+CURRENT.unit,false);
 }
+function lastDoneToday(){ const t=dayKey(Date.now()); const x=S.sessions.filter(z=>isTodayLabel(z.label)&&!/partial|written/.test(z.label)&&dayKey(z.ts)===t).pop(); return x&&typeof PLAN!=='undefined'?PLAN.find(p=>x.label.indexOf(p.idea+':')>-1):null; }
 function startTodayWritten(){
   const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
-  const fc=todayFocus();
-  let pool=frqInUnit(CURRENT.unit).filter(f=>f.short); if(!pool.length) pool=frqInUnit(CURRENT.unit);
-  pool=shuffle(pool).sort((a,b)=>{const fa=fc&&a.t===fc.topic?0:1, fb=fc&&b.t===fc.topic?0:1; if(fa!==fb)return fa-fb; const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
+  const fc=lastDoneToday()||todayFocus();
+  let pool=FRQ.filter(f=>f.short&&TOPICS[f.t].unit===CURRENT.unit&&(taughtYet(f.t)||(fc&&topicsOf(fc).includes(f.t)))); if(!pool.length) pool=frqInUnit(CURRENT.unit);
+  if(fc&&fc.pool) pool=pool.filter(f=>fc.pool.includes(f.t));
+  pool=shuffle(pool).sort((a,b)=>{const fa=fc&&topicsOf(fc).includes(a.t)?0:1, fb=fc&&topicsOf(fc).includes(b.t)?0:1; if(fa!==fb)return fa-fb; const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
   if(!pool.length){toast('No written questions for this unit yet');return}
   startFRQ([pool[0]],'Today written · '+(fc?fc.idea+': '+fc.title:'Unit '+CURRENT.unit));
 }
@@ -622,11 +638,15 @@ $('todayWritten').addEventListener('click',startTodayWritten);
 
 // ---------- deep link from the study guide: #drill=<topic> ----------
 function handleDrillLink(){
+  const fm=location.hash.match(/frq=([A-Za-z0-9]+)/);
+  if(fm&&frqById[fm[1]]){ history.replaceState(null,'',location.pathname+location.search); const f=frqById[fm[1]]; SEL_UNIT=TOPICS[f.t].unit; startFRQ([f],(f.short?'Written':'FRQ practice')+' · '+f.title); return true; }
   const m=location.hash.match(/drill=([a-z0-9]+)/); if(!m||!TOPICS[m[1]]) return false;
   history.replaceState(null,'',location.pathname+location.search);
   const list=shuffle(MCQ.filter(q=>q.t===m[1])).slice(0,10); if(!list.length) return false;
   SEL_UNIT=TOPICS[m[1]].unit; startMCQ(list,'Drill: '+TOPICS[m[1]].short,false); return true;
 }
+
+window.addEventListener('hashchange',()=>{ if(typeof ROLE==='undefined'||ROLE==='student') handleDrillLink(); });
 
 // ---------- modes ----------
 let lastMode='smart'; let chosenTopics=new Set();

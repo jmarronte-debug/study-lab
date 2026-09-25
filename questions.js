@@ -496,19 +496,28 @@ Object.assign(TOPICS, {
 });
 const UNITS = {1:{name:"Unit 1 · Chemistry of Life"}, 2:{name:"Unit 2 · Cell Structure & Function"}};
 // Which unit is being taught now, and which topics were taught most recently (Today session leans on these)
-const CURRENT = {unit:2, newest:["u2mem","u2perm"], taughtThrough:"2.4", asOf:"Wed Sep 23"};
+const CURRENT = {unit:2, newest:["u2trans","u2tonic","u2wp"], taughtThrough:"2.8", asOf:"Fri Sep 25",
+  // when each topic is taught in class (from the teacher's syllabus); the app won't quiz a topic before this date
+  taughtOn:{u2cells:"2026-09-17",u2endo:"2026-09-17",u2cyto:"2026-09-17",u2size:"2026-09-18",u2mem:"2026-09-23",u2perm:"2026-09-23",
+            u2trans:"2026-09-24",u2tonic:"2026-09-24",u2mech:"2026-09-24",u2lab:"2026-09-24",u2wp:"2026-09-28",u2comp:"2026-10-01"}};
 // Daily plan: one guide idea per day, and that day's session practices exactly that idea.
 // guide = page + section anchor in the study guide. Update this list as new material arrives.
-const PLAN = [   // every idea below was already TAUGHT in class 9/17–9/23; this is review before the Cell Quiz, one idea a day
-  {date:"2026-09-23", topic:"u2cells", idea:"Idea 1", title:"Cells: two basic designs",          guide:"unit2.html#i1", note:"2.1 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
-  {date:"2026-09-24", topic:"u2endo",  idea:"Idea 2", title:"Follow one protein",               guide:"unit2.html#i2", note:"2.1–2.2 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
-  {date:"2026-09-25", topic:"u2cyto",  idea:"Idea 3", title:"The cytoskeleton and junctions",   guide:"unit2.html#i3", note:"2.1 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
-  {date:"2026-09-26", topic:"u2size",  idea:"Idea 4", title:"Why cells stay small (SA:V)",      guide:"unit2.html#i4", note:"2.2 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1).", extra:"<b>Weekend FRQ (Sat or Sun, about 15 min):</b> tap <b>FRQ practice</b> below and type your answer. Claude grades it that night."},
-  {date:"2026-09-27", topic:"u2mem",   idea:"Idea 5", title:"The membrane is Unit 1 chemistry", guide:"unit2.html#i5", note:"2.3 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
-  {date:"2026-09-28", topic:"u2perm",  idea:"Idea 6", title:"What gets through the membrane",   guide:"unit2.html#i6", note:"2.4 · taught in class 9/17–9/23. Review to lock it in before the Cell Quiz (Thu 10/1)."},
-  {date:"2026-09-29", topic:"mix", idea:"Review 1", title:"All six ideas, mixed",               guide:"unit2.html#check", note:"Quiz review, day 1 of 2.", extra:"After the session, tap <b>Redo my misses</b> until it's empty."},
-  {date:"2026-09-30", topic:"mix", idea:"Review 2", title:"Final review before the Cell Quiz",  guide:"unit2.html#check", note:"Quiz review, day 2 of 2. The Cell Quiz is tomorrow.", extra:"Do the <b>self-check</b> at the bottom of the guide, then <b>Redo my misses</b> until it's empty."},
-  {date:"2026-10-01", topic:"quiz", idea:"Quiz day", title:"Cell Quiz today (2.1–2.5)", guide:"unit2.html#check", extra:"No full session needed. Before school, spend 5 minutes on the <b>self-check</b> questions at the bottom of the guide. Good luck!"}
+const PLAN = [   // matches the teacher's syllabus: Cell Quiz Thu 10/1 (2.1–2.5), Unit 2 Test Wed 10/7 (all of Unit 2, 50% MCQ / 50% FRQ)
+  {date:"2026-09-23", topic:"u2cells", idea:"Idea 1", title:"Cells: two basic designs",          guide:"unit2.html#i1", note:"2.1 · taught in class. Review to lock it in."},
+  {date:"2026-09-24", topic:"u2endo",  idea:"Idea 2", title:"Follow one protein",               guide:"unit2.html#i2", note:"2.1–2.2 · taught in class. Review to lock it in."},
+  {date:"2026-09-25", topic:"u2cyto",  idea:"Idea 3", title:"The cytoskeleton and junctions",   guide:"unit2.html#i3", note:"2.1 · taught in class. Review to lock it in."},
+  {date:"2026-09-26", topic:"u2size",  idea:"Idea 4", title:"Why cells stay small (SA:V)",      guide:"unit2.html#i4", note:"2.2 · taught in class. Review to lock it in.", extra:"<b>Weekend FRQ (Sat or Sun, about 15 min):</b> tap <b>FRQ practice</b> below and type your answer. Claude grades it that night."},
+  {date:"2026-09-27", topic:"u2mem",   idea:"Idea 5", title:"The membrane is Unit 1 chemistry", guide:"unit2.html#i5", note:"2.3 · taught in class. Review to lock it in.", extra:"<b>Lab prep (10 min):</b> read the <a href=\"unit2.html#lab-potato\">Potato Core Lab guide</a> before Monday, when class analyzes the lab."},
+  {date:"2026-09-28", topics:["u2perm","u2trans"], topic:"u2perm", idea:"Ideas 6–7", title:"What gets through, and how (passive vs. active)", guide:"unit2.html#i6", note:"2.4–2.5 · taught in class. Review to lock it in. Read Idea 6, then Idea 7."},
+  {date:"2026-09-29", topic:"mix", pool:["u2cells","u2endo","u2cyto","u2size","u2mem","u2perm","u2trans"], poolName:"the Cell Quiz topics (Ideas 1–7)", idea:"Quiz review 1", title:"Ideas 1–7, mixed", guide:"unit2.html#check", note:"Cell Quiz review, day 1 of 2. The quiz covers 2.1–2.5.", extra:"After the session, tap <b>Redo my misses</b> until it's empty."},
+  {date:"2026-09-30", topic:"mix", pool:["u2cells","u2endo","u2cyto","u2size","u2mem","u2perm","u2trans"], poolName:"the Cell Quiz topics (Ideas 1–7)", idea:"Quiz review 2", title:"Final review before the Cell Quiz", guide:"unit2.html#check", note:"Cell Quiz review, day 2 of 2. The Cell Quiz is tomorrow.", extra:"Do the <b>self-check</b> at the bottom of the guide, then <b>Redo my misses</b> until it's empty."},
+  {date:"2026-10-01", assess:"Cell Quiz (2.1–2.5)", topic:"u2tonic", idea:"Idea 8", title:"Tonicity: which way water moves", guide:"unit2.html#i8", note:"Cell Quiz today. Before school: 5 minutes on the self-check. Tonight: Idea 8 (2.6–2.7), which you need for the potato lab due tomorrow.", extra:"<b>Potato lab</b> is turned in tomorrow (Fri 10/2). Check your analysis against the <a href=\"unit2.html#lab-potato\">lab guide</a>."},
+  {date:"2026-10-02", topic:"u2wp",    idea:"Idea 9", title:"Water potential, step by step",    guide:"unit2.html#i9", note:"2.7–2.8 · the one math-heavy topic. The Water Potential homework is due Tue 10/6.", extra:"Turn in the potato lab today."},
+  {date:"2026-10-03", topic:"u2mech",  idea:"Idea 10", title:"Pumps and cotransport",           guide:"unit2.html#i10", note:"2.8 · the intestine model is a classic AP visual.", extra:"<b>Weekend lab FRQ (about 20 min):</b> <a href=\"./#frq=U2F8\">Potato cores and water potential</a>. Claude grades it that night."},
+  {date:"2026-10-04", topics:["u2comp","u2lab"], topic:"u2comp", idea:"Idea 11", title:"Compartments, endosymbiosis, and the labs", guide:"unit2.html#i11", note:"2.9–2.10 plus lab data questions."},
+  {date:"2026-10-05", topic:"mix", poolName:"all of Unit 2", idea:"Test review 1", title:"All of Unit 2, mixed", guide:"unit2.html#test", note:"Unit 2 Test is Wed 10/7: 50% multiple choice, 50% FRQ.", extra:"<b>AP Classroom Progress Check #1:</b> do the multiple choice AND the pre-test reflection today. It's due Tue 10/6 at 8:15 am (+1 point on the test). The pre-reflection must be at least 24 hours before the test."},
+  {date:"2026-10-06", topic:"mix", poolName:"all of Unit 2", idea:"Test review 2", title:"Final review before the Unit 2 Test", guide:"unit2.html#test", note:"The Unit 2 Test is tomorrow.", extra:"Also do one full FRQ: <a href=\"./#frq=U2F9\">Glucose absorption in the intestine</a>. Then <b>Redo my misses</b> until it's empty."},
+  {date:"2026-10-07", assess:"Unit 2 Test (50% MCQ / 50% FRQ)", topic:"quiz", idea:"Test day", title:"Unit 2 Test today", guide:"unit2.html#test", extra:"No full session needed. Before school, 5 minutes on the self-check. After the test, remember the post-test reflection for the AP Classroom point."}
 ];
 
 MCQ.push(
@@ -956,5 +965,496 @@ FRQ.push(
   {verb:"Explain",text:"why urea crossed faster than glucose even though both are polar.",pts:1,rubric:["Urea is smaller than glucose; once charge is ruled out, smaller polar molecules cross the bilayer more easily"]},
   {verb:"Explain",text:"why K⁺ barely crossed.",pts:1,rubric:["K⁺ is charged (an ion), so it cannot pass the hydrophobic interior of the bilayer"]},
   {verb:"Predict",text:"how adding potassium channel proteins to the membrane would change the K⁺ rate, and justify.",pts:1,rubric:["The rate would increase greatly, because the channel provides a hydrophilic path through the membrane for the ion"]}
+ ]}
+);
+
+// ================= UNIT 2, PART 2 — TRANSPORT, WATER POTENTIAL, COMPARTMENTS, LABS (2.5–2.10) =================
+Object.assign(TOPICS, {
+  u2trans: {unit:2, name:"Passive vs. active transport; endo- & exocytosis (2.5)", short:"Transport"},
+  u2tonic: {unit:2, name:"Facilitated diffusion & tonicity (2.6–2.7)", short:"Tonicity"},
+  u2wp:    {unit:2, name:"Water potential (2.7–2.8)", short:"Water potential"},
+  u2mech:  {unit:2, name:"Pumps & cotransport (2.8)", short:"Pumps"},
+  u2comp:  {unit:2, name:"Compartmentalization & endosymbiosis (2.9–2.10)", short:"Endosymbiosis"},
+  u2lab:   {unit:2, name:"Unit 2 labs & data (dialysis, potato cores, graphs)", short:"Labs & data"}
+});
+
+// ---- figures (drawn in the app above the question) ----
+const FIG_GUT = `<svg viewBox="0 0 400 190" role="img" aria-label="Model of an intestinal cell: blood on the left, intestine on the right" style="width:100%;max-width:560px;font:11px sans-serif">
+<rect x="4" y="4" width="100" height="44" rx="4" fill="none" stroke="currentColor"/><text x="54" y="18" text-anchor="middle" font-weight="700">Blood</text><text x="54" y="31" text-anchor="middle">High Na⁺</text><text x="54" y="43" text-anchor="middle">Low glucose</text>
+<rect x="150" y="4" width="100" height="44" rx="4" fill="none" stroke="currentColor"/><text x="200" y="18" text-anchor="middle" font-weight="700">Intestinal cell</text><text x="200" y="31" text-anchor="middle">Low Na⁺</text><text x="200" y="43" text-anchor="middle">High glucose</text>
+<rect x="296" y="4" width="100" height="44" rx="4" fill="none" stroke="currentColor"/><text x="346" y="18" text-anchor="middle" font-weight="700">Intestine</text><text x="346" y="31" text-anchor="middle">High Na⁺</text><text x="346" y="43" text-anchor="middle">Medium glucose</text>
+<rect x="140" y="62" width="120" height="110" rx="6" fill="rgba(120,120,120,.18)" stroke="currentColor"/>
+<circle cx="140" cy="92" r="9" fill="none" stroke="currentColor" stroke-width="2"/><text x="126" y="84" text-anchor="end">GLUT2</text><text x="126" y="98" text-anchor="end">← glucose out</text>
+<circle cx="140" cy="142" r="9" fill="currentColor"/><text x="126" y="134" text-anchor="end">Na⁺/K⁺ pump (ATP)</text><text x="126" y="148" text-anchor="end">← 3 Na⁺ out</text><text x="126" y="162" text-anchor="end">2 K⁺ in →</text>
+<circle cx="260" cy="117" r="9" fill="none" stroke="currentColor" stroke-width="2"/><text x="274" y="104">Na⁺/glucose</text><text x="274" y="117">symporter</text><text x="274" y="132">← Na⁺ + glucose in</text>
+</svg>`;
+const FIG_BEAKER = `<div style="font-size:15px;border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;max-width:520px"><b>Cell (inside the bag):</b> 0.03 M sucrose, 0.02 M glucose<br><b>Beaker (outside):</b> 0.01 M sucrose, 0.01 M glucose, 0.01 M fructose<br><span class="small">The membrane lets glucose and fructose through but NOT sucrose.</span></div>`;
+const FIG_POTATO = `<table style="border-collapse:collapse;font-size:15px;margin:4px 0"><tr><th style="border:1px solid var(--line-2);padding:4px 10px">Sucrose in beaker (M)</th><th style="border:1px solid var(--line-2);padding:4px 10px">% change in mass</th></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">0.0</td><td style="border:1px solid var(--line-2);padding:4px 10px">+18.0</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">0.2</td><td style="border:1px solid var(--line-2);padding:4px 10px">+5.0</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">0.4</td><td style="border:1px solid var(--line-2);padding:4px 10px">−8.0</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">0.6</td><td style="border:1px solid var(--line-2);padding:4px 10px">−16.0</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">0.8</td><td style="border:1px solid var(--line-2);padding:4px 10px">−23.5</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">1.0</td><td style="border:1px solid var(--line-2);padding:4px 10px">−24.0</td></tr></table>`;
+
+MCQ.push(
+// ---------- 2.5 PASSIVE vs ACTIVE, ENDO/EXOCYTOSIS ----------
+{id:"u2t1",t:"u2trans",q:"Which statement correctly describes passive transport?",
+ opts:["It moves substances from low concentration to high concentration using ATP","It moves substances from high concentration to low concentration without using ATP","It always requires a protein pump","It only moves water"],a:1,
+ why:"Passive transport moves a substance DOWN (with) its concentration gradient, from high [X] to low [X], and needs no ATP. It may use a channel or carrier protein (facilitated diffusion), but never a pump.",
+ wrong:{0:"That describes active transport.",2:"Pumps are for active transport. Passive transport uses no protein (simple diffusion) or a channel/carrier (facilitated diffusion).",3:"Osmosis is one kind of passive transport; solutes like O₂ also move passively."}},
+{id:"u2t2",t:"u2trans",q:"Active transport always requires",
+ opts:["a channel protein and no energy","a protein pump and an energy source","a vesicle","a hypotonic solution"],a:1,
+ why:"Moving a substance AGAINST (up) its gradient, from low to high concentration, needs energy (usually ATP) and a pump protein that changes shape (a conformational change) to carry the solute across.",
+ wrong:{0:"Channels only allow movement down a gradient.",2:"Vesicles are for bulk transport (endo/exocytosis), not for pumping single ions.",3:"Tonicity describes water movement, not active transport."}},
+{id:"u2t3",t:"u2trans",q:"Your teacher says not to write just 'moves from high to low.' Which answer earns the point?",
+ opts:["It moves from high to low","Glucose moves from an area of high glucose concentration to an area of low glucose concentration","Glucose moves from high to low energy","The molecules spread out"],a:1,
+ why:"Name the substance and say concentration. Her test notes: don't use 'it,' and don't just say 'high to low.'",
+ wrong:{0:"Uses 'it' and doesn't say high what.",2:"Energy isn't what's high or low here; concentration is.",3:"Too vague to earn credit."}},
+{id:"u2t4",t:"u2trans",q:"A white blood cell engulfs a whole bacterium by wrapping its membrane around it. This is",
+ opts:["pinocytosis","phagocytosis","exocytosis","facilitated diffusion"],a:1,
+ why:"Phago = eating. The membrane surrounds a large particle and pinches off into a vesicle (which then fuses with a lysosome to digest it).",
+ wrong:{0:"Pinocytosis ('cell drinking') takes in droplets of fluid and dissolved solutes.",2:"Exocytosis releases material OUT of the cell.",3:"Facilitated diffusion moves single molecules through proteins."}},
+{id:"u2t5",t:"u2trans",q:"Receptor-mediated endocytosis differs from pinocytosis because it",
+ opts:["does not use vesicles","takes in only specific molecules that bind to receptor proteins on the membrane","moves substances down their gradient through channels","releases proteins from the cell"],a:1,
+ why:"Receptors on the membrane bind a specific molecule (ligand); those regions pinch in to form a vesicle. The name tells you: receptor-mediated = specific. Pinocytosis takes in whatever fluid is there.",
+ wrong:{0:"Both form vesicles.",2:"That's facilitated diffusion.",3:"That's exocytosis."}},
+{id:"u2t6",t:"u2trans",q:"Insulin, a protein hormone, leaves a pancreatic cell by",
+ opts:["simple diffusion through the bilayer","a channel protein","exocytosis: a secretory vesicle fuses with the plasma membrane","phagocytosis"],a:2,
+ why:"Big polar molecules like proteins leave in bulk. Connects to Idea 2: rough ER → Golgi → secretory vesicle → fuses with plasma membrane → released (exocytosis).",
+ wrong:{0:"Proteins are large and polar; they can't cross the hydrophobic core.",1:"Channels are for ions and small molecules.",3:"Phagocytosis brings material IN."}},
+{id:"u2t7",t:"u2trans",q:"Endocytosis and exocytosis both require energy because",
+ opts:["they move substances down their concentration gradients","forming, moving, and fusing vesicles requires the cell to do work","they use aquaporins","they happen only in plant cells"],a:1,
+ why:"Bulk transport is a form of active transport: reshaping the membrane and moving vesicles (along microtubules, using motor proteins) uses ATP. Idea 3 link: kinesin walks vesicles on microtubules.",
+ wrong:{0:"Direction relative to a gradient isn't what makes them cost energy.",2:"Aquaporins are channels for water.",3:"All eukaryotic cells do bulk transport."}},
+{id:"u2t8",t:"u2trans",q:"Diffusion happens because",
+ opts:["cells push molecules with ATP","molecules move randomly, and random motion spreads them out until evenly distributed (entropy increases)","membranes attract solutes","water pulls solutes along"],a:1,
+ why:"The 2nd law of thermodynamics: things tend toward disorder (entropy). Random motion means more molecules leave a crowded area than enter it, so the net movement is from high to low concentration.",
+ wrong:{0:"Diffusion needs no ATP.",2:"Attraction isn't the cause.",3:"Diffusion of a solute doesn't depend on water pulling it."}},
+{id:"u2t9",t:"u2trans",q:"At dynamic equilibrium across a membrane,",
+ opts:["all molecules stop moving","molecules keep moving in both directions, but there is no NET movement","water moves only into the cell","the cell bursts"],a:1,
+ why:"Molecules never stop moving; at equilibrium, equal numbers cross each way. Her notes: isotonic = dynamic equilibrium.",
+ wrong:{0:"Molecules are always in motion.",2:"Net movement is zero at equilibrium.",3:"Nothing changes on average."}},
+{id:"u2t10",t:"u2trans",q:"A cell poison stops ATP production. Which process stops FIRST?",
+ opts:["O₂ diffusing into the cell","Water moving through aquaporins","The Na⁺/K⁺ pump","Glucose moving down its gradient through a channel"],a:2,
+ why:"Only active transport needs ATP. Everything else listed is passive and keeps going.",
+ wrong:{0:"Simple diffusion needs no energy.",1:"Osmosis through aquaporins is passive.",3:"Facilitated diffusion is passive."}},
+{id:"u2t11",t:"u2trans",q:"Which pair is matched correctly?",
+ opts:["Simple diffusion: needs a protein, no energy","Facilitated diffusion: needs a protein, no energy","Active transport: no protein, needs energy","Osmosis: needs a pump"],a:1,
+ why:"Her Blue Sheet table: simple diffusion (no protein, no energy, high→low); facilitated diffusion (channel/carrier protein, no energy, high→low); active transport (pump protein, energy, low→high).",
+ wrong:{0:"Simple diffusion uses no protein.",2:"Active transport always uses a pump protein.",3:"Osmosis is passive."}},
+{id:"u2t12",t:"u2trans",q:"Why can't a large protein simply diffuse out of a cell?",
+ opts:["It is too small","It is large and polar, so it can't pass through the hydrophobic interior of the membrane","Proteins never leave cells","The cell wall blocks it"],a:1,
+ why:"Idea 6 again: the middle of the bilayer is nonpolar. Large polar molecules need help, and something as big as a protein leaves by exocytosis.",
+ wrong:{0:"It's large, not small.",2:"Cells secrete many proteins (enzymes, hormones, antibodies).",3:"Animal cells have no wall, and the membrane is the real barrier."}},
+
+// ---------- 2.6–2.7 FACILITATED DIFFUSION & TONICITY ----------
+{id:"u2o1",t:"u2tonic",q:"Facilitated diffusion uses membrane proteins to move charged and large polar molecules WITH the concentration gradient. 'With' the gradient means",
+ opts:["from low concentration to high concentration","from high concentration to low concentration","in both directions equally","against the flow of water"],a:1,
+ why:"With = down the gradient, from high [X] to low [X], so no energy is needed. The protein just provides a hydrophilic path.",
+ wrong:{0:"That's against (up) the gradient: active transport.",2:"That's equilibrium, not what 'with' means.",3:"Water direction isn't the point."}},
+{id:"u2o2",t:"u2tonic",q:"A solution that has a HIGHER solute concentration than the cell is called",
+ opts:["hypotonic","hypertonic","isotonic","turgid"],a:1,
+ why:"Hyper = more solute. Always a comparison: 'the solution is hypertonic compared to the cell.'",
+ wrong:{0:"Hypo = less solute.",2:"Iso = equal.",3:"Turgid describes a swollen plant cell, not a solution."}},
+{id:"u2o3",t:"u2tonic",q:"In osmosis, water moves",
+ opts:["from hypertonic to hypotonic","from hypotonic to hypertonic","from low water concentration to high water concentration","only through the phospholipids"],a:1,
+ why:"Water moves toward where there is more solute (less free water): hypotonic → hypertonic. Same idea said three ways: high [H₂O] → low [H₂O]; high Ψ → low Ψ; low osmolarity → high osmolarity.",
+ wrong:{0:"Backwards.",2:"Backwards: water moves from HIGH water concentration to LOW.",3:"Most water moves through aquaporins."}},
+{id:"u2o4",t:"u2tonic",q:"A red blood cell is placed in distilled water. What happens?",
+ opts:["It shrivels, because water leaves","It swells and may burst (lyse), because water enters","Nothing, because it is isotonic","It becomes turgid and stays safe"],a:1,
+ why:"Distilled water is hypotonic to the cell, so water moves in. Animal cells have no wall to push back, so they can lyse.",
+ wrong:{0:"That happens in a hypertonic solution.",2:"Distilled water has no solute; the cell does.",3:"Turgid is the healthy state for PLANT cells, which have a wall."}},
+{id:"u2o5",t:"u2tonic",q:"Which is the healthy (normal) state for a plant cell?",
+ opts:["Plasmolyzed","Flaccid","Turgid (in a hypotonic environment)","Lysed"],a:2,
+ why:"Plant cells want water pushing their membrane against the wall (turgor pressure). That's why plants wilt (flaccid) when they lack water. Animal cells are healthiest in isotonic solutions.",
+ wrong:{0:"Plasmolysis (membrane pulling away from the wall) happens in hypertonic solutions and can kill the cell.",1:"Flaccid (isotonic) = limp, wilting.",3:"The wall keeps plant cells from lysing."}},
+{id:"u2o6",t:"u2tonic",q:"A plant cell is placed in a very salty solution. The membrane pulls away from the cell wall. This is",
+ opts:["turgor","plasmolysis","lysis","endocytosis"],a:1,
+ why:"The solution is hypertonic, water leaves the cell, and the membrane shrinks away from the wall: plasmolysis.",
+ wrong:{0:"Turgor is the pressure of a full cell.",2:"Lysis is bursting; plant cells don't lyse because of the wall.",3:"Unrelated."}},
+{id:"u2o7",t:"u2tonic",fig:FIG_BEAKER,q:"Using the figure, which way does water flow?",
+ opts:["Out of the cell, because the beaker is hypertonic","Into the cell, because the cell is hypertonic compared to the beaker","No net flow, because they are isotonic","Out of the cell, because glucose leaves"],a:1,
+ why:"Only the solute that CAN'T cross determines water movement. Sucrose is trapped: 0.03 M inside vs 0.01 M outside, so the cell is hypertonic and water moves in. (Glucose and fructose just diffuse until equal on both sides.)",
+ wrong:{0:"The beaker has less of the trapped solute (sucrose), so it's hypotonic.",2:"Sucrose differs (0.03 vs 0.01).",3:"Glucose leaving doesn't reverse water flow; sucrose sets the gradient."}},
+{id:"u2o8",t:"u2tonic",fig:FIG_BEAKER,q:"In the same setup, which way will fructose move?",
+ opts:["Into the cell","Out of the cell","It can't cross","No net movement from the start"],a:0,
+ why:"Fructose can cross and is 0.01 M outside vs 0 inside, so it diffuses in, from high fructose concentration to low.",
+ wrong:{1:"There's no fructose inside to start with.",2:"The membrane is permeable to fructose.",3:"There is a gradient: 0.01 outside, 0 inside."}},
+{id:"u2o9",t:"u2tonic",q:"Aquaporins are",
+ opts:["pumps that push water against its gradient","channel proteins that let water cross the membrane quickly by osmosis","lipids that block water","vesicles that carry water"],a:1,
+ why:"Water is polar, so only a little slips through the bilayer. Aquaporins are channels (facilitated diffusion of water) and require no energy.",
+ wrong:{0:"Water always moves passively.",2:"They are proteins, not lipids.",3:"No vesicles are involved."}},
+{id:"u2o10",t:"u2tonic",q:"Plant roots are usually hypertonic to the soil. This means water",
+ opts:["moves from the roots into the soil","moves from the soil into the roots","doesn't move","moves only by active transport"],a:1,
+ why:"Roots have a higher solute concentration (carbohydrates) than the soil, so water moves from the soil (hypotonic) into the roots (hypertonic). Her slide used this exact example.",
+ wrong:{0:"Backwards.",2:"There is a gradient.",3:"Water moves passively."}},
+{id:"u2o11",t:"u2tonic",q:"A freshwater fish lives in water that is hypotonic to its body. Its main osmoregulation problem is",
+ opts:["losing too much water","water constantly entering its cells, so it must get rid of excess water","gaining too much salt","none; it is isotonic"],a:1,
+ why:"Water moves from the hypotonic lake into the fish. Freshwater fish produce lots of dilute urine and actively take in salts. Osmoregulation = keeping water and solute balance (homeostasis).",
+ wrong:{0:"That's the saltwater fish's problem.",2:"Fresh water has few salts.",3:"The lake is hypotonic, not isotonic."}},
+{id:"u2o12",t:"u2tonic",q:"Which BEST describes 'isotonic'?",
+ opts:["No water moves at all","Solute concentration is the same on both sides; water moves both ways with no net movement","Water only enters","The cell is turgid"],a:1,
+ why:"Iso = same. Water keeps crossing (dynamic equilibrium) but the net flow is zero.",
+ wrong:{0:"Water still moves; only the net is zero.",2:"That's a hypotonic environment.",3:"A plant cell in isotonic solution is flaccid."}},
+{id:"u2o13",t:"u2tonic",q:"Glucose enters most body cells by facilitated diffusion through GLUT proteins. If blood glucose drops below the glucose level inside the cell, glucose will",
+ opts:["keep entering through GLUT","move out through GLUT, down its gradient","stop moving entirely","be pumped in using ATP by GLUT"],a:1,
+ why:"Channels and carriers don't choose a direction; the gradient does. If the inside has more glucose, it moves out.",
+ wrong:{0:"Facilitated diffusion only goes down the gradient.",2:"As long as there's a gradient, there's net movement.",3:"GLUT is not a pump."}},
+
+// ---------- 2.7–2.8 WATER POTENTIAL ----------
+{id:"u2w1",t:"u2wp",q:"Water always moves from",
+ opts:["low water potential to high water potential","high water potential to low (more negative) water potential","negative pressure to positive pressure","the cell to the solution"],a:1,
+ why:"High Ψ → low Ψ. 'Low' usually means MORE NEGATIVE: water moves from −2 bars toward −7 bars.",
+ wrong:{0:"Backwards.",2:"Not a rule.",3:"Depends on the values."}},
+{id:"u2w2",t:"u2wp",q:"What is the water potential of pure water in an open beaker?",
+ opts:["−1 bar","0 bars","+1 bar","It depends on the temperature"],a:1,
+ why:"By definition, pure water at atmospheric pressure has Ψ = 0. Solute can only lower it (Ψs is 0 or negative), and an open beaker means Ψp = 0.",
+ wrong:{0:"Pure water has no solute to lower it.",2:"Ψs can't be positive, and Ψp = 0 in an open container.",3:"With C = 0, Ψs = 0 at any temperature."}},
+{id:"u2w3",t:"u2wp",q:"Adding solute to water makes its solute potential (Ψs)",
+ opts:["more positive","more negative","zero","unchanged"],a:1,
+ why:"More solute means more water tied up in hydration shells around the solute, so less free water can move, so Ψs goes down (more negative). ↑[solute] = ↓ free water = ↓Ψ.",
+ wrong:{0:"Backwards.",2:"Only pure water is zero.",3:"Solute always lowers Ψs."}},
+{id:"u2w4",t:"u2wp",q:"Why is the ionization constant (i) for NaCl equal to 2, but for sucrose equal to 1?",
+ opts:["NaCl is heavier","NaCl splits into two ions (Na⁺ and Cl⁻) in water; sucrose stays as one molecule","Sucrose is charged","NaCl is a sugar"],a:1,
+ why:"Each particle ties up water. Two particles tie up about twice as much water, so NaCl lowers Ψs twice as much at the same molarity. Unit 1 link: ionic bonds ionize in water.",
+ wrong:{0:"Mass isn't what i measures.",2:"Sucrose is uncharged.",3:"NaCl is a salt."}},
+{id:"u2w5",t:"u2wp",q:"In an animal cell, the pressure potential (Ψp) is",
+ opts:["always equal to Ψs","0, because there is no cell wall to push back","always negative","always greater than 0"],a:1,
+ why:"Pressure potential comes from the wall pushing back on a swollen plant cell. Animal cells have no wall, so Ψp = 0 (and they can burst). Open beakers also have Ψp = 0.",
+ wrong:{0:"Only at equilibrium in plant cells do Ψp and Ψs cancel.",2:"Not in this course's problems.",3:"No wall, no pressure."}},
+{id:"u2w6",t:"u2wp",q:"A plant cell has Ψ = −3 bars. It is placed in a solution with Ψ = −5 bars. Water will",
+ opts:["move into the cell","move out of the cell","not move","move in, then burst the cell"],a:1,
+ why:"From high (−3) to low (−5): water leaves the cell.",
+ wrong:{0:"The solution is lower (more negative), so water moves toward it.",2:"There's a difference of 2 bars.",3:"Plant cells don't burst; and water is leaving."}},
+{id:"u2w7",t:"u2wp",q:"When a potato cell in pure water stops gaining water, even though it still has more solute than the water, it is because",
+ opts:["its solute leaked out","turgor pressure (Ψp) built up against the cell wall and balanced the solute potential","the water became hypertonic","the membrane stopped all movement"],a:1,
+ why:"As water enters, the membrane presses on the wall. That positive pressure (Ψp) rises until Ψcell = Ψs + Ψp equals 0, the Ψ of pure water. Net flow stops (dynamic equilibrium).",
+ wrong:{0:"The cell membrane keeps sucrose in.",2:"Pure water can't be hypertonic.",3:"Water still crosses both ways."}},
+{id:"u2w8",t:"u2wp",q:"On a graph of % change in potato mass (y) vs. sucrose molarity (x), the point where the line crosses 0% tells you",
+ opts:["the temperature","the sucrose concentration that is isotonic to the potato cells","the maximum mass","that the potato died"],a:1,
+ why:"At 0% change, no net water moved: the solution matches the potato's water potential. That molarity is your C for Ψs = −iCRT.",
+ wrong:{0:"Temperature is measured separately.",2:"Not what the x-intercept means.",3:"No."}},
+{id:"u2w9",t:"u2wp",q:"In Ψs = −iCRT, the T must be in",
+ opts:["°C","°F","kelvin (°C + 273)","bars"],a:2,
+ why:"R is 0.0831 L·bar/mol·K, so T must be in K. Forgetting to add 273 is the most common calculation error.",
+ wrong:{0:"Convert to K first.",1:"Never.",3:"Bars is the unit of the answer."}},
+{id:"u2w10",t:"u2wp",q:"Which answer would lose points on her teacher's test?",
+ opts:["The solute potential is −13.6 bars.","Ψs = 13.6","The solute potential of the solution is −4.95 bars.","Water moves from the cell (Ψ = −2 bars) into the solution (Ψ = −4 bars)."],a:1,
+ why:"Her first-test notes: include the negative sign AND the unit (bars), and write the result as a complete sentence. '13.6' has neither.",
+ wrong:{0:"Sign, unit, and a sentence: full credit.",2:"Sign, unit, and a sentence: full credit.",3:"Complete, with values: full credit."}},
+{id:"u2w11",t:"u2wp",q:"A farmer adds far too much fertilizer (dissolved salts) to the soil. What happens to the crops?",
+ opts:["Water moves into the roots faster","The soil's water potential becomes lower than the roots', so water leaves the roots and the plants wilt","Nothing, because roots are hypertonic","The roots burst"],a:1,
+ why:"Salts lower the soil's Ψs. When the soil's Ψ drops below the root's Ψ, water moves from the roots into the soil. Fix: water heavily to dilute the salts.",
+ wrong:{0:"Backwards.",2:"Only while the roots have the lower Ψ.",3:"Plant cells don't burst, and water is leaving."}},
+{id:"u2w12",t:"u2wp",q:"Wheat roots have Ψs = −11 bars. Seawater has Ψs = −24 bars. If the fields are irrigated with seawater,",
+ opts:["water moves into the roots","water moves out of the roots, into the soil, and the plants wilt","nothing happens","the roots take up salt and grow faster"],a:1,
+ why:"−11 is higher than −24, so water flows from the roots to the seawater-soaked soil. The plants lose water (the lab's extension question uses this same reasoning).",
+ wrong:{0:"Water moves toward the more negative Ψ, which is the seawater.",2:"There's a 13-bar difference.",3:"Not what the numbers predict."}},
+
+// ---------- 2.8 PUMPS & COTRANSPORT ----------
+{id:"u2q1",t:"u2mech",q:"The sodium-potassium pump moves",
+ opts:["3 Na⁺ into the cell and 2 K⁺ out, with no energy","3 Na⁺ out of the cell and 2 K⁺ into the cell, using ATP","Na⁺ and K⁺ down their gradients through a channel","glucose into the cell"],a:1,
+ why:"It keeps Na⁺ low inside and K⁺ high inside. Both ions go against their gradients, so it's active transport powered by ATP (the pump changes shape when phosphorylated).",
+ wrong:{0:"Backwards, and it needs ATP.",2:"It's a pump, not a channel.",3:"Glucose comes in through a different protein."}},
+{id:"u2q2",t:"u2mech",fig:FIG_GUT,q:"In the model, how does glucose get from the intestinal cell into the blood?",
+ opts:["Active transport through the Na⁺/K⁺ pump","Facilitated diffusion through GLUT2, from high glucose (cell) to low glucose (blood)","Simple diffusion through the bilayer","Exocytosis"],a:1,
+ why:"The cell has HIGH glucose and the blood has LOW glucose, so glucose moves down its gradient through the GLUT2 channel/carrier: facilitated diffusion, no energy.",
+ wrong:{0:"The pump moves Na⁺ and K⁺, not glucose.",2:"Glucose is large and polar; it needs a protein.",3:"Single molecules don't need vesicles."}},
+{id:"u2q3",t:"u2mech",fig:FIG_GUT,q:"How does glucose get from the intestine INTO the cell, even though the cell already has more glucose?",
+ opts:["Simple diffusion","Through the Na⁺/glucose symporter: Na⁺ flowing down its gradient into the cell drags glucose in against its gradient","Through GLUT2","It can't"],a:1,
+ why:"This is cotransport (secondary active transport). The Na⁺/K⁺ pump keeps Na⁺ low inside the cell. Na⁺ 'wants' to rush in, and the symporter only lets it in with a glucose. The energy comes from the Na⁺ gradient, which ATP built.",
+ wrong:{0:"Glucose is moving from low to high here, which needs energy.",2:"GLUT2 is on the blood side and only goes down the gradient.",3:"The symporter does it."}},
+{id:"u2q4",t:"u2mech",fig:FIG_GUT,q:"What is the ultimate energy source for moving glucose into the intestinal cell?",
+ opts:["The glucose gradient","ATP, used by the Na⁺/K⁺ pump to build the Na⁺ gradient","Light","Water potential"],a:1,
+ why:"The symporter uses no ATP directly, but it depends on the Na⁺ gradient, and the pump spends ATP to maintain it. Stop the pump and glucose uptake stops too.",
+ wrong:{0:"Glucose moves AGAINST its gradient here; that can't be the energy source.",2:"No light involved.",3:"Water potential drives water, not glucose."}},
+{id:"u2q5",t:"u2mech",fig:FIG_GUT,q:"Na⁺ moves INTO the intestinal cell and also moves OUT of the cell into the blood. How are these different?",
+ opts:["Both are passive","Into the cell is passive (down its gradient, through the symporter); out to the blood is active (against its gradient, through the ATP pump)","Both are active","Into the cell is active; out is passive"],a:1,
+ why:"Read the concentrations: lumen high Na⁺ → cell low Na⁺ (downhill, passive). Cell low Na⁺ → blood high Na⁺ (uphill, needs the ATP pump). This is a question from her Visual Representations practice.",
+ wrong:{0:"Going into the blood is uphill.",2:"Going into the cell is downhill.",3:"Backwards."}},
+{id:"u2q6",t:"u2mech",q:"A drug blocks the Na⁺/K⁺ pump in intestinal cells. Predict the effect on glucose absorption from the intestine.",
+ opts:["It increases","It decreases, because the Na⁺ gradient that powers the symporter runs down","No effect, because the symporter doesn't use ATP","Glucose absorption switches to GLUT2"],a:1,
+ why:"No pump → Na⁺ builds up inside → no Na⁺ gradient → the symporter stops bringing glucose in. Indirect dependence on ATP is what 'secondary active transport' means.",
+ wrong:{0:"Backwards.",2:"It depends on the gradient the pump makes.",3:"GLUT2 can't move glucose against its gradient."}},
+{id:"u2q7",t:"u2mech",q:"A proton pump uses ATP to move H⁺ into a plant vacuole. What happens to the pH inside the vacuole?",
+ opts:["It rises (more basic)","It falls (more acidic)","No change","It becomes neutral"],a:1,
+ why:"More H⁺ = lower pH = more acidic. Unit 1 link: pH measures H⁺ concentration. (In her morning-glory practice problem, a transporter moves H⁺ OUT of the vacuole, so the pH rises to 7.7.)",
+ wrong:{0:"Adding H⁺ lowers pH.",2:"H⁺ concentration changes.",3:"Not necessarily."}},
+{id:"u2q8",t:"u2mech",q:"In the morning-glory petal model, a K⁺/H⁺ transporter moves K⁺ INTO the vacuole. Why does the vacuole then swell?",
+ opts:["K⁺ is a water molecule","More K⁺ (solute) inside lowers the vacuole's water potential, so water moves in by osmosis","The transporter pumps water directly","The cell wall breaks"],a:1,
+ why:"Adding solute lowers Ψs (more negative), so water moves from high Ψ to low Ψ: into the vacuole. The cell gets bigger and the flower opens.",
+ wrong:{0:"K⁺ is an ion.",2:"Water moves passively, following the solute.",3:"No."}},
+{id:"u2q9",t:"u2mech",q:"What is a 'symporter'?",
+ opts:["A protein that moves two substances in the same direction at the same time","A protein that moves one substance only","A vesicle","A channel that only lets water through"],a:0,
+ why:"Sym = together. The Na⁺/glucose symporter moves both into the cell. (An antiporter moves two substances in opposite directions, like the Na⁺/K⁺ pump.)",
+ wrong:{1:"That's a uniporter.",2:"Not a vesicle.",3:"That's an aquaporin."}},
+{id:"u2q10",t:"u2mech",q:"How does a pump protein move a solute across the membrane?",
+ opts:["It opens a permanent pore","It changes shape (conformational change) when energy is added, carrying the solute to the other side","It dissolves in the membrane","It wraps the solute in a vesicle"],a:1,
+ why:"Unit 1 link again: a protein's shape is its function. ATP causes a shape change that moves the solute from one side to the other.",
+ wrong:{0:"That's a channel.",2:"No.",3:"That's endocytosis."}},
+{id:"u2q11",t:"u2mech",q:"Which gradient does the Na⁺/K⁺ pump create that other transporters rely on?",
+ opts:["Low Na⁺ inside the cell, high Na⁺ outside","High Na⁺ inside, low Na⁺ outside","Equal Na⁺ on both sides","High glucose outside"],a:0,
+ why:"By pumping Na⁺ out, the cell keeps inside Na⁺ low. That 'stored' gradient is then used by cotransporters (like the Na⁺/glucose symporter).",
+ wrong:{1:"Backwards.",2:"A pump creates differences.",3:"Glucose isn't moved by the pump."}},
+
+// ---------- 2.9–2.10 COMPARTMENTALIZATION & ENDOSYMBIOSIS ----------
+{id:"u2x1",t:"u2comp",q:"Why is compartmentalization an advantage for eukaryotic cells?",
+ opts:["It makes cells smaller","Separate membrane-bound compartments keep different (even competing) reactions apart and increase membrane surface area for reactions","It removes the need for ribosomes","It lets cells skip the plasma membrane"],a:1,
+ why:"Her slide gives both reasons: it prevents competing reactions from interfering (e.g., lysosome enzymes kept away from the cytoplasm) and increases surface area (e.g., folded inner mitochondrial membrane, ER).",
+ wrong:{0:"Eukaryotic cells are usually larger.",2:"All cells need ribosomes.",3:"Every cell has a plasma membrane."}},
+{id:"u2x2",t:"u2comp",q:"Which is evidence that mitochondria were once free-living prokaryotes?",
+ opts:["They have a single membrane","They have their own circular DNA and 70S ribosomes, like bacteria","They are made in the Golgi","They are found only in plants"],a:1,
+ why:"Four pieces of evidence (her slide): double membrane; own naked, circular DNA; own 70S (bacteria-sized) ribosomes; they divide on their own like bacteria (made only from pre-existing mitochondria).",
+ wrong:{0:"They have a DOUBLE membrane: the inner one from the original bacterium, the outer from the engulfing cell.",2:"They reproduce by dividing, not in the Golgi.",3:"Animals, plants and fungi all have mitochondria."}},
+{id:"u2x3",t:"u2comp",q:"Why do mitochondria and chloroplasts have TWO membranes?",
+ opts:["For extra strength","The inner membrane came from the engulfed prokaryote, and the outer came from the host cell's membrane during engulfing (endocytosis)","Because all organelles do","To store DNA between them"],a:1,
+ why:"That's exactly what you'd expect if one cell engulfed another. Link to 2.5: engulfing = endocytosis.",
+ wrong:{0:"Not the explanation for their origin.",2:"The ER and Golgi have one membrane.",3:"Not why."}},
+{id:"u2x4",t:"u2comp",q:"The endomembrane system (nuclear envelope, ER, Golgi) most likely evolved from",
+ opts:["endosymbiosis","infolding of the plasma membrane","mitochondria","the cell wall"],a:1,
+ why:"Two origin stories, two kinds of organelles: infolding → nucleus and endomembrane system; endosymbiosis → mitochondria and chloroplasts.",
+ wrong:{0:"Endosymbiosis explains mitochondria and chloroplasts.",2:"No.",3:"No."}},
+{id:"u2x5",t:"u2comp",q:"Which sequence of endosymbiosis is supported by the fact that ALL eukaryotes have mitochondria but only some have chloroplasts?",
+ opts:["Chloroplasts first, then mitochondria","Mitochondria first (aerobic bacterium), then chloroplasts (photosynthetic bacterium) in some lineages","Both at the same time","Neither was engulfed"],a:1,
+ why:"If mitochondria came first, every later lineage inherits them; only the lineage that later engulfed a photosynthetic bacterium (plants/algae) got chloroplasts.",
+ wrong:{0:"Then animals would have chloroplasts or would lack mitochondria.",2:"Not supported.",3:"Contradicts the evidence."}},
+{id:"u2x6",t:"u2comp",q:"Prokaryotes carry out cellular respiration and photosynthesis without mitochondria or chloroplasts. Where?",
+ opts:["In the nucleus","On infolded regions of the plasma membrane","In lysosomes","They can't do either"],a:1,
+ why:"Her slide shows respiratory and thylakoid membranes in bacteria: folds of the plasma membrane. Same principle as always: more membrane surface = more room for reactions.",
+ wrong:{0:"Prokaryotes have no nucleus.",2:"Prokaryotes have no lysosomes.",3:"Many bacteria do both."}},
+{id:"u2x7",t:"u2comp",q:"Why are lysosomal enzymes kept inside lysosomes?",
+ opts:["They only work at the cytoplasm's pH","They would digest the cell's own molecules if they were free in the cytoplasm; the membrane keeps this reaction separate","They are too large to leave","They need light"],a:1,
+ why:"Compartmentalization in action. Lysosomes are acidic inside (the enzymes work best there), and the membrane protects the rest of the cell. Lysosomal storage diseases happen when these enzymes don't work and material builds up.",
+ wrong:{0:"They work best at the lysosome's acidic pH.",2:"Not the main reason.",3:"No."}},
+{id:"u2x8",t:"u2comp",q:"Which statement about ribosomes and endosymbiosis is correct?",
+ opts:["Mitochondrial ribosomes are 70S, like bacterial ribosomes, while the cell's own cytoplasmic ribosomes are larger (80S)","Mitochondria have no ribosomes","All ribosomes are the same size","Mitochondrial ribosomes are made in the nucleolus"],a:0,
+ why:"The size match with bacteria is key evidence.",
+ wrong:{1:"They do have their own.",2:"Sizes differ; that's the evidence.",3:"Mitochondria make their own."}},
+{id:"u2x9",t:"u2comp",q:"A student claims prokaryotes have no compartments at all. The best correction is",
+ opts:["Correct, prokaryotes are just a bag of cytoplasm","Prokaryotes lack membrane-bound organelles, but they do have regions (nucleoid) and infolded membranes that separate some functions","Prokaryotes have a nucleus","Prokaryotes have mitochondria"],a:1,
+ why:"Precise language earns points: prokaryotes lack MEMBRANE-BOUND organelles (Idea 1 tripping point), but they still organize their interior.",
+ wrong:{0:"Too strong.",2:"No nucleus.",3:"No mitochondria."}},
+
+// ---------- LABS & DATA ----------
+{id:"u2L1",t:"u2lab",q:"In the dialysis-tubing lab, a bag of glucose + starch is placed in water with iodine (IKI). Afterward, the INSIDE of the bag turns blue-black and the water outside tests positive for glucose. What does this show?",
+ opts:["Starch left the bag","Glucose and IKI can cross the tubing, but starch cannot","Nothing crossed","The tubing is impermeable to everything"],a:1,
+ why:"The color change is inside, so IKI got IN to the starch. Glucose showed up outside, so glucose got OUT. Starch stayed in (outside never turned blue-black). Conclusion: glucose and IKI are smaller than the pores; starch is larger.",
+ wrong:{0:"If starch had left, the outside would turn blue-black.",2:"Both glucose and IKI moved.",3:"Some molecules crossed."}},
+{id:"u2L2",t:"u2lab",q:"Why does the dialysis lab measure percent change in mass instead of just change in mass?",
+ opts:["It's easier to measure","The pieces start at different masses; percent change lets you compare them fairly","Percent change is always positive","Balances only show percents"],a:1,
+ why:"A 1 g gain means more for a 2 g core than a 10 g core. Percent change = (final − initial) ÷ initial × 100 puts everything on the same scale. This is the lab's exact question.",
+ wrong:{0:"Not the reason.",2:"It can be negative (mass lost).",3:"No."}},
+{id:"u2L3",t:"u2lab",q:"A potato core LOSES mass in a sucrose solution. The solution was",
+ opts:["hypotonic to the potato","hypertonic to the potato","isotonic","pure water"],a:1,
+ why:"Mass lost = water left the potato = water moved toward the higher solute concentration outside. The solution is hypertonic (lower Ψ) compared to the potato.",
+ wrong:{0:"In a hypotonic solution the core gains water.",2:"Isotonic = no net change.",3:"Pure water is hypotonic; the core would gain mass."}},
+{id:"u2L4",fig:FIG_POTATO,t:"u2lab",q:"Using the data, at about what sucrose molarity would the potato neither gain nor lose mass?",
+ opts:["0.0 M","About 0.28 M (between 0.2 and 0.4 M)","About 0.6 M","1.0 M"],a:1,
+ why:"The % change goes from +5.0 at 0.2 M to −8.0 at 0.4 M, so it crosses 0 between them, closer to 0.2: 0.2 + 0.2 × (5 ÷ 13) ≈ 0.28 M. On a graph, read where the line crosses the x-axis.",
+ wrong:{0:"At 0.0 M it gained 18%.",2:"At 0.6 M it lost 16%.",3:"At 1.0 M it lost 24%."}},
+{id:"u2L5",fig:FIG_POTATO,t:"u2lab",q:"Cores that soaked in 0.2 M are moved to 0.8 M sucrose. What happens?",
+ opts:["They gain water, because 0.8 M is hypotonic","They lose water, because 0.8 M is hypertonic to the cells (lower water potential); the cells may plasmolyze","Nothing changes","They burst"],a:1,
+ why:"0.8 M is far above the potato's ~0.28 M equilibrium, so its Ψ is lower than the cells'. Water leaves, cells shrink, membranes pull from the walls. This is a question from her Visual Representations practice.",
+ wrong:{0:"0.8 M has MORE solute.",2:"There's a big gradient.",3:"Plant cells don't burst, and water is leaving."}},
+{id:"u2L6",t:"u2lab",q:"In the potato lab, which is the independent variable?",
+ opts:["% change in mass","Sucrose concentration (molarity) of the solution","Final mass","Temperature"],a:1,
+ why:"The IV is what you change on purpose: the sucrose molarity. It goes on the x-axis. % change in mass is the dependent variable (y-axis). Her graphing notes: IV with units on x; DV with units on y.",
+ wrong:{0:"That's the DV.",2:"Used to calculate the DV.",3:"Held constant (a controlled variable)."}},
+{id:"u2L7",t:"u2lab",q:"Which is the BEST graphing practice according to her teacher's notes?",
+ opts:["Draw a line from the origin even if there's no 0,0 point","Use simple scale intervals (1, 2, 5, 10), plot every point, and connect the points","Draw extra grid lines to help","Extend the line past the last point"],a:1,
+ why:"Her Blue Sheet tips: simple intervals, plot every point accurately (one misplaced point loses the plotting point), connect dots for line graphs, don't go to 0,0 unless it's data, don't extend past the last point unless asked, never add lines to the graph paper.",
+ wrong:{0:"Only if 0,0 is a real data point.",2:"Never add lines to the graph paper.",3:"Only if asked to extrapolate."}},
+{id:"u2L8",t:"u2lab",q:"A marine clam is put in a freshwater aquarium. What happens?",
+ opts:["It loses water and shrivels","Water moves into its cells (fresh water is hypotonic to the clam), and the cells swell and may burst","Nothing","It becomes more salty"],a:1,
+ why:"Fresh water has a higher Ψ (fewer solutes) than the clam's cells. Water moves in; animal cells have no wall, so they can lyse. This is one of her lab extension questions, so practice explaining it in terms of water potential.",
+ wrong:{0:"That's a freshwater animal in salt water.",2:"There's a big gradient.",3:"Salt would, if anything, leave."}},
+{id:"u2L9",t:"u2lab",q:"In a lab, a student writes: 'The water moved because it was hypotonic.' What's missing?",
+ opts:["Nothing","The comparison: hypotonic compared to WHAT (e.g., 'the beaker was hypotonic compared to the cell')","The color of the solution","A drawing"],a:1,
+ why:"Tonicity words are always comparisons. Her test notes: complete every comparison, and don't use 'it.'",
+ wrong:{0:"It loses the point.",2:"Irrelevant.",3:"Not required."}}
+);
+
+// ---- numeric (typed) ----
+MCQ.push(
+{id:"u2n7",t:"u2wp",type:"num",q:"Calculate the solute potential (Ψs) of a 0.2 M sucrose solution at 22 °C. Use Ψs = −iCRT with R = 0.0831 L·bar/mol·K. (Type the number in bars, with its sign.)",
+ answer:-4.90, tol:0.05, unit:"bars",
+ why:"i = 1 (sucrose doesn't ionize). T = 22 + 273 = 295 K. Ψs = −(1)(0.2)(0.0831)(295) = −4.90 bars. In a sentence: 'The solute potential of the solution is −4.90 bars.'",
+ hint:"Most common errors: forgetting to convert °C to K (+273), or dropping the negative sign."},
+{id:"u2n8",t:"u2wp",type:"num",q:"Calculate Ψs of a 0.15 M CaCl₂ solution at 25 °C. (CaCl₂ breaks into Ca²⁺ + 2 Cl⁻.)",
+ answer:-11.14, tol:0.06, unit:"bars",
+ why:"i = 3 (three ions). T = 298 K. Ψs = −(3)(0.15)(0.0831)(298) = −11.14 bars.",
+ hint:"Count the ions: one Ca²⁺ and two Cl⁻, so i = 3."},
+{id:"u2n9",t:"u2wp",type:"num",q:"A plant cell has Ψp = 3 bars and Ψs = −5.2 bars. What is its water potential (Ψ)?",
+ answer:-2.2, tol:0.02, unit:"bars",
+ why:"Ψ = Ψs + Ψp = −5.2 + 3 = −2.2 bars.",
+ hint:"Add them, keeping the signs."},
+{id:"u2n10",t:"u2wp",type:"num",q:"At equilibrium in an open beaker, a plant cell's Ψs is −6.0 bars and the surrounding solution's Ψ is −2.5 bars. What is the cell's pressure potential (Ψp)?",
+ answer:3.5, tol:0.02, unit:"bars",
+ why:"At equilibrium Ψcell = Ψsolution. So Ψs + Ψp = −2.5 → −6.0 + Ψp = −2.5 → Ψp = +3.5 bars.",
+ hint:"At equilibrium, the cell's total Ψ equals the solution's Ψ. Solve for Ψp."},
+{id:"u2n11",t:"u2wp",type:"num",q:"Calculate Ψs of a 0.4 M glucose solution at 27 °C.",
+ answer:-9.97, tol:0.05, unit:"bars",
+ why:"i = 1, T = 300 K. Ψs = −(1)(0.4)(0.0831)(300) = −9.97 bars.",
+ hint:"27 °C + 273 = 300 K."},
+{id:"u2n12",t:"u2lab",type:"num",q:"A potato core had an initial mass of 4.20 g and a final mass of 3.78 g. What is the percent change in mass?",
+ answer:-10, tol:0.1, unit:"%",
+ why:"(3.78 − 4.20) ÷ 4.20 × 100 = −0.42 ÷ 4.20 × 100 = −10.0%. Negative means it lost water.",
+ hint:"(final − initial) ÷ initial × 100. Keep the negative sign."},
+{id:"u2n13",t:"u2lab",type:"num",q:"A potato core went from 5.00 g to 5.45 g. What is the percent change in mass?",
+ answer:9, tol:0.1, unit:"%",
+ why:"(5.45 − 5.00) ÷ 5.00 × 100 = +9.0%.",
+ hint:"Divide by the INITIAL mass."},
+{id:"u2n14",t:"u2lab",type:"num",q:"From the potato data (0.2 M: +5.0%; 0.4 M: −8.0%), estimate the sucrose molarity where % change = 0. Round to two decimal places.",
+ answer:0.28, tol:0.02, unit:"M",
+ why:"The line drops 13 percentage points over 0.2 M. To drop 5 points (from +5 to 0) takes 0.2 × 5/13 ≈ 0.077 M. 0.2 + 0.077 ≈ 0.28 M.",
+ hint:"Find how far between 0.2 and 0.4 the zero lies: 5 out of 13 of the way."},
+{id:"u2n15",t:"u2lab",type:"num",q:"Using C = 0.28 M sucrose (the potato's equilibrium) at 23 °C, calculate the potato cells' solute potential.",
+ answer:-6.89, tol:0.05, unit:"bars",
+ why:"Ψs = −(1)(0.28)(0.0831)(296) = −6.89 bars. This is exactly what the lab analysis asks you to do with your class's C and room temperature.",
+ hint:"T = 23 + 273 = 296 K; i = 1 for sucrose."}
+);
+
+// ---- daily short written questions (graded by Claude each night) ----
+FRQ.push(
+{id:"U2S19",t:"u2trans",short:true,title:"Passive or active?",
+ stem:"Oxygen enters a muscle cell, and the same cell also takes in K⁺ ions even though there is already much more K⁺ inside than outside.",
+ parts:[
+  {verb:"Identify",text:"the type of transport for each substance.",pts:1,rubric:["O₂: passive transport (simple diffusion); K⁺: active transport (both needed)"]},
+  {verb:"Explain",text:"why K⁺ movement requires energy but O₂ movement does not.",pts:1,rubric:["K⁺ moves against its concentration gradient (from low K⁺ outside to high K⁺ inside), which requires energy (ATP) and a pump protein; O₂ moves down its gradient (high O₂ outside to low O₂ inside) and, being small and nonpolar, crosses the bilayer without energy"]}
+ ]},
+{id:"U2S20",t:"u2trans",short:true,title:"Receptor-mediated endocytosis",
+ stem:"Liver cells take in cholesterol-carrying particles (LDL) using receptor proteins on the plasma membrane.",
+ parts:[
+  {verb:"Describe",text:"how receptor-mediated endocytosis brings LDL into the cell.",pts:2,rubric:["LDL binds to specific receptor proteins on the plasma membrane","The membrane region with the bound receptors folds inward and pinches off, forming a vesicle that carries the LDL into the cell (requires energy)"]}
+ ]},
+{id:"U2S21",t:"u2trans",short:true,title:"Diffusion in words",
+ stem:"A student writes: \"It moves from high to low until it's even.\"",
+ parts:[
+  {verb:"Rewrite",text:"this sentence so it would earn credit for glucose diffusing into a cell.",pts:1,rubric:["Names glucose (no 'it') and says concentration: e.g., 'Glucose moves from an area of high glucose concentration outside the cell to an area of low glucose concentration inside the cell'"]},
+  {verb:"Explain",text:"why diffusion needs no energy from the cell.",pts:1,rubric:["Molecules are in constant random motion; the net movement down a concentration gradient (toward more disorder/entropy) happens on its own, so no ATP is needed"]}
+ ]},
+{id:"U2S22",t:"u2tonic",short:true,title:"Red blood cell in salt water",
+ stem:"A red blood cell is placed in a 5% salt solution. Red blood cells are isotonic to a 0.9% salt solution.",
+ parts:[
+  {verb:"Identify",text:"the tonicity of the 5% solution compared with the cell.",pts:1,rubric:["The 5% salt solution is hypertonic compared to the red blood cell (comparison stated)"]},
+  {verb:"Predict",text:"what happens to the cell and justify your prediction.",pts:1,rubric:["The cell shrivels (crenates) because water moves by osmosis out of the cell (hypotonic, higher water concentration) into the hypertonic solution"]}
+ ]},
+{id:"U2S23",t:"u2tonic",short:true,title:"Why plants wilt",
+ stem:"A houseplant that hasn't been watered for a week droops.",
+ parts:[
+  {verb:"Describe",text:"the state of the plant's cells (use turgid, flaccid, or plasmolyzed).",pts:1,rubric:["The cells are flaccid (or plasmolyzed if severe): they've lost water, so the membrane no longer presses against the cell wall"]},
+  {verb:"Explain",text:"how watering the plant makes it stand up again.",pts:1,rubric:["Water moves into the cells (the cells are hypertonic to the water / lower Ψ), the central vacuole fills, and turgor pressure pushes the membrane against the cell wall, making cells firm (turgid)"]}
+ ]},
+{id:"U2S24",t:"u2tonic",short:true,title:"Only the trapped solute counts",
+ stem:"A bag permeable to water and glucose (but NOT sucrose) contains 0.4 M sucrose and is placed in a beaker of 0.4 M glucose.",
+ parts:[
+  {verb:"Predict",text:"what happens to the bag's mass over time.",pts:1,rubric:["The bag gains mass (swells)"]},
+  {verb:"Justify",text:"your prediction.",pts:1,rubric:["Glucose diffuses into the bag until equal on both sides, but sucrose can't leave; the bag ends up with more total solute (hypertonic), so water moves in by osmosis"]}
+ ]},
+{id:"U2S25",t:"u2wp",short:true,title:"Solute potential, in a sentence",
+ stem:"A student places potato cores in 0.3 M sucrose at 20 °C.",
+ parts:[
+  {verb:"Calculate",text:"the solute potential of the solution. Show your setup and answer in a complete sentence.",pts:1,rubric:["Ψs = −(1)(0.3 mol/L)(0.0831 L·bar/mol·K)(293 K) = −7.30 bars, stated in a sentence with the negative sign and the unit bars"]},
+  {verb:"Explain",text:"why Ψs can never be positive.",pts:1,rubric:["Pure water has Ψs = 0; adding solute binds water in hydration shells and reduces free water, so Ψs can only decrease (become negative); the equation has a negative sign"]}
+ ]},
+{id:"U2S26",t:"u2wp",short:true,title:"Which way does water go?",
+ stem:"Plant cell: Ψs = −6 bars, Ψp = +2 bars. It is placed in an open beaker of solution with Ψs = −3 bars.",
+ parts:[
+  {verb:"Calculate",text:"the water potential of the cell and of the solution.",pts:1,rubric:["Cell Ψ = −6 + 2 = −4 bars; solution Ψ = −3 + 0 = −3 bars (open beaker, Ψp = 0)"]},
+  {verb:"Predict",text:"the direction of net water movement and justify.",pts:1,rubric:["Water moves into the cell, because water moves from higher water potential (−3 bars, solution) to lower water potential (−4 bars, cell)"]}
+ ]},
+{id:"U2S27",t:"u2wp",short:true,title:"Salted cucumbers",
+ stem:"Salt is sprinkled on sliced cucumbers, and after 20 minutes a puddle of water forms under them.",
+ parts:[
+  {verb:"Explain",text:"where the water came from, using water potential.",pts:2,rubric:["The salt dissolves on the surface, lowering the water potential outside the cucumber cells (more negative Ψs)","Water moves by osmosis from the cells (higher Ψ) to the salty surface (lower Ψ), so the cells lose water"]}
+ ]},
+{id:"U2S28",t:"u2mech",short:true,title:"The sodium–potassium pump",
+ stem:"Nerve cells spend a large share of their ATP on the Na⁺/K⁺ pump.",
+ parts:[
+  {verb:"Describe",text:"what the pump moves and in which directions.",pts:1,rubric:["3 Na⁺ out of the cell and 2 K⁺ into the cell"]},
+  {verb:"Explain",text:"why this process requires ATP.",pts:1,rubric:["Both ions move against their concentration gradients (Na⁺ to where Na⁺ is already high outside; K⁺ to where K⁺ is already high inside), which requires energy; ATP causes the pump's shape change"]}
+ ]},
+{id:"U2S29",t:"u2mech",short:true,title:"Cotransport",
+ stem:"Intestinal cells use a Na⁺/glucose symporter to bring glucose into the cell, even when the cell already has more glucose than the intestine.",
+ parts:[
+  {verb:"Explain",text:"how the symporter moves glucose against its gradient without using ATP directly.",pts:1,rubric:["Na⁺ moves down its concentration gradient (high outside, low inside) through the symporter, and that movement provides the energy to carry glucose in against its gradient"]},
+  {verb:"Identify",text:"what maintains the Na⁺ gradient.",pts:1,rubric:["The Na⁺/K⁺ pump, using ATP, pumps Na⁺ out of the cell"]}
+ ]},
+{id:"U2S30",t:"u2mech",short:true,title:"Opening the flower",
+ stem:"In morning-glory petals, an active K⁺/H⁺ transporter moves K⁺ into the vacuole and H⁺ out of it as the flower opens, and the vacuole swells.",
+ parts:[
+  {verb:"Describe",text:"how the vacuole's pH changes, and why.",pts:1,rubric:["The pH increases (becomes more basic, 6.6 → 7.7) because H⁺ ions are transported out of the vacuole"]},
+  {verb:"Explain",text:"why the vacuole swells.",pts:1,rubric:["K⁺ moving in increases the solute concentration of the vacuole, lowering its water potential, so water moves into the vacuole by osmosis"]}
+ ]},
+{id:"U2S31",t:"u2comp",short:true,title:"Evidence for endosymbiosis",
+ stem:"The endosymbiotic theory proposes that mitochondria were once free-living prokaryotes.",
+ parts:[
+  {verb:"Identify",text:"TWO pieces of evidence that support this theory.",pts:2,rubric:["Any one of: double membrane; own circular (naked) DNA; own 70S (bacteria-like) ribosomes; reproduce by division / only come from pre-existing mitochondria","A second, different piece of evidence from the same list"]}
+ ]},
+{id:"U2S32",t:"u2comp",short:true,title:"Why compartments help",
+ stem:"Lysosomes contain enzymes that break down proteins, lipids, and nucleic acids.",
+ parts:[
+  {verb:"Explain",text:"how keeping these enzymes inside a membrane benefits the cell.",pts:2,rubric:["The membrane separates the hydrolytic reactions from the rest of the cell, so the enzymes don't digest the cell's own molecules (prevents competing/harmful reactions)","It allows a specialized environment (acidic pH) where the enzymes work best"]}
+ ]},
+{id:"U2S33",t:"u2comp",short:true,title:"Two origins",
+ stem:"Eukaryotic cells have a nucleus and ER, and also mitochondria.",
+ parts:[
+  {verb:"Contrast",text:"how the nucleus/ER and the mitochondria are thought to have originated.",pts:2,rubric:["The nucleus and endomembrane system (ER) formed from infolding of the plasma membrane","Mitochondria originated by endosymbiosis: an aerobic prokaryote was engulfed by a host cell and kept"]}
+ ]},
+{id:"U2S34",t:"u2lab",short:true,title:"Reading the dialysis bag",
+ stem:"A dialysis bag with starch and glucose sits in a cup of water with IKI. After 30 minutes, the bag's contents are blue-black, the water in the cup is still amber (yellow-brown), and the cup water tests positive for glucose.",
+ parts:[
+  {verb:"Identify",text:"which molecules crossed the tubing and which did not.",pts:1,rubric:["Glucose (out) and IKI (in) crossed; starch did not cross (all three needed)"]},
+  {verb:"Explain",text:"what this tells you about molecule size and the tubing's pores.",pts:1,rubric:["Glucose and IKI are smaller than the pores; starch (a polysaccharide polymer) is larger than the pores, so the tubing is selectively permeable by size"]}
+ ]},
+{id:"U2S35",t:"u2lab",short:true,title:"Designing the potato lab",
+ stem:"In the potato core lab, cores are placed in sucrose solutions from 0.0 M to 1.0 M overnight.",
+ parts:[
+  {verb:"Identify",text:"the independent variable, the dependent variable, and one controlled variable.",pts:1,rubric:["IV: sucrose concentration (M); DV: percent change in mass; a controlled variable such as temperature, time in solution, size/type of potato, or volume of solution (all three needed)"]},
+  {verb:"Explain",text:"why the 0.0 M (distilled water) cup is useful.",pts:1,rubric:["It serves as a control/reference with no solute: the cores gain the most water there, showing the potato's cells are hypertonic to pure water"]}
+ ]},
+{id:"U2S36",t:"u2lab",short:true,title:"The carrot and the corn syrup",
+ stem:"A hole in a carrot is filled with corn syrup (very concentrated sugar) and sealed with a glass tube. The carrot sits in pure water.",
+ parts:[
+  {verb:"Predict",text:"what happens to the liquid level in the glass tube.",pts:1,rubric:["The liquid level in the tube rises"]},
+  {verb:"Explain",text:"your prediction in terms of water potential.",pts:1,rubric:["Pure water has the highest Ψ (0), the carrot cells are in between, and the corn syrup has the lowest Ψ; water moves from high to low Ψ, from the cup through the carrot cells into the corn syrup, so the volume in the tube increases"]}
+ ]}
+);
+
+// ---- full AP-style FRQs ----
+FRQ.push(
+{id:"U2F8",t:"u2lab",title:"Potato cores and water potential (lab FRQ)",fig:FIG_POTATO,
+ stem:"Students placed potato cores in sucrose solutions of different molarities at 23 °C for 24 hours and calculated the percent change in mass (table).",
+ parts:[
+  {verb:"Identify",text:"the independent variable and the dependent variable.",pts:1,rubric:["IV: molarity of sucrose in the beaker (M); DV: percent change in mass of the potato cores"]},
+  {verb:"Construct",text:"a graph of the data. Describe your axes (labels and units), your scale, and how you would plot and connect the points.",pts:2,rubric:["x-axis: sucrose molarity (M) with a simple scale (e.g., 0.1 M intervals); y-axis: percent change in mass (%) with a scale including negative values (e.g., 5% intervals from −25 to +20)","All six points plotted and connected with straight lines point to point (no line to the origin, not extended past 1.0 M)"]},
+  {verb:"Determine",text:"the molarity of sucrose that is isotonic to the potato cells.",pts:1,rubric:["About 0.28 M (accept 0.25–0.30 M), where the line crosses 0% change"]},
+  {verb:"Calculate",text:"the solute potential of the potato cells. Show your work.",pts:1,rubric:["Ψs = −(1)(0.28)(0.0831)(296) ≈ −6.9 bars (consistent with their C), with the negative sign and the unit bars, stated in a sentence"]},
+  {verb:"Explain",text:"why the cores in 0.0 M sucrose gained mass.",pts:1,rubric:["Distilled water has a higher water potential (0 bars) than the potato cells (lower/negative Ψ), so water moved into the cells by osmosis"]},
+  {verb:"Predict",text:"how the results would change if the cores were sweet potato, which has a higher sugar content, and justify.",pts:2,rubric:["The line would shift right: the isotonic point (x-intercept) would be at a higher sucrose molarity","Sweet potato cells have more solute, so a lower Ψs; it takes a more concentrated solution to match them, and they gain water in solutions that would make regular potato lose water"]}
+ ]},
+{id:"U2F9",t:"u2mech",title:"Glucose absorption in the intestine",fig:FIG_GUT,
+ stem:"The model shows a cell lining the small intestine, with the concentrations of Na⁺ and glucose in the blood, the cell, and the intestine.",
+ parts:[
+  {verb:"Identify",text:"the type of transport that moves glucose from the cell into the blood.",pts:1,rubric:["Facilitated diffusion (passive) through GLUT2"]},
+  {verb:"Describe",text:"how the Na⁺/K⁺ pump establishes the conditions needed for glucose to enter the cell from the intestine.",pts:1,rubric:["The pump uses ATP to move Na⁺ out of the cell (into the blood), keeping Na⁺ concentration low inside the cell, creating a Na⁺ gradient from the lumen into the cell"]},
+  {verb:"Explain",text:"how the Na⁺/glucose symporter moves glucose into the cell against its concentration gradient.",pts:1,rubric:["Na⁺ moves down its gradient into the cell through the symporter; the energy of that movement is coupled to moving glucose into the cell against its gradient (secondary active transport/cotransport)"]},
+  {verb:"Predict",text:"the effect on glucose absorption if the cell ran out of ATP, and justify.",pts:1,rubric:["Glucose absorption from the intestine would decrease/stop, because without ATP the pump stops, the Na⁺ gradient runs down, and the symporter no longer has the energy to bring glucose in"]}
+ ]},
+{id:"U2F10",t:"u2comp",title:"Where did mitochondria come from?",
+ stem:"Researchers compared mitochondria with free-living bacteria. Mitochondria have two membranes, a circular DNA molecule, and ribosomes that are 70S in size (like bacteria); the rest of the eukaryotic cell has 80S ribosomes. New mitochondria form only by the division of existing mitochondria.",
+ parts:[
+  {verb:"Describe",text:"the endosymbiotic theory.",pts:1,rubric:["An ancestral host cell engulfed a free-living (aerobic) prokaryote, which was not digested and lived inside it in a mutually beneficial relationship, eventually becoming the mitochondrion"]},
+  {verb:"Explain",text:"how TWO of the observations support the theory.",pts:2,rubric:["One observation linked to reasoning, e.g., circular DNA and 70S ribosomes match bacteria, not the eukaryotic nucleus/cytoplasm","A second observation with reasoning, e.g., the double membrane (inner from the bacterium, outer from the host's engulfing membrane) or division like bacterial fission"]},
+  {verb:"Explain",text:"how compartmentalization inside the mitochondrion benefits the cell.",pts:1,rubric:["The folded inner membrane increases surface area for the reactions that make ATP, and separating these reactions from the cytoplasm keeps competing reactions apart"]}
+ ]},
+{id:"U2F11",t:"u2tonic",title:"Osmosis in a dialysis bag",fig:FIG_BEAKER,
+ stem:"A model cell (dialysis bag) and a beaker contain the solutions shown. The membrane is permeable to water, glucose, and fructose, but not sucrose.",
+ parts:[
+  {verb:"Identify",text:"whether the cell is hypertonic, hypotonic, or isotonic compared to the beaker.",pts:1,rubric:["The cell is hypertonic compared to the beaker (0.03 M vs 0.01 M sucrose, the solute that can't cross)"]},
+  {verb:"Predict",text:"the direction of net water movement and justify.",pts:1,rubric:["Water moves into the cell, from the hypotonic beaker (higher water concentration/higher Ψ) to the hypertonic cell"]},
+  {verb:"Describe",text:"the movement of glucose and of fructose.",pts:1,rubric:["Glucose moves out of the cell (0.02 M → 0.01 M) and fructose moves into the cell (0.01 M → 0 M), each down its own concentration gradient until equal on both sides"]},
+  {verb:"Explain",text:"why sucrose, not glucose, determines the direction of water movement at equilibrium.",pts:1,rubric:["Glucose and fructose even out on both sides, so they create no lasting difference; sucrose can't cross, so its concentration difference remains and sets the water gradient"]}
  ]}
 );

@@ -116,7 +116,8 @@ td .f{white-space:nowrap}
 .tbl.narrow table{min-width:420px}
 /* mnemonic */
 .mn{display:flex;gap:12px;align-items:flex-start;margin:14px 0;padding:12px 14px;border:1.5px dashed var(--line-2);border-radius:10px}
-.mn .k{font-family:var(--display);font-weight:800;color:var(--teal);font-size:13px;letter-spacing:.1em;padding-top:3px;flex:none}
+.mn .k{font-family:var(--display);font-weight:800;color:var(--teal);font-size:13px;letter-spacing:.1em;padding-top:3px;flex:none;max-width:30%}
+.mn>div:last-child{min-width:0}
 /* trap */
 .trap{margin:14px 0;padding:12px 14px;border-radius:10px;background:var(--warn-soft);border:1px solid transparent}
 .trap b{color:var(--warn)}
@@ -160,12 +161,12 @@ p.u1{padding:8px 12px}
   <a class="back" href="./">← Study Lab</a>
   <div class="eyebrow">AP Biology · Unit 2 · Cell Structure &amp; Function</div>
   <h1>Unit 2 Study Guide</h1>
-  <div class="ver">Covers 2.1–2.4 (taught through Sep 23) · 2.5 onward is added as it's taught</div>
+  <div class="ver">Covers all of Unit 2 (2.1–2.10) · matched to the teacher's syllabus · updated Sep 25</div>
   <p class="sub">Unit 2 isn't a pile of new facts. It's Unit 1 put to work: the same molecules, now built into a cell. If you understand <em>why</em> each part is shaped the way it is, most of this unit explains itself.</p>
 
   <div class="facts">
     <div class="fact"><div class="n">Thu 10/1</div><div class="l">Cell Quiz · covers 2.1–2.5</div></div>
-    <div class="fact"><div class="n">Mon 10/5</div><div class="l">Do the AP Classroom progress check + reflection (free +1 point)</div></div>
+    <div class="fact"><div class="n">Tue 10/6 · 8:15 am</div><div class="l">AP Classroom Progress Check + pre-reflection due (+1 test point)</div></div>
     <div class="fact"><div class="n">Wed 10/7</div><div class="l">Unit 2 Test · 50% MCQ / 50% FRQ</div></div>
   </div>
 </header>
@@ -179,6 +180,13 @@ p.u1{padding:8px 12px}
   <a href="#i4">4 · Size</a>
   <a href="#i5">5 · Membrane</a>
   <a href="#i6">6 · What crosses</a>
+  <a href="#i7">7 · Transport</a>
+  <a href="#i8">8 · Tonicity</a>
+  <a href="#i9">9 · Water potential</a>
+  <a href="#i10">10 · Pumps</a>
+  <a href="#i11">11 · Endosymbiosis</a>
+  <a href="#labs">Labs</a>
+  <a href="#test">Test &amp; grading</a>
   <a href="#writing">FRQ writing</a>
   <a href="#check">Self-check</a>
 </nav>
@@ -186,11 +194,12 @@ p.u1{padding:8px 12px}
 <!-- ================= BIG PICTURE ================= -->
 <h2 id="bigpicture">The big picture</h2>
 <p class="lede">One sentence for the whole unit: <mark>a cell is a bag of Unit 1 molecules, divided into compartments, with a membrane that decides what gets in and out.</mark></p>
-<p>Every topic in Unit 2 answers one of three questions:</p>
+<p>Every topic in Unit 2 answers one of four questions:</p>
 <ol>
   <li><strong>What's inside?</strong> The organelles, and what each one does (2.1–2.2).</li>
   <li><strong>How big can it be?</strong> Surface area to volume (2.2).</li>
-  <li><strong>What's the wall made of, and what gets through?</strong> The membrane (2.3–2.4), and next, how things cross it (2.5–2.8).</li>
+  <li><strong>What's the wall made of, and what gets through?</strong> The membrane (2.3–2.4) and how things cross it: diffusion, osmosis, pumps, and water potential (2.5–2.8).</li>
+  <li><strong>Why compartments, and where did they come from?</strong> Compartmentalization and endosymbiosis (2.9–2.10).</li>
 </ol>
 
 <h3>Where Unit 1 shows up in Unit 2</h3>
@@ -205,33 +214,43 @@ p.u1{padding:8px 12px}
   <tr><td><strong>Carbohydrates</strong></td><td>Glycoproteins and glycolipids (the cell's ID tags). Cell walls: cellulose in plants, chitin in fungi.</td></tr>
   <tr><td><strong>Steroids</strong> (lipids)</td><td>Made in the smooth ER. Cholesterol sits in the membrane and controls fluidity.</td></tr>
   <tr><td><strong>Nucleic acids</strong></td><td>DNA lives in the nucleus (or nucleoid). Ribosomes are made of rRNA.</td></tr>
+  <tr><td><strong>Ionic bonds ionize in water</strong></td><td>NaCl splits into two ions, so its ionization constant is i = 2 in the water-potential formula, and it pulls water twice as hard as sugar.</td></tr>
+  <tr><td><strong>Hydrogen bonds &amp; hydration shells</strong></td><td>Water clinging to dissolved particles is "bound" and can't move. More solute means less free water, which is the reason for osmosis and negative water potential.</td></tr>
+  <tr><td><strong>pH = H⁺ concentration</strong></td><td>Proton pumps change the pH inside vacuoles and lysosomes.</td></tr>
+  <tr><td><strong>Protein shape = function</strong></td><td>Pumps and carriers move things by changing shape (conformational change).</td></tr>
   <tr><td><strong>Structure → function</strong></td><td>The theme of the whole unit. Folded membranes, branched shapes, and double membranes all exist for a reason.</td></tr>
 </table></div>
 
-<div class="note"><p><strong>How to use this guide.</strong> Follow the <a href="#plan">daily plan</a>: read one idea, then do the Study Lab's "Today" session, which practices that same idea. Tuesdays and Thursdays include a written question: write it on paper, photograph it, and send it to Dad for Claude to grade. The self-check questions at the bottom work anywhere, including in line or in the car.</p></div>
+<div class="note"><p><strong>How to use this guide.</strong> Follow the <a href="#plan">daily plan</a>: read one idea, then do the Study Lab's "Today" session, which practices that same idea. Every day includes one short written answer, typed in the Study Lab; Claude grades it that night. The self-check questions at the bottom work anywhere, including in line or in the car.</p></div>
 
 
 <!-- ================= DAILY PLAN ================= -->
-<h2 id="plan">The daily plan to the Cell Quiz</h2>
-<p class="lede">All six ideas below were <strong>already taught in class (9/17–9/23)</strong>. This plan reviews one a day so each one sticks before the Cell Quiz. Each day: <strong>read the idea here, then do the "Today" session in the Study Lab</strong>. About 20–25 minutes total:</p>
+<h2 id="plan">The daily plan to the Cell Quiz and the Unit 2 Test</h2>
+<p class="lede">Matched to the teacher's syllabus. Each day: <strong>read the idea here, then do the "Today" session in the Study Lab</strong>. About 20–25 minutes total:</p>
 <ol>
   <li><b>Read</b> the day's idea (about 8 min).</li>
-  <li><b>14 questions</b> (about 10 min): 6 on that idea, 6 review questions due from earlier days, and 2 from Unit 1. Anything you miss comes back the next day, then again 3 days and 7 days later, until it sticks.</li>
+  <li><b>14 questions</b> (about 10 min): 6 on that idea, 6 review questions due from earlier days, and 2 from Unit 1. Anything she misses comes back the next day, then again 3 days and 7 days later, until it sticks.</li>
   <li><b>One short written answer</b> (about 4 min), typed. Claude grades it that night; the grade and feedback show up under "Written work" in the Study Lab.</li>
 </ol>
 <div class="tbl narrow"><table>
-  <tr><th>Day</th><th>Read</th><th>Extra</th></tr>
+  <tr><th>Day</th><th>Read</th><th>Also (from the syllabus)</th></tr>
   <tr><td>Wed 9/23</td><td><a href="#i1">Idea 1 · Cells</a></td><td></td></tr>
-  <tr><td>Thu 9/24</td><td><a href="#i2">Idea 2 · Protein path</a></td><td></td></tr>
+  <tr><td>Thu 9/24</td><td><a href="#i2">Idea 2 · Protein path</a></td><td>Class: dialysis demo, transport slides 1–20</td></tr>
   <tr><td>Fri 9/25</td><td><a href="#i3">Idea 3 · Cytoskeleton</a></td><td></td></tr>
-  <tr><td>Sat 9/26</td><td><a href="#i4">Idea 4 · Cell size</a></td><td>One full FRQ this weekend (about 15 min, typed)</td></tr>
-  <tr><td>Sun 9/27</td><td><a href="#i5">Idea 5 · Membrane</a></td><td></td></tr>
-  <tr><td>Mon 9/28</td><td><a href="#i6">Idea 6 · What crosses</a></td><td></td></tr>
-  <tr><td>Tue 9/29</td><td>Review 1: all six ideas mixed</td><td>Redo my misses until empty</td></tr>
-  <tr><td>Wed 9/30</td><td>Review 2: <a href="#check">Self-check</a></td><td>Redo my misses until empty</td></tr>
-  <tr><td><b>Thu 10/1</b></td><td colspan="2"><b>Cell Quiz (2.1–2.5)</b></td></tr>
+  <tr><td>Sat 9/26</td><td><a href="#i4">Idea 4 · Cell size</a></td><td>One full FRQ this weekend (typed)</td></tr>
+  <tr><td>Sun 9/27</td><td><a href="#i5">Idea 5 · Membrane</a></td><td>10 min: read the <a href="#lab-potato">potato lab guide</a></td></tr>
+  <tr><td>Mon 9/28</td><td><a href="#i6">Ideas 6–7 · What crosses, and how</a></td><td>Class: potato lab analysis, osmosis case study, slides 21–34</td></tr>
+  <tr><td>Tue 9/29</td><td>Quiz review 1 (Ideas 1–7 mixed)</td><td>Redo my misses until empty</td></tr>
+  <tr><td>Wed 9/30</td><td>Quiz review 2 + <a href="#check">self-check</a></td><td>Redo my misses until empty</td></tr>
+  <tr><td><b>Thu 10/1</b></td><td><b>Cell Quiz (2.1–2.5)</b>; tonight <a href="#i8">Idea 8 · Tonicity</a></td><td>Class: slides 2.9–2.11</td></tr>
+  <tr><td>Fri 10/2</td><td><a href="#i9">Idea 9 · Water potential</a></td><td>Potato lab due</td></tr>
+  <tr><td>Sat 10/3</td><td><a href="#i10">Idea 10 · Pumps</a></td><td>Weekend lab FRQ (typed)</td></tr>
+  <tr><td>Sun 10/4</td><td><a href="#i11">Idea 11 · Endosymbiosis</a> + lab data</td><td></td></tr>
+  <tr><td>Mon 10/5</td><td>Test review 1 (all of Unit 2)</td><td>AP Classroom Progress Check + pre-reflection</td></tr>
+  <tr><td>Tue 10/6</td><td>Test review 2 + one full FRQ</td><td>Progress Check due 8:15 am; Water Potential HW due</td></tr>
+  <tr><td><b>Wed 10/7</b></td><td colspan="2"><b>Unit 2 Test</b> (50% MCQ / 50% FRQ)</td></tr>
 </table></div>
-<p class="small">Missed a day? The Study Lab doesn't skip anything. It shows the missed idea first as "Catch-up," then the day's idea.</p>
+<p class="small">Missed a day? The Study Lab doesn't skip anything. It shows the missed idea first as "Catch-up," then the day's idea. Review days are only offered on their own day. <b>Cell Quiz scope:</b> the syllabus says 2.1–2.5, "up to and including cell membrane structure and function." The teacher's 2.5 slide is Membrane Transport (Idea 7), so the plan covers it before the quiz. If she's unsure, it's worth asking the teacher.</p>
 
 <!-- ================= IDEA 1 ================= -->
 <div class="idea" id="i1">
@@ -431,8 +450,264 @@ p.u1{padding:8px 12px}
   <a class="practice" href="./#drill=u2perm">Practice this idea: 10 questions →</a>
 </div>
 
-<!-- ================= COMING NEXT ================= -->
-<div class="note" style="margin-top:36px"><p><strong>Coming next: 2.5–2.8 (on the Cell Quiz through 2.5).</strong> The next lessons are about <em>how</em> things cross: passive transport (no energy, downhill), active transport (uses ATP, uphill), and osmosis (water moving toward where there's more stuff dissolved). Water potential is the one math-heavy topic. This guide will be updated as soon as those slides are in the folder. The big-picture thread: everything in Idea 6 about <em>what</em> can cross decides <em>how</em> it has to cross.</p></div>
+<!-- ================= IDEA 7 ================= -->
+<div class="idea" id="i7">
+  <div class="num">IDEA 7 · 2.5</div>
+  <h3>Downhill is free. Uphill costs energy.</h3>
+  <div class="plain"><b>In plain English:</b> Molecules are always jiggling around at random. Because of that, they spread out from where they're crowded to where they're not. That's <strong>diffusion</strong>, and it happens on its own, with no energy. Moving something the <em>other</em> way, into a place where it's already crowded, is like pushing a ball uphill: the cell has to spend energy (usually ATP) and use a <strong>pump</strong>.</div>
+  <div class="tbl"><table>
+    <tr><th></th><th>Simple diffusion</th><th>Facilitated diffusion</th><th>Active transport</th></tr>
+    <tr><td><b>Direction</b></td><td>[high] → [low]<br>(with / down the gradient)</td><td>[high] → [low]<br>(with / down the gradient)</td><td>[low] → [high]<br>(against / up the gradient)</td></tr>
+    <tr><td><b>Protein?</b></td><td>No</td><td>Yes: channel or carrier</td><td>Yes: a <b>pump</b></td></tr>
+    <tr><td><b>Energy?</b></td><td>No (passive)</td><td>No (passive)</td><td><b>Yes</b> (ATP or another gradient)</td></tr>
+    <tr><td><b>What moves this way</b></td><td>O₂, CO₂, steroids</td><td>Ions, glucose, water (aquaporins)</td><td>Na⁺, K⁺, H⁺ against their gradients</td></tr>
+  </table></div>
+  <p>This is her Blue Sheet table. The big-picture link: <strong>Idea 6 decides Idea 7.</strong> If a molecule can cross the oily middle on its own (small, nonpolar), it uses simple diffusion. If it can't (charged, or large and polar), it needs a protein.</p>
+
+  <h4>Moving big things: bulk transport (uses energy)</h4>
+  <div class="tbl"><table>
+    <tr><th>Process</th><th>What happens</th><th>Example</th></tr>
+    <tr><td><strong>Phagocytosis</strong> ("cell eating")</td><td>The membrane wraps around a large particle and pinches off a vesicle</td><td>White blood cell engulfing a bacterium</td></tr>
+    <tr><td><strong>Pinocytosis</strong> ("cell drinking")</td><td>Takes in droplets of fluid and whatever is dissolved in them</td><td>Cells sampling fluid around them</td></tr>
+    <tr><td><strong>Receptor-mediated endocytosis</strong></td><td>Only molecules that bind to specific <b>receptor proteins</b> get taken in</td><td>Liver cells taking in cholesterol (LDL)</td></tr>
+    <tr><td><strong>Exocytosis</strong></td><td>A vesicle fuses with the plasma membrane and releases its contents outside</td><td>Secreting insulin or digestive enzymes</td></tr>
+  </table></div>
+  <p class="u1">Idea 2 link: exocytosis is the last step of the protein route. Rough ER → Golgi → secretory vesicle → <b>exocytosis</b>. Idea 3 link: vesicles are carried along microtubules by motor proteins, which is part of why bulk transport costs energy.</p>
+  <div class="mn"><div class="k">NAMES</div><div>Endo = in, exo = out, phago = eat, pino = drink, receptor-mediated = only what fits the receptor. On her slide, the teacher asks you to explain receptor-mediated endocytosis <em>from its name</em>. That's the skill.</div></div>
+  <div class="trap"><b>Tripping points:</b>
+  <br>• <strong>Never write "it moves from high to low."</strong> Her rule: name the substance and say concentration. "Glucose moves from an area of high glucose concentration to an area of low glucose concentration."
+  <br>• <strong>"With the gradient" = downhill = passive.</strong> "Against the gradient" = uphill = active. Students swap these under pressure.
+  <br>• <strong>A channel doesn't make transport active.</strong> Facilitated diffusion uses a protein and is still passive. Only pumps use energy.
+  <br>• <strong>Diffusion doesn't stop at equilibrium.</strong> Molecules keep moving both ways; only the <em>net</em> movement stops (dynamic equilibrium).</div>
+  <a class="practice" href="./#drill=u2trans">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 8 ================= -->
+<div class="idea" id="i8">
+  <div class="num">IDEA 8 · 2.6–2.7</div>
+  <h3>Water follows solute.</h3>
+  <div class="plain"><b>In plain English:</b> Water moves toward wherever there's <em>more stuff dissolved</em>. That's the whole idea of osmosis. Why? Dissolved particles hold water molecules around themselves (hydration shells), so a salty or sugary side has less <em>free</em> water. Free water diffuses from where there's more of it to where there's less, which is the same as moving toward more solute.</div>
+  <div class="mn"><div class="k">SAME IDEA</div><div>All three sentences mean the same thing, and the teacher uses all three:<br>• Water moves from <b>high [H₂O]</b> to <b>low [H₂O]</b>.<br>• Water moves from <b>hypotonic</b> to <b>hypertonic</b> (low solute → high solute).<br>• Water moves from <b>high water potential</b> to <b>low water potential</b> (Idea 9).</div></div>
+
+  <h4>Tonicity words are always comparisons</h4>
+  <div class="tbl"><table>
+    <tr><th>Word</th><th>Means</th><th>Water moves…</th></tr>
+    <tr><td><strong>Hypertonic</strong></td><td>MORE solute (than the other side)</td><td>toward it</td></tr>
+    <tr><td><strong>Hypotonic</strong></td><td>LESS solute (than the other side)</td><td>away from it</td></tr>
+    <tr><td><strong>Isotonic</strong></td><td>SAME solute</td><td>both ways equally: no <em>net</em> movement (dynamic equilibrium)</td></tr>
+  </table></div>
+  <p>Say the comparison every time: "The beaker is hypotonic <em>compared to the cell</em>." Her test notes take points off for incomplete comparisons.</p>
+
+  <h4>What happens to cells (her Tonicity slide)</h4>
+  <div class="tbl"><table>
+    <tr><th>Cell is in a…</th><th>Animal cell (no wall)</th><th>Plant cell (has a wall)</th></tr>
+    <tr><td>Hypotonic solution (water rushes in)</td><td><b>Lysed</b>: swells and may burst</td><td><b>Turgid</b>: firm. This is the healthy state for plants.</td></tr>
+    <tr><td>Isotonic solution</td><td><b>Normal</b>: the healthy state for animal cells</td><td><b>Flaccid</b>: limp; the plant wilts</td></tr>
+    <tr><td>Hypertonic solution (water leaves)</td><td><b>Shriveled</b> (crenated)</td><td><b>Plasmolyzed</b>: the membrane pulls away from the wall</td></tr>
+  </table></div>
+  <p class="u1">Idea 6 link: plant cells survive a hypotonic world because of the cell wall. Idea 1 link: the central vacuole fills with water and pushes out (turgor pressure).</p>
+
+  <h4>Facilitated diffusion: passive, with a protein doorway</h4>
+  <p>Charged and large polar molecules can't cross the oily middle (Idea 6), so they go through <strong>channel proteins</strong> (a tunnel) or <strong>carrier proteins</strong> (change shape to pass the molecule through). It's still downhill, "with" the gradient, so it costs no energy. <strong>Aquaporins</strong> are channels just for water, which is why water crosses membranes so quickly.</p>
+
+  <h4>Osmoregulation: why this matters for survival</h4>
+  <p>Organisms have to keep their water and solute balance (homeostasis). A freshwater fish lives in water that's hypotonic to its body, so water keeps flowing in and it must get rid of it. A saltwater fish has the opposite problem. Plant roots are kept <em>hypertonic</em> to the soil (lots of dissolved sugars), so water flows from the soil into the roots. For Monday's case study "Osmosis is Serious Business," use the same method on every scenario: first decide what's hypertonic compared to what, then say which way water moves and what happens to the cells.</p>
+
+  <div class="trap"><b>Tripping points:</b>
+  <br>• <strong>Only the solute that CAN'T cross decides where water goes.</strong> In her "Do you understand osmosis?" slide, glucose and fructose can cross, so they just even out. Sucrose is trapped (0.03 M inside vs. 0.01 M outside), so the cell is hypertonic and water moves in.
+  <br>• <strong>"Hyper" describes the solution, not the water.</strong> A hypertonic solution has <em>less</em> free water.
+  <br>• <strong>Water moves; solute usually doesn't.</strong> In osmosis questions, the solute can't cross. Don't write "the salt moves into the cell."</div>
+  <a class="practice" href="./#drill=u2tonic">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 9 ================= -->
+<div class="idea" id="i9">
+  <div class="num">IDEA 9 · 2.7–2.8</div>
+  <h3>Water potential: a number that tells you where water will go.</h3>
+  <div class="plain"><b>In plain English:</b> Water potential (Ψ, "psi") is just a score for how badly water "wants" to leave a place. Pure water scores <b>0</b>, the highest possible in these problems. Adding solute makes the score <b>negative</b>. Water always flows from the <b>higher</b> score to the <b>lower</b> one: from 0 to −4, or from −2 to −7. That's all Idea 8 said, but now with numbers.</div>
+
+  <h4>The two parts (both are on the formula sheet: don't memorize, know how to use them)</h4>
+  <div class="tbl"><table>
+    <tr><th>Piece</th><th>What it is</th><th>Sign</th></tr>
+    <tr><td><strong>Ψ = Ψs + Ψp</strong></td><td>Total water potential</td><td>Usually negative</td></tr>
+    <tr><td><strong>Ψs</strong> (solute potential) = −iCRT</td><td>The effect of dissolved stuff</td><td>Always 0 or negative. More solute → more negative.</td></tr>
+    <tr><td><strong>Ψp</strong> (pressure potential)</td><td>The push of the cell wall on a swollen plant cell</td><td>0 in open beakers and in animal cells; positive in turgid plant cells</td></tr>
+  </table></div>
+
+  <h4>Ψs = −iCRT, one letter at a time</h4>
+  <ul class="check">
+    <li><strong>i</strong> = how many particles the solute breaks into. Sugars (anything ending in -ose) = 1. NaCl = 2 (Na⁺ + Cl⁻). CaCl₂ = 3. <span class="u1">Unit 1 link: ionic bonds ionize in water; each ion gets its own hydration shell, so it ties up more water.</span></li>
+    <li><strong>C</strong> = molar concentration (mol/L).</li>
+    <li><strong>R</strong> = 0.0831 L·bar/mol·K (given).</li>
+    <li><strong>T</strong> = temperature in <b>kelvin</b>: °C + 273. Forgetting this is the #1 calculation error.</li>
+  </ul>
+
+  <h4>Worked example (same type as her slides, different numbers)</h4>
+  <div class="plain">A potato core is placed in an open beaker of <b>0.2 M sucrose at 22 °C</b>. What is the solute potential of the solution?<br><br>
+  i = 1 (sucrose doesn't ionize) · C = 0.2 mol/L · R = 0.0831 · T = 22 + 273 = 295 K<br>
+  Ψs = −(1)(0.2)(0.0831)(295) = −4.90 bars<br><br>
+  <b>Answer in a sentence:</b> "The solute potential of the sucrose solution is −4.90 bars." Include the negative sign, the unit, and a full sentence, with the answer as a decimal. All four of those are on her teacher's list from the first test.</div>
+
+  <h4>The three problem types</h4>
+  <div class="tbl"><table>
+    <tr><th>They ask…</th><th>Do this</th></tr>
+    <tr><td>"Calculate Ψs"</td><td>Plug into −iCRT. Kelvin! Sign! Unit!</td></tr>
+    <tr><td>"Which way will water move?"</td><td>Find Ψ on both sides (open beaker: Ψp = 0, so Ψ = Ψs). Water goes from higher (less negative) to lower (more negative).</td></tr>
+    <tr><td>"What is Ψp at equilibrium?"</td><td>At equilibrium, the cell's Ψ equals the outside Ψ. Set Ψs(cell) + Ψp = Ψ(outside) and solve for Ψp.</td></tr>
+  </table></div>
+  <p><b>Equilibrium example:</b> a cell with Ψs = −6.0 bars is at equilibrium with a solution whose Ψ = −2.5 bars. Then −6.0 + Ψp = −2.5, so Ψp = +3.5 bars. That positive pressure is turgor: the wall pushing back.</p>
+
+  <div class="trap"><b>Tripping points:</b>
+  <br>• <strong>"Lower" water potential means MORE negative.</strong> −7 is lower than −2.
+  <br>• <strong>An open beaker has Ψp = 0.</strong> So the solution's Ψ is just its Ψs.
+  <br>• <strong>Pure water: Ψ = 0.</strong> Nothing can be higher in these problems, so water always flows <em>out of</em> pure water.
+  <br>• <strong>Same molarity isn't the same Ψs.</strong> 0.1 M NaCl pulls twice as hard as 0.1 M sucrose (i = 2 vs. 1).
+  <br>• <strong>Round at the end, as a decimal.</strong> Don't leave fractions.</div>
+  <p>Her Water Potential Practice Problems homework (due Tue 10/6) uses exactly these three types. The Study Lab has typed-answer problems with different numbers, so she can practice the method first and then do the homework on her own.</p>
+  <a class="practice" href="./#drill=u2wp">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 10 ================= -->
+<div class="idea" id="i10">
+  <div class="num">IDEA 10 · 2.8</div>
+  <h3>Pumps build a gradient; other proteins spend it.</h3>
+  <div class="plain"><b>In plain English:</b> The cell uses ATP to pump sodium <em>out</em>, so there's always much more Na⁺ outside than inside. Sodium "wants" back in. The cell lets it back in only through special doors that make it carry something else in with it, like glucose. So one ATP-powered pump ends up powering a lot of other transport. That's <strong>cotransport</strong> (secondary active transport).</div>
+
+  <h4>The sodium–potassium pump (primary active transport)</h4>
+  <p>Moves <b>3 Na⁺ out</b> and <b>2 K⁺ in</b>, both against their gradients, using <b>ATP</b>. ATP makes the pump change shape, which carries the ions across. <span class="u1">Unit 1 link: a protein's shape is its function. Change the shape and you change what it does (conformational change).</span></p>
+
+  <h4>The intestine model (on her slide and in her Visual Representations practice: learn to read it)</h4>
+  <div class="tbl"><table>
+    <tr><th>Step</th><th>Protein</th><th>Direction vs. gradient</th><th>Type</th></tr>
+    <tr><td>1. Na⁺ pumped from the cell into the blood</td><td>Na⁺/K⁺ pump</td><td>Low Na⁺ (cell) → high Na⁺ (blood): <b>uphill</b></td><td>Active (ATP)</td></tr>
+    <tr><td>2. Na⁺ and glucose enter the cell from the intestine</td><td>Na⁺/glucose symporter</td><td>Na⁺ downhill; glucose <b>uphill</b> (the cell already has more)</td><td>Cotransport: secondary active (powered by the Na⁺ gradient)</td></tr>
+    <tr><td>3. Glucose leaves the cell into the blood</td><td>GLUT2</td><td>High glucose (cell) → low glucose (blood): <b>downhill</b></td><td>Facilitated diffusion (passive)</td></tr>
+  </table></div>
+  <div class="mn"><div class="k">READ IT</div><div>For each arrow, ask: (1) Which side has more of this substance? (2) Is the arrow going toward more (uphill → active) or toward less (downhill → passive)? (3) What protein is it using? The concentrations are usually printed in boxes above the diagram. Use them and cite them.</div></div>
+  <p><b>"Source of energy?"</b> (her slide asks this): for the symporter, the energy comes from Na⁺ flowing down its gradient, and that gradient was built by the ATP-powered pump. Block the pump and glucose uptake stops, even though the symporter itself never touches ATP.</p>
+
+  <h4>Proton pumps and the morning-glory flower (her practice problem)</h4>
+  <p>Pumping H⁺ changes pH (<span class="u1">Unit 1: more H⁺ = lower pH</span>). In the petals, a K⁺/H⁺ transporter moves H⁺ <em>out</em> of the vacuole (pH rises from 6.6 to 7.7, and the petal turns blue) and K⁺ <em>in</em>. More K⁺ inside means more solute, which means lower water potential, so water rushes in and the vacuole swells. Ideas 8, 9 and 10 in one question.</p>
+  <div class="trap"><b>Tripping points:</b>
+  <br>• <strong>The same ion can move passively in one place and actively in another.</strong> Na⁺ enters the cell passively and leaves into the blood actively. That's a real question from her practice set.
+  <br>• <strong>"Active" doesn't always mean ATP directly.</strong> Her slide: "always requires energy (not always ATP)." Cotransport uses a gradient.
+  <br>• <strong>Symporter</strong> = two things, same direction. <strong>Antiporter</strong> = opposite directions (the Na⁺/K⁺ pump).</div>
+  <a class="practice" href="./#drill=u2mech">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 11 ================= -->
+<div class="idea" id="i11">
+  <div class="num">IDEA 11 · 2.9–2.10</div>
+  <h3>Rooms with walls, and where two of the rooms came from.</h3>
+  <div class="plain"><b>In plain English:</b> Eukaryotic cells are divided into membrane-bound compartments so that different jobs can happen in different places without getting in each other's way. The compartments came from two sources. Most (nucleus, ER, Golgi) formed when the outer membrane <strong>folded inward</strong>. Two of them, mitochondria and chloroplasts, were once <strong>separate bacteria</strong> that got swallowed and stayed (endosymbiosis).</div>
+  <h4>Why compartments help (2.9): her slide gives two reasons</h4>
+  <ul class="check">
+    <li><strong>Keeps competing reactions apart.</strong> Lysosomes hold digestive enzymes that would destroy the cell if they were loose in the cytoplasm. Each compartment can also keep its own conditions (a lysosome is acidic inside).</li>
+    <li><strong>Increases surface area for reactions.</strong> The folded inner membrane of the mitochondrion and the ER network. <span class="u1">Idea 4 link: more surface area means more exchange and more reactions.</span></li>
+  </ul>
+  <h4>Where the compartments came from (2.10)</h4>
+  <div class="tbl"><table>
+    <tr><th>Origin</th><th>Which organelles</th><th>How</th></tr>
+    <tr><td><strong>Membrane infolding</strong></td><td>Nucleus (nuclear envelope), ER, Golgi: the endomembrane system</td><td>The plasma membrane of an ancestral prokaryote folded inward around the DNA and into internal membranes</td></tr>
+    <tr><td><strong>Endosymbiosis</strong></td><td>Mitochondria (from an aerobic bacterium); chloroplasts (from a photosynthetic bacterium)</td><td>A host cell engulfed the bacterium (endocytosis, Idea 7), didn't digest it, and both benefited</td></tr>
+  </table></div>
+  <div class="mn"><div class="k">EVIDENCE</div><div>Mitochondria and chloroplasts:<br><b>1. Double membrane</b> (inner from the bacterium, outer from the engulfing host).<br><b>2. Their own DNA</b>, naked and circular, like bacteria.<br><b>3. Their own ribosomes</b>, 70S, bacteria-sized (the rest of the cell has 80S).<br><b>4. They divide on their own</b>: new ones only come from existing ones, like bacteria.<br>An FRQ asking you to "explain" the evidence wants the link: "…which matches bacteria, not the eukaryotic nucleus."</div></div>
+  <p class="u1">Idea 1 link: prokaryotes don't have mitochondria or chloroplasts, but many still do respiration and photosynthesis on <em>folds of their plasma membrane</em>. It's the same surface-area idea, before compartments existed.</p>
+  <div class="trap"><b>Tripping points:</b>
+  <br>• <strong>Two origin stories, different organelles.</strong> Infolding explains the nucleus/ER; endosymbiosis explains mitochondria/chloroplasts. Don't mix them.
+  <br>• <strong>Mitochondria came first.</strong> Every eukaryote has them; only plants and algae also have chloroplasts.
+  <br>• <strong>"Prokaryotes have no compartments"</strong> is too strong. They lack <em>membrane-bound organelles</em>.</div>
+  <a class="practice" href="./#drill=u2comp">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= LABS ================= -->
+<h2 id="labs">Lab prep</h2>
+<p class="lede">Labs are graded classwork. Most lost points come from vague answers, not wrong science. For each lab: know <strong>what question it answers</strong>, <strong>what the result means</strong>, and <strong>how to write the analysis</strong>. This section teaches the reasoning. It doesn't fill in her answers: the lab is hers to write, and she'll do better on the test if she's worked it out herself.</p>
+
+<div class="idea" id="lab-dialysis">
+  <div class="num">LAB · ACTIVITY A · DIFFUSION (DIALYSIS TUBING)</div>
+  <h3>The question: what can get through the "membrane"?</h3>
+  <div class="plain"><b>Setup in one sentence:</b> a bag of dialysis tubing (a model membrane with tiny holes) holds <b>glucose + starch</b>, and sits in a cup of water with <b>IKI</b> (iodine). Two tests tell you where things went: <b>IKI turns blue-black where starch is</b>, and <b>glucose test strips</b> show where glucose is.</div>
+  <h4>How to read the results</h4>
+  <div class="tbl"><table>
+    <tr><th>If you see…</th><th>It means…</th></tr>
+    <tr><td>The inside of the bag turns blue-black</td><td>IKI got <b>into</b> the bag (and met the starch)</td></tr>
+    <tr><td>The cup stays amber (not blue-black)</td><td>Starch did <b>not</b> get out</td></tr>
+    <tr><td>The cup tests + for glucose</td><td>Glucose got <b>out</b> of the bag</td></tr>
+  </table></div>
+  <p><b>The conclusion the data supports:</b> glucose and IKI are small enough to pass through the pores; starch (a polysaccharide, a huge polymer from Unit 1) is too big. The tubing is <strong>selectively permeable by size</strong>, like a membrane.</p>
+  <h4>Analysis questions: how to think about each one</h4>
+  <ul class="check">
+    <li><strong>"Compare your results with your predictions."</strong> Go molecule by molecule (water, glucose, starch, IKI): predicted direction, actual evidence, match or not. If a prediction was wrong, say which and why.</li>
+    <li><strong>"Does this account for all the molecules?"</strong> Think about which molecule had <em>no test</em> in this activity. What measurement would show where it went? (Hint: something you could weigh.)</li>
+    <li><strong>"What does your data tell you about sizes vs. pore size?"</strong> Name each molecule and say whether it's smaller or larger than the pores, citing the color or test-strip evidence.</li>
+  </ul>
+  <p><a class="practice" href="./#drill=u2lab">Practice lab data questions →</a></p>
+</div>
+
+<div class="idea" id="lab-potato">
+  <div class="num">LAB · ACTIVITY B · POTATO CORE WATER POTENTIAL</div>
+  <h3>The question: what is the water potential inside a potato cell?</h3>
+  <div class="plain"><b>The trick behind the whole lab:</b> you can't measure inside a potato cell directly. So you soak potato cores in sugar solutions of different strengths and watch which way water goes. In weak solutions the cores <b>gain</b> mass (water moved in). In strong solutions they <b>lose</b> mass (water moved out). Somewhere in between is a solution where they neither gain nor lose. That solution <b>matches</b> the potato (isotonic), so its concentration tells you the potato's.</div>
+  <h4>Step by step</h4>
+  <ol class="route">
+    <li><strong>% change in mass</strong> = (final − initial) ÷ initial × 100. Keep the sign: negative = lost water. <em>Why percent?</em> The cores start at different masses; percent change puts them on the same scale so they can be compared fairly.</li>
+    <li><strong>Graph the class averages.</strong> x-axis (independent variable): sucrose molarity (M). y-axis (dependent variable): % change in mass (%). The y-axis needs negative values. Follow her graphing rules below.</li>
+    <li><strong>Find where the line crosses 0% on the y-axis</strong> (the x-intercept). That molarity is <b>C</b>: the isotonic concentration.</li>
+    <li><strong>Convert the room temperature to kelvin</strong> (°C + 273).</li>
+    <li><strong>Calculate Ψs = −iCRT</strong> with i = 1 (sucrose). Write the answer as a sentence, with the negative sign and bars.</li>
+  </ol>
+  <p><b>Check her numbers:</b> class potato data usually crosses zero somewhere around 0.2–0.4 M, so Ψs usually comes out around −5 to −10 bars. If she gets a positive number, the sign is missing. If she gets something tiny like −0.02, she forgot to convert to kelvin.</p>
+  <h4>The extension questions: the method, not the answers</h4>
+  <ul class="check">
+    <li><strong>Chef and vegetables in tap water:</strong> compare the Ψ of tap water (close to 0) with the vegetable cells (negative). Water goes from higher to lower. Say what happens to the slices, and why they get crisp.</li>
+    <li><strong>Wheat farm and seawater:</strong> you're given two numbers (root Ψs and seawater Ψs). Decide which is higher, which way water would go, and what that does to the plants. Then give the advice, backed by the numbers.</li>
+    <li><strong>Marine clam in fresh water:</strong> which is hypotonic compared to the clam's cells? Which way does water move? Clams are animals: is there a wall to stop the cells from swelling?</li>
+    <li><strong>Carrot with corn syrup:</strong> the hint asks whether a solution can be hypertonic and hypotonic at the same time. Yes: the carrot cells are hypertonic to the pure water outside but hypotonic to the corn syrup inside. Follow the water from highest Ψ to lowest Ψ. Where does it end up? What happens to the level in the tube?</li>
+  </ul>
+  <div class="trap"><b>Tripping points:</b> writing "the potato lost mass because of osmosis" without saying which direction and why (say which side had lower water potential); calling the solution "hypertonic" without "compared to the potato cells"; using the individual group's data when the question asks for class averages.</div>
+  <p><a class="practice" href="./#frq=U2F8">Practice: a full lab FRQ on this exact experiment (different data) →</a></p>
+</div>
+
+<div class="idea" id="graphing">
+  <div class="num">HER TEACHER'S GRAPHING RULES (FROM THE BLUE SHEET)</div>
+  <h3>A graph point is easy to earn and easy to lose.</h3>
+  <ul class="check">
+    <li><strong>Independent variable (with units) on the x-axis; dependent variable (with units) on the y-axis.</strong> The IV is what you change on purpose. Time is often on the x-axis but is rarely the IV.</li>
+    <li><strong>Simple scale:</strong> intervals of 1, 2, 5 or 10. Not 2.5 or 3.</li>
+    <li><strong>Plot every point accurately.</strong> One misplaced point loses the plotting point.</li>
+    <li><strong>Connect the dots</strong> for line graphs (usually better than a best-fit line). Don't connect to 0,0 unless 0,0 is a data point, and don't extend past the last point unless asked to extrapolate.</li>
+    <li><strong>Never add lines to the graph paper.</strong> If the scale is wrong, cross it out and start over.</li>
+    <li><strong>Read the entire FRQ first</strong>, and read graphs using a straightedge.</li>
+  </ul>
+</div>
+
+<!-- ================= TEST ================= -->
+<h2 id="test">How the Unit 2 Test is graded, and how to get an A</h2>
+<p class="lede">The test is <strong>half multiple choice, half FRQ</strong>, 40 minutes each, over two periods, with the AP formula sheet and a calculator. No retests. That's why every day in the Study Lab has a written answer, not just multiple choice.</p>
+<h4>Her teacher's "Notes from the First Test" (from the Unit 2 Blue Sheet)</h4>
+<ul class="check">
+  <li><strong>Always write in complete sentences</strong>, including numerical answers. "The solute potential is −4.90 bars."</li>
+  <li><strong>For Ψs, include the − sign and the unit (bars).</strong></li>
+  <li><strong>Finish every calculation as a decimal.</strong> No fractions, no "2.1π."</li>
+  <li><strong>Complete every comparison:</strong> "the cell is hypertonic compared with the beaker."</li>
+  <li><strong>Never use "it" or "stuff."</strong> Not "it moves from high to low," but "Glucose moves from high glucose concentration to low glucose concentration."</li>
+  <li><strong>Describe graphs simply:</strong> "As the radius of the cell increases, the surface area-to-volume ratio decreases."</li>
+  <li><strong>Keep the dependent variable dependent:</strong> it depends on the independent variable, not the other way around.</li>
+  <li><strong>When asked for evidence, cite numbers from the data.</strong></li>
+  <li><strong>Predict what WILL happen</strong>, not what won't. "I predict the cell will lose water," not "the cell won't gain water."</li>
+  <li><strong>Express SA:V as SA:1</strong> (for example, 3:1).</li>
+</ul>
+<h4>Sentence patterns that earn Unit 2 points</h4>
+<div class="tbl"><table>
+  <tr><th>Question type</th><th>Pattern</th></tr>
+  <tr><td>Structure → function</td><td>"The [specific structure] [has this feature], which allows it to [do this job]."</td></tr>
+  <tr><td>Which way does a solute move?</td><td>"[Substance] moves from an area of high [substance] concentration in the [place] to an area of low [substance] concentration in the [place] by [process], which [does / does not] require energy because…"</td></tr>
+  <tr><td>Which way does water move?</td><td>"Water moves from the [side] (higher water potential / hypotonic) to the [side] (lower water potential / hypertonic) by osmosis, so the [cell] will [gain/lose] water and [swell/shrink/become turgid/plasmolyze]."</td></tr>
+  <tr><td>Calculation</td><td>Formula → numbers plugged in (with K) → answer with sign and unit → one sentence.</td></tr>
+  <tr><td>Explain evidence</td><td>"[Observation] supports [claim] because [link]." Example: "Mitochondria have circular DNA, which supports endosymbiosis because bacteria also have circular DNA."</td></tr>
+</table></div>
+<p>The AP Classroom Progress Check is worth +1 point on this test, but only if she does the multiple choice <b>and</b> the pre-test reflection at least 24 hours before the test, and the post-test reflection afterward. It's due Tue 10/6 at 8:15 am, and late work isn't accepted. The daily plan puts it on Mon 10/5.</p>
 
 <!-- ================= FRQ WRITING ================= -->
 <h2 id="writing">Writing Unit 2 FRQs</h2>
@@ -462,8 +737,21 @@ p.u1{padding:8px 12px}
 <details><summary>Rank how easily these cross a bare bilayer: glucose, O₂, Na⁺, water.</summary><div class="a">O₂ (small, nonpolar) → water (small, polar; a little) → glucose (large, polar; no) and Na⁺ (charged; no). The last two need proteins.</div></details>
 <details><summary>What do all cell walls have in common, and what differs?</summary><div class="a">All are complex carbohydrates that give structure. They differ in the carbohydrate: cellulose (plants), chitin (fungi), peptidoglycan (bacteria).</div></details>
 <details><summary>Why is a folded membrane an advantage? Give two examples.</summary><div class="a">More surface area means more exchange or more reactions. Examples: microvilli in the intestine, the inner membrane of mitochondria (also the ER).</div></details>
+<details><summary>Simple diffusion, facilitated diffusion, active transport: which need a protein, and which need energy?</summary><div class="a">Simple: neither. Facilitated: a protein (channel/carrier), no energy. Active: a pump protein AND energy.</div></details>
+<details><summary>Explain receptor-mediated endocytosis using only its name.</summary><div class="a">Endo = into the cell; receptor-mediated = only molecules that bind specific receptor proteins get taken in (inside a vesicle).</div></details>
+<details><summary>A red blood cell goes into distilled water. What happens, and why?</summary><div class="a">Water moves in (distilled water is hypotonic compared to the cell), and the cell swells and may lyse, because animal cells have no wall.</div></details>
+<details><summary>What's the healthy state for a plant cell? For an animal cell?</summary><div class="a">Plant: turgid (hypotonic surroundings). Animal: normal in an isotonic solution.</div></details>
+<details><summary>Ψs of 0.1 M NaCl at 25 °C?</summary><div class="a">−(2)(0.1)(0.0831)(298) = −4.95 bars. (i = 2 because NaCl makes two ions.)</div></details>
+<details><summary>Cell Ψ = −3 bars, solution Ψ = −1 bar. Which way does water move?</summary><div class="a">From the solution (−1, higher) into the cell (−3, lower).</div></details>
+<details><summary>In the intestine model, Na⁺ enters the cell one way and leaves another. How are they different?</summary><div class="a">In from the intestine: passive (down its gradient, through the symporter). Out to the blood: active (against its gradient, Na⁺/K⁺ pump, ATP).</div></details>
+<details><summary>What powers the Na⁺/glucose symporter?</summary><div class="a">The Na⁺ gradient, which the ATP-powered Na⁺/K⁺ pump maintains (secondary active transport).</div></details>
+<details><summary>Name the four pieces of evidence for endosymbiosis.</summary><div class="a">Double membrane; own circular DNA; own 70S ribosomes; they divide on their own like bacteria.</div></details>
+<details><summary>Infolding or endosymbiosis: where did the nucleus come from? The chloroplast?</summary><div class="a">Nucleus/ER: infolding of the plasma membrane. Chloroplast (and mitochondrion): endosymbiosis.</div></details>
+<details><summary>Potato cores in 0.6 M sucrose lost 16% of their mass. Was the solution hypertonic or hypotonic compared to the cores?</summary><div class="a">Hypertonic compared to the cores: water left them, moving to the solution's lower water potential.</div></details>
+<details><summary>Why calculate PERCENT change in mass?</summary><div class="a">The cores start at different masses; percent change makes them comparable.</div></details>
 
-<div class="foot">Built from the teacher's Unit 2 slides (#1 Cell Structure &amp; Organelles, #2 Plasma Membrane), the Membrane Function POGIL, and the cell-size (Decocube) lab. Updated as new material arrives.</div>
+
+<div class="foot">Built from the teacher's Unit 2 slides (#1–#4), the Membrane Function POGIL, the Cell Size and Diffusion &amp; Osmosis lab handouts, the Visual Representations practice, the Unit 2 review sheet, and the daily syllabus.</div>
 </div>
 
 </body></html>

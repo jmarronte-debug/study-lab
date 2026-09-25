@@ -28,7 +28,7 @@ try: G=coll("grades"); grades_ok=True
 except urllib.error.HTTPError: G=[]; grades_ok=False
 graded={(g.get("f"),int(g.get("t"))) for g in G if g.get("t") is not None}
 js=urllib.request.urlopen("https://raw.githubusercontent.com/jmarronte-debug/study-lab/main/questions.js",timeout=30).read().decode()
-m=json.loads(subprocess.run(["node","-e",js+";console.log(JSON.stringify({T:TOPICS,Q:Object.fromEntries(MCQ.map(q=>[q.id,q])),F:Object.fromEntries(FRQ.map(f=>[f.id,f])),PLAN:typeof PLAN!=='undefined'?PLAN:[]}))"],capture_output=True,text=True).stdout)
+m=json.loads(subprocess.run(["node","-"],input=js+";console.log(JSON.stringify({T:TOPICS,Q:Object.fromEntries(MCQ.map(q=>[q.id,q])),F:Object.fromEntries(FRQ.map(f=>[f.id,f])),PLAN:typeof PLAN!=='undefined'?PLAN:[]}))",capture_output=True,text=True).stdout)
 tz=ZoneInfo("America/New_York");day=lambda ms:datetime.datetime.fromtimestamp(int(ms)/1000,tz).date();now=datetime.datetime.now(tz);today=now.date()
 hm=lambda ms:datetime.datetime.fromtimestamp(int(ms)/1000,tz).strftime("%a %-m/%-d %-I:%M %p")
 A=[a for s in S for a in (s.get("a") or [])];Fr=[f for s in S for f in (s.get("f") or [])];Sm=[(x,s.get("dev")) for s in S for x in (s.get("s") or [])]
@@ -49,9 +49,9 @@ plan=[]
 for p in m["PLAN"]:
     if p["topic"]=="quiz": plan.append({"date":p["date"],"what":p["title"]}); continue
     plan.append({"date":p["date"],"what":p["idea"]+": "+p["title"],"done":any((p["idea"]+":") in l for l in labels)})
-missed_ideas=[p["what"] for p in plan if "done" in p and not p["done"] and p["date"]<str(today)]
+missed_ideas=[p["what"] for p,q in zip(plan,m["PLAN"]) if "done" in p and not p["done"] and p["date"]<str(today) and q["topic"]!="mix"]
 todays_plan=next((p for p in plan if p["date"]==str(today)),None)
-next_quiz=next((p for p in plan if "done" not in p and p["date"]>=str(today)),None)
+next_quiz=next(({"date":q["date"],"what":q["assess"]} for q in m["PLAN"] if q.get("assess") and q["date"]>=str(today)),None)
 # missed MCQs today
 missed=[]
 for a in tA:
