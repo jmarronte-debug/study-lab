@@ -157,7 +157,7 @@ body.viewer .student-only{display:none!important}
     <div>
       <div class="eyebrow">AP Biology · all units · 2026–27</div>
       <h1>AP Bio Practice Lab</h1>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 12 · Unit 2 through 2.10 · saved to your account, works on any device</div>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:6px">Version 13 · Unit 2 through 2.10 · saved to your account, works on any device</div>
       <p class="sub">A short session every day, explanations for every miss, FRQs scored against the rubric, and a running picture of what's strong and what needs another pass.</p>
     </div>
   </div>
@@ -225,6 +225,7 @@ body.viewer .student-only{display:none!important}
       <button class="mode" data-mode="misses"><span class="t">Redo my misses</span><span class="n" id="missCount">0 saved</span><span class="d">Only questions you've gotten wrong and not yet gotten right since.</span></button>
       <button class="mode" data-mode="frq"><span class="t">FRQ practice</span><span class="n">1 FRQ · 10 min</span><span class="d">One full AP-style FRQ. Type your answer; Claude grades it that night against the rubric.</span></button>
       <button class="mode" data-mode="frqset"><span class="t">FRQ set</span><span class="n">3 FRQs · 30 min</span><span class="d">Three FRQs, like half a real FRQ period. Typed answers are graded that night.</span></button>
+      <button class="mode hidden" data-mode="mocktest" id="mockBtn"><span class="t">Mock Test · Unit 2</span><span class="n">25 MCQ + 4 FRQ · 80 min</span><span class="d">The full test, timed both halves, made of questions you haven't seen in daily practice. Take it once before the real test.</span></button>
     </div>
 
     <div id="topicPick" class="card hidden" style="margin-top:14px">
@@ -307,7 +308,7 @@ body.viewer .student-only{display:none!important}
 <script src="vendor/firebase-app-compat.js"></script>
 <script src="vendor/firebase-auth-compat.js"></script>
 <script src="vendor/firebase-firestore-compat.js"></script>
-<script src="questions.js?v=12"></script>
+<script src="questions.js?v=13"></script>
 <script>
 (function(){
 "use strict";
@@ -324,9 +325,11 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 let SEL_UNIT=CURRENT.unit; try{const u=localStorage.getItem('lab:unit'); if(u&&UNITS[u]) SEL_UNIT=+u;}catch(e){}
 const unitOf=q=>TOPICS[q.t].unit;
 const taughtYet=t=>!(CURRENT.taughtOn&&CURRENT.taughtOn[t]&&CURRENT.taughtOn[t]>dayKey(Date.now()));   // don't quiz on lessons not taught yet
-const inUnit=u=>MCQ.filter(q=>unitOf(q)===u&&taughtYet(q.t));
+const inUnit=u=>MCQ.filter(q=>unitOf(q)===u&&taughtYet(q.t)&&!q.mock);
 const topicsOf=p=>p.topics||[p.topic];
-const frqInUnit=u=>FRQ.filter(f=>TOPICS[f.t].unit===u&&taughtYet(f.t));
+const frqInUnit=u=>FRQ.filter(f=>TOPICS[f.t].unit===u&&taughtYet(f.t)&&!f.mock);
+const MOCK_READY='2026-10-03';                     // mock test unlocks this weekend, per Julian
+const mockReady=()=>dayKey(Date.now())>=MOCK_READY;
 const dayKey=ts=>{const d=new Date(ts); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const isTodayLabel=l=>/^Today/.test(l||'');
 let GRADES={};                                   // Claude's grades, keyed by FRQ id + answer time
@@ -347,12 +350,23 @@ function reviewQueue(pool){
 
 // ---------- analytics ----------
 function topicStats(){
-  const st={}; for(const k in TOPICS) st[k]={n:0,c:0,fpts:0,fmax:0};
-  for(const a of S.attempts){const q=byId[a.q]; if(!q) continue; st[q.t].n++; if(a.ok) st[q.t].c++;}
-  for(const f of S.frq){const F=frqById[f.f]; if(!F) continue; const g=gradeFor(f); const pts=g?g.pts:f.pts; if(pts==null) continue; st[F.t].fpts+=pts; st[F.t].fmax+=f.max;}
+  // Two tiers, tracked separately: "Know it" (recall MCQs + old short written answers) vs
+  // "Apply it" (lvl:2 MCQs + real FRQs — daily, practice, mock). Only Apply-it counts toward being "ready".
+  const st={}; for(const k in TOPICS) st[k]={n:0,c:0,fpts:0,fmax:0, an:0,ac:0,afpts:0,afmax:0};
+  for(const a of S.attempts){const q=byId[a.q]; if(!q) continue; if(q.lvl===2){st[q.t].an++; if(a.ok)st[q.t].ac++;} else {st[q.t].n++; if(a.ok) st[q.t].c++;}}
+  for(const f of S.frq){const F=frqById[f.f]; if(!F) continue; const g=gradeFor(f); const pts=g?g.pts:f.pts; if(pts==null) continue;
+    if(F.short){st[F.t].fpts+=pts; st[F.t].fmax+=f.max;} else {st[F.t].afpts+=pts; st[F.t].afmax+=f.max;}}
   for(const k in st){const s=st[k]; const total=s.n+s.fmax; s.acc= total? (s.c+s.fpts)/total : null; s.total=total;
-    s.level = s.acc===null||total<4 ? 'none' : s.acc>=.8?'strong': s.acc>=.6?'ok':'weak';}
+    s.level = s.acc===null||total<4 ? 'none' : s.acc>=.8?'strong': s.acc>=.6?'ok':'weak';
+    const atotal=s.an+s.afmax; s.aacc = atotal? (s.ac+s.afpts)/atotal : null; s.atotal=atotal;
+    s.alevel = s.aacc===null||atotal<4 ? 'none' : s.aacc>=.85?'strong': s.aacc>=.65?'ok':'weak';}
   return st;
+}
+// Overall "ready for the test" read: apply-it accuracy across the unit, only once there's enough data.
+function applyReadiness(unit){
+  const st=topicStats(); const ks=Object.keys(TOPICS).filter(k=>TOPICS[k].unit===unit);
+  let ac=0, atotal=0; ks.forEach(k=>{ac+=st[k].ac+st[k].afpts; atotal+=st[k].an+st[k].afmax;});
+  return {acc: atotal? ac/atotal : null, total: atotal, ready: atotal>=20 && (ac/atotal)>=.85};
 }
 function currentMisses(){ // questions whose most recent attempt was wrong
   const last={}; for(const a of S.attempts) last[a.q]=a.ok;
@@ -362,18 +376,22 @@ function renderHome(){
   const st=topicStats();
   const bars=$('topicBars'); bars.innerHTML='';
   const totalAtt=S.attempts.length, totalC=S.attempts.filter(a=>a.ok).length;
-  $('overview').textContent = totalAtt? `${totalAtt} multiple-choice answers so far · ${Math.round(100*totalC/totalAtt)}% correct · ${S.frq.length} written answer${S.frq.length===1?'':'s'}` : 'Nothing answered yet. Start with Smart 10.';
+  const ready=applyReadiness(SEL_UNIT);
+  $('overview').innerHTML = (totalAtt? `${totalAtt} multiple-choice answers so far · ${Math.round(100*totalC/totalAtt)}% correct · ${S.frq.length} written answer${S.frq.length===1?'':'s'}` : 'Nothing answered yet. Start with Smart 10.')
+    + (ready.total ? `<br><b>Apply-it score</b> (what actually predicts test day): ${Math.round(100*ready.acc)}%${ready.total<20?' so far (needs 20+ apply-it answers to be reliable)':(ready.ready?' — this is the score that counts. 85%+ here means she\'s ready.':' — under 85%, not test-ready yet even if the "know it" numbers look good.')}` : '');
   const label={strong:'Strong',ok:'Getting there',weak:'Needs review',none:'Not enough data'};
   const order=Object.keys(TOPICS).filter(k=>TOPICS[k].unit===SEL_UNIT).sort((a,b)=>{const A=st[a],B=st[b]; if(A.acc===null&&B.acc===null)return 0; if(A.acc===null)return 1; if(B.acc===null)return -1; return A.acc-B.acc;});
   for(const k of order){const s=st[k];
     const d=document.createElement('div'); d.className='topic';
-    d.innerHTML=`<div class="nm">${TOPICS[k].name}</div><span class="st ${s.level}">${label[s.level]}</span><div class="bar"><i style="width:${s.acc===null?0:Math.round(s.acc*100)}%"></i></div><div class="meta">${s.n} MCQ${s.fmax?` · ${s.fpts}/${s.fmax} FRQ pts`:''}${s.acc!==null?` · ${Math.round(s.acc*100)}%`:''}</div>`;
+    d.innerHTML=`<div class="nm">${TOPICS[k].name} <span style="font-weight:400;color:var(--ink-3)">· know it</span></div><span class="st ${s.level}">${label[s.level]}</span><div class="bar"><i style="width:${s.acc===null?0:Math.round(s.acc*100)}%"></i></div><div class="meta">${s.n} MCQ${s.fmax?` · ${s.fpts}/${s.fmax} FRQ pts`:''}${s.acc!==null?` · ${Math.round(s.acc*100)}%`:''}</div>`
+      +`<div class="nm" style="margin-top:4px">${TOPICS[k].name} <span style="font-weight:400;color:var(--ink-3)">· apply it</span></div><span class="st ${s.alevel}">${label[s.alevel]}</span><div class="bar"><i style="width:${s.aacc===null?0:Math.round(s.aacc*100)}%"></i></div><div class="meta">${s.an} MCQ${s.afmax?` · ${s.afpts}/${s.afmax} FRQ pts`:''}${s.aacc!==null?` · ${Math.round(s.aacc*100)}%`:''}</div>`;
     bars.appendChild(d);}
   $('standEyebrow').textContent='Where you stand · '+UNITS[SEL_UNIT].name;
   const uc=$('unitChips'); uc.innerHTML='';
   Object.keys(UNITS).sort((a,b)=>b-a).forEach(u=>{const b=document.createElement('button'); b.className='chip'+(+u===SEL_UNIT?' on':''); b.setAttribute('role','tab'); b.setAttribute('aria-selected',+u===SEL_UNIT);
     b.textContent=UNITS[u].name+(+u===CURRENT.unit?' · now':''); b.onclick=()=>{SEL_UNIT=+u; try{localStorage.setItem('lab:unit',u)}catch(e){} renderHome();}; uc.appendChild(b);});
   renderToday();
+  const mb=$('mockBtn'); if(mb) mb.classList.toggle('hidden',!mockReady());
   const m=currentMisses(); $('missCount').textContent=`${m.length} saved`;
   const h=$('history'); h.innerHTML='';
   $('noHist').classList.toggle('hidden',S.sessions.length>0);
@@ -388,9 +406,11 @@ function renderWritten(){
   if(!list.length){ box.innerHTML='<p class="small">No written answers yet. The daily written question will show up here.</p>'; return; }
   box.innerHTML=list.map(f=>{const F=frqById[f.f]; if(!F) return ''; const g=gradeFor(f); const d=new Date(f.ts);
     const parts=F.parts.map((pt,k)=>{const gp=g&&g.parts&&g.parts[k];
-      return `<div style="margin-top:8px"><span class="small"><b>(${'abcdefgh'[k]}) ${esc(pt.verb)}</b> ${esc(pt.text)}</span><div class="ans">${esc((f.ans[k]||'').trim())||'<i>(left blank)</i>'}</div>${gp?`<div class="gr"><b>${gp.pts}/${pt.pts}</b> · ${esc(gp.fb)}</div>`:''}</div>`;}).join('');
+      return `<div style="margin-top:8px"><span class="small"><b>(${'abcdefgh'[k]}) ${esc(pt.verb)}</b> ${esc(pt.text)}</span><div class="ans">${esc((f.ans[k]||'').trim())||'<i>(left blank)</i>'}</div>${(gp&&!F.reflection)?`<div class="gr"><b>${gp.pts}/${pt.pts}</b> · ${esc(gp.fb)}</div>`:''}</div>`;}).join('');
+    const gradeLine = F.reflection ? (g? `<div class="gr" style="margin-top:10px"><span class="st ok">Read</span> ${esc(g.overall||'Thanks — this helps calibrate the next unit.')}</div>` : '<div class="pend">Saved. Not graded — just for calibrating future units.</div>')
+      : (g?`<div class="gr" style="margin-top:10px"><span class="st ${g.pts/g.max>=.8?'strong':g.pts/g.max>=.6?'ok':'weak'}">Claude's grade ${g.pts}/${g.max}</span> ${esc(g.overall||'')}</div>`:'<div class="pend">Waiting for tonight\'s grading.</div>');
     return `<div class="wr"><div class="q">${esc(F.title)} <span class="small">· ${d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</span></div><div class="small">${esc(F.stem)}</div>${parts}
-      ${g?`<div class="gr" style="margin-top:10px"><span class="st ${g.pts/g.max>=.8?'strong':g.pts/g.max>=.6?'ok':'weak'}">Claude's grade ${g.pts}/${g.max}</span> ${esc(g.overall||'')}</div>`:'<div class="pend">Waiting for tonight\'s grading.</div>'}</div>`;}).join('');
+      ${gradeLine}</div>`;}).join('');
 }
 
 // ---------- question selection ----------
@@ -482,8 +502,10 @@ function finishMCQ(partial){
   if(misses.length){rm.insertAdjacentHTML('beforeend',`<h3>Review your ${misses.length} miss${misses.length===1?'':'es'}</h3>`);
     misses.forEach(r=>{const q=byId[r.q]; const mine=q.type==='num'?r.chosen:q.opts[r.chosen]; const ans=q.type==='num'?(q.answer+' '+(q.unit||'')):q.opts[q.a]; rm.insertAdjacentHTML('beforeend',`<div class="miss"><b>${q.q}</b><span class="small">You ${q.type==='num'?'entered':'chose'}: ${mine}</span><div class="why"><strong>Answer:</strong> ${ans}. ${q.why}</div></div>`);});}
   const fcw=lastDoneToday()||todayFocus(); const wantWritten=isTodayLabel(Q.label)&&!partial&&!(fcw&&fcw.topic==='quiz');
-  if(wantWritten) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · every day</div><p style="margin:6px 0 12px">One short written answer on today's idea, about 4 minutes. Type it in full sentences. Claude grades it tonight.</p><button class="btn" id="goWritten">Start the written question →</button></div>`);
+  if(wantWritten) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · every day</div><p style="margin:6px 0 12px">One full FRQ-style written answer on today's idea, about 10 minutes. Type it in full sentences — real AP length, not a quick short answer. Claude grades it tonight.</p><button class="btn" id="goWritten">Start the written question →</button></div>`);
   if(wantWritten) setTimeout(()=>{const b=$('goWritten'); if(b) b.onclick=startTodayWritten;},0);
+  if(/^Mock Test/.test(Q.label)&&!partial) rm.insertAdjacentHTML('beforeend',`<div class="card" style="margin-top:14px;border-color:var(--teal)"><div class="eyebrow">Part 2 · Mock Test</div><p style="margin:6px 0 12px">Now the FRQ section: 4 questions, 40 minutes, like the real second half of the test. Type your answers; Claude grades them against the rubric.</p><button class="btn" id="goMockFRQ">Start the FRQ section →</button></div>`);
+  if(/^Mock Test/.test(Q.label)&&!partial) setTimeout(()=>{const b=$('goMockFRQ'); if(b) b.onclick=()=>startFRQ(shuffle(FRQ.filter(f=>f.mock)),'Mock Test FRQ · Unit 2');},0);
   $('ragain').onclick=()=>startMode(lastMode); $('ragain').textContent=isTodayLabel(Q.label)?'Another round':'Go again';
   show('results');
 }
@@ -579,10 +601,10 @@ function renderToday(){
     const extra=fc.catchup?'':(fc.extra||'');
     $('todaySteps').innerHTML = fc.topic==='quiz'
       ? `<li>${extra}</li><li>Optional: <a href="${fc.guide}">self-check</a> or a short session below.</li>`
-      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 14 questions (about 10 min): ${fc.topic==='mix'?'8 from '+(fc.poolName||'all of Unit 2 so far'):(fc.topics?'6 on these ideas':'6 on this idea')}, plus 6 review questions due from earlier days (misses come back until they stick), plus ${fc.topic==='mix'?'none':'2'} from Unit 1.</li><li><b>Write</b> one short answer (about 4 min), typed. Claude grades it tonight.</li>`+(extra?`<li>${extra}</li>`:'');
+      : (fc.topic==='mix'?`<li><b>Review</b> the <a href="${fc.guide}">self-check questions</a> in the study guide (about 8 min).</li>`:`<li><b>Read</b> <a href="${fc.guide}">${fc.idea} in the study guide</a> (about 8 min).</li>`)+`<li><b>Practice</b> 14 questions (about 12 min): ${fc.topic==='mix'?'8 from '+(fc.poolName||'all of Unit 2 so far'):(fc.topics?'6 on these ideas':'6 on this idea')}, plus 6 review questions due from earlier days (misses come back until they stick), plus ${fc.topic==='mix'?'none':'2'} from Unit 1.</li><li><b>Write</b> one full FRQ-style answer (about 10 min), typed — real AP length and difficulty, not a quick short answer. Claude grades it tonight.</li>`+(extra?`<li>${extra}</li>`:'');
     $('todaySteps').classList.remove('hidden');
   } else {
-    $('todayTitle').textContent=`14 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review · + 1 written`;
+    $('todayTitle').textContent=`14 questions · mostly ${CURRENT.newest.map(k=>TOPICS[k].short).join(' & ')}, plus review · + 1 full FRQ`;
     $('todayNote').textContent=''; $('todaySteps').classList.add('hidden');
   }
   const st=$('todayStatus');
@@ -590,7 +612,7 @@ function renderToday(){
     st.className='status done'; st.textContent=`Questions done at ${tm} · ${mcq.score}/${mcq.max}`+(writtenDay?(wr?' · written answer submitted':' · written question still to do'):'');
     if(writtenDay&&!wr) st.className='status';
     $('todayBtn').textContent=fc&&fc.another?(fc.catchup?'Catch up: '+fc.idea+' →':'Next: '+fc.idea+' →'):'Do another round'; $('todayBtn').className=fc&&fc.another?'btn':'btn quiet';
-  } else { st.className='status'; st.textContent='Not done yet today. About 20–25 minutes.'; $('todayBtn').textContent="Start today's session"; $('todayBtn').className='btn'; }
+  } else { st.className='status'; st.textContent='Not done yet today. About 30 minutes.'; $('todayBtn').textContent="Start today's session"; $('todayBtn').className='btn'; }
   $('todayWritten').classList.toggle('hidden',!(writtenDay&&mcq&&!wr));
   const days=new Set(todays.filter(x=>!/written/.test(x.label)).map(x=>dayKey(x.ts)));
   const strip=$('strip'); strip.innerHTML='';
@@ -628,7 +650,11 @@ function lastDoneToday(){ const t=dayKey(Date.now()); const x=S.sessions.filter(
 function startTodayWritten(){
   const done=new Set(S.frq.map(x=>x.f)); const st=topicStats();
   const fc=lastDoneToday()||todayFocus();
-  let pool=FRQ.filter(f=>f.short&&TOPICS[f.t].unit===CURRENT.unit&&(taughtYet(f.t)||(fc&&topicsOf(fc).includes(f.t)))); if(!pool.length) pool=frqInUnit(CURRENT.unit);
+  // Full FRQ-style daily question (daily:true) is the real daily written question now — AP length and difficulty,
+  // not the old 4-min short-answer. Fall back to a short one only for topics that don't have a daily item yet.
+  let pool=FRQ.filter(f=>f.daily&&TOPICS[f.t].unit===CURRENT.unit&&(taughtYet(f.t)||(fc&&topicsOf(fc).includes(f.t))));
+  if(!pool.length) pool=FRQ.filter(f=>f.short&&TOPICS[f.t].unit===CURRENT.unit&&(taughtYet(f.t)||(fc&&topicsOf(fc).includes(f.t))));
+  if(!pool.length) pool=frqInUnit(CURRENT.unit);
   if(fc&&fc.pool) pool=pool.filter(f=>fc.pool.includes(f.t));
   pool=shuffle(pool).sort((a,b)=>{const fa=fc&&topicsOf(fc).includes(a.t)?0:1, fb=fc&&topicsOf(fc).includes(b.t)?0:1; if(fa!==fb)return fa-fb; const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; return (st[a.t].acc??0.5)-(st[b.t].acc??0.5);});
   if(!pool.length){toast('No written questions for this unit yet');return}
@@ -668,6 +694,9 @@ function startMode(m){
     const pool=frqInUnit(SEL_UNIT).filter(f=>!f.short).sort((a,b)=>{const da=done.has(a.id)?1:0, db=done.has(b.id)?1:0; if(da!==db)return da-db; const A=st[a.t].acc??0.5,B=st[b.t].acc??0.5; return A-B;});
     startFRQ([pool[0]],'FRQ practice'+uTag);}
   else if(m==='frqset'){const done=new Set(S.frq.map(x=>x.f)); const pool=shuffle(frqInUnit(SEL_UNIT).filter(f=>!f.short)).sort((a,b)=>(done.has(a.id)?1:0)-(done.has(b.id)?1:0)); startFRQ(pool.slice(0,3),'FRQ set'+uTag);}
+  else if(m==='mocktest'){ if(!mockReady()){toast('The mock test unlocks the weekend before the unit test.');return}
+    const mockMCQ=shuffle(MCQ.filter(q=>q.mock)); if(!mockMCQ.length){toast('Mock test not available yet');return}
+    startMCQ(mockMCQ,'Mock Test · Unit 2',true);}
 }
 function renderChips(){const c=$('chips'); c.innerHTML=''; for(const k in TOPICS){ if(TOPICS[k].unit!==SEL_UNIT) continue;const b=document.createElement('button'); b.className='chip'+(chosenTopics.has(k)?' on':''); b.textContent=TOPICS[k].short; b.onclick=()=>{chosenTopics.has(k)?chosenTopics.delete(k):chosenTopics.add(k); renderChips();}; c.appendChild(b);}}
 $('startTopic').addEventListener('click',()=>{ if(!chosenTopics.size){toast('Pick at least one topic');return} const list=shuffle(MCQ.filter(q=>chosenTopics.has(q.t))); $('topicPick').classList.add('hidden'); startMCQ(list,'Drill: '+[...chosenTopics].map(k=>TOPICS[k].short).join(', '),false); });
