@@ -2625,3 +2625,695 @@ FRQ.push(
   {verb:"Predict",text:"how the time for 50% of eggs to burst in ethylene glycol would change if the experiment were run at 5 °C. Justify your prediction.",pts:1,rubric:["It will take longer than 7 minutes, because at a lower temperature molecules move more slowly and the phospholipid bilayer is less fluid (the phospholipids pack more tightly), so ethylene glycol and water cross the membrane more slowly. A prediction of direction AND a justification based on the membrane or molecular motion are both required"]}
  ]}
 );
+
+// ================= UNIT 3a — CELLULAR ENERGETICS: ENZYMES & PHOTOSYNTHESIS (3.1–3.3, 3.5) =================
+Object.assign(TOPICS, {
+  u3enz:    {unit:3, name:"Enzyme structure, specificity & induced fit (3.1)", short:"Enzyme structure"},
+  u3cat:    {unit:3, name:"How enzymes speed reactions: activation energy & mechanisms (3.1–3.2)", short:"Catalysis"},
+  u3env:    {unit:3, name:"Temperature, pH, and concentration effects on enzyme rate (3.2)", short:"Enzyme environment"},
+  u3inhib:  {unit:3, name:"Inhibitors, allosteric regulation & feedback (3.2)", short:"Inhibition"},
+  u3therm:  {unit:3, name:"Thermodynamics: laws, free energy, exergonic/endergonic (3.3)", short:"Thermodynamics"},
+  u3atp:    {unit:3, name:"ATP: structure, hydrolysis & energy coupling (3.3)", short:"ATP"},
+  u3photo:  {unit:3, name:"Photosynthesis overview: equation, redox, chloroplast, pigments (3.5)", short:"Photosynthesis intro"},
+  u3light:  {unit:3, name:"Light reactions: photosystems, ETC, chemiosmosis (3.5)", short:"Light reactions"},
+  u3calvin: {unit:3, name:"Calvin cycle: fixation, reduction, regeneration (3.5)", short:"Calvin cycle"},
+  u3lab:    {unit:3, name:"Unit 3a labs & data: enzyme graphing, amylase case study (3.1–3.5)", short:"Labs & data"}
+});
+
+// ---- figures (drawn in the app above the question) ----
+const FIG_TEMPCURVE = `<svg viewBox="0 0 380 220" role="img" aria-label="Graph of enzyme reaction rate versus temperature: rate rises gently to an optimum, then drops sharply past the optimum as the enzyme denatures" style="width:100%;max-width:440px;font:11px sans-serif">
+<line x1="40" y1="190" x2="360" y2="190" stroke="currentColor" stroke-width="2"/>
+<line x1="40" y1="190" x2="40" y2="20" stroke="currentColor" stroke-width="2"/>
+<path d="M40,172 Q110,166 170,120 Q210,78 235,55 Q255,115 280,172 Q315,186 350,189" fill="none" stroke="currentColor" stroke-width="2.5"/>
+<line x1="235" y1="55" x2="235" y2="190" stroke="currentColor" stroke-dasharray="3,3"/>
+<text x="235" y="205" text-anchor="middle" font-size="10">optimum</text>
+<text x="200" y="216" text-anchor="middle">Temperature (°C) →</text>
+<text x="18" y="100" text-anchor="middle" transform="rotate(-90 18 100)">Reaction rate →</text>
+<text x="300" y="150" font-size="9">denaturation</text>
+</svg>`;
+const FIG_PHCURVE = `<svg viewBox="0 0 380 220" role="img" aria-label="Graph of enzyme reaction rate versus pH: a symmetric bell-shaped curve that rises to an optimum pH and falls off evenly on both sides" style="width:100%;max-width:440px;font:11px sans-serif">
+<line x1="40" y1="190" x2="360" y2="190" stroke="currentColor" stroke-width="2"/>
+<line x1="40" y1="190" x2="40" y2="20" stroke="currentColor" stroke-width="2"/>
+<path d="M40,185 Q95,150 140,90 Q175,50 200,50 Q225,50 260,90 Q305,150 350,185" fill="none" stroke="currentColor" stroke-width="2.5"/>
+<line x1="200" y1="50" x2="200" y2="190" stroke="currentColor" stroke-dasharray="3,3"/>
+<text x="200" y="205" text-anchor="middle" font-size="10">optimum pH</text>
+<text x="200" y="216" text-anchor="middle">pH →</text>
+<text x="18" y="100" text-anchor="middle" transform="rotate(-90 18 100)">Reaction rate →</text>
+</svg>`;
+const FIG_LIGHTRXN = `<svg viewBox="0 0 480 220" role="img" aria-label="Model of the thylakoid membrane during the light reactions: water is split at Photosystem II, electrons pass through an electron transport chain to Photosystem I while H+ is pumped into the thylakoid space, ATP synthase uses the H+ gradient to make ATP, and electrons reduce NADP+ to NADPH" style="width:100%;max-width:600px;font:10px sans-serif">
+<rect x="10" y="80" width="460" height="18" fill="rgba(120,120,120,.18)" stroke="currentColor"/><text x="20" y="74" font-size="9">Thylakoid membrane</text>
+<text x="20" y="145" font-size="9">Thylakoid space (lumen) — high [H⁺]</text>
+<text x="20" y="48" font-size="9">Stroma — low [H⁺]</text>
+<rect x="35" y="60" width="55" height="48" fill="none" stroke="currentColor" stroke-width="2"/><text x="62" y="88" text-anchor="middle">PSII</text>
+<text x="15" y="165" font-size="9">H₂O → 2H⁺ + 2e⁻ + ½O₂</text>
+<rect x="135" y="60" width="55" height="48" fill="none" stroke="currentColor" stroke-width="2"/><text x="162" y="88" text-anchor="middle">ETC</text>
+<path d="M90,78 L135,78" stroke="currentColor" marker-end="url(#aL1)"/>
+<rect x="235" y="45" width="55" height="70" rx="20" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="262" y="83" text-anchor="middle" font-size="9">ATP</text><text x="262" y="94" text-anchor="middle" font-size="9">synthase</text>
+<path d="M260,110 L260,62" stroke="currentColor" stroke-dasharray="2,2" marker-end="url(#aL1)"/><text x="262" y="35" text-anchor="middle" font-size="9">ADP+Pᵢ→ATP</text>
+<rect x="325" y="60" width="55" height="48" fill="none" stroke="currentColor" stroke-width="2"/><text x="352" y="88" text-anchor="middle">PSI</text>
+<path d="M190,78 L325,78" stroke="currentColor" marker-end="url(#aL1)"/>
+<rect x="395" y="60" width="65" height="48" fill="none" stroke="currentColor" stroke-width="2"/><text x="427" y="80" text-anchor="middle" font-size="9">NADP⁺</text><text x="427" y="92" text-anchor="middle" font-size="9">reductase</text>
+<path d="M380,78 L395,78" stroke="currentColor" marker-end="url(#aL1)"/>
+<text x="427" y="135" text-anchor="middle" font-size="9">NADP⁺+H⁺+2e⁻→NADPH</text>
+<defs><marker id="aL1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="currentColor"/></marker></defs>
+</svg>`;
+const FIG_CALVIN = `<svg viewBox="0 0 380 320" role="img" aria-label="Model of the Calvin cycle in the stroma: 3 CO2 combine with 3 RuBP via rubisco to form 6 3-PGA in carbon fixation; using 6 ATP and 6 NADPH, the 6 PGA are reduced to 6 G3P, with 1 G3P exiting as net product; the remaining 5 G3P use 3 ATP to regenerate 3 RuBP" style="width:100%;max-width:420px;font:10px sans-serif">
+<circle cx="190" cy="160" r="130" fill="none" stroke="currentColor" stroke-dasharray="2,3"/>
+<text x="190" y="40" text-anchor="middle" font-weight="700">1. Carbon fixation</text>
+<text x="190" y="55" text-anchor="middle" font-size="9">3 CO₂ + 3 RuBP —rubisco→ 6 3-PGA</text>
+<text x="330" y="160" text-anchor="middle" font-weight="700">2. Reduction</text>
+<text x="330" y="175" text-anchor="middle" font-size="9">+ 6 ATP + 6 NADPH</text>
+<text x="330" y="190" text-anchor="middle" font-size="9">6 PGA → 6 G3P</text>
+<text x="330" y="205" text-anchor="middle" font-size="9">1 G3P exits (net product)</text>
+<text x="55" y="160" text-anchor="middle" font-weight="700">3. Regeneration</text>
+<text x="55" y="175" text-anchor="middle" font-size="9">5 G3P + 3 ATP</text>
+<text x="55" y="190" text-anchor="middle" font-size="9">→ 3 RuBP</text>
+<path d="M190,60 A130,130 0 0 1 300,150" fill="none" stroke="currentColor" marker-end="url(#aCv)"/>
+<path d="M300,180 A130,130 0 0 1 100,270" fill="none" stroke="currentColor" marker-end="url(#aCv)"/>
+<path d="M90,230 A130,130 0 0 1 150,65" fill="none" stroke="currentColor" marker-end="url(#aCv)"/>
+<defs><marker id="aCv" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="currentColor"/></marker></defs>
+</svg>`;
+const FIG_ATPCYCLE = `<svg viewBox="0 0 320 150" role="img" aria-label="Model of the ATP and ADP cycle: ATP hydrolysis is exergonic and releases energy that powers cellular work, forming ADP and inorganic phosphate; energy from exergonic reactions rebuilds ATP from ADP and phosphate" style="width:100%;max-width:400px;font:11px sans-serif">
+<rect x="20" y="50" width="70" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2"/><text x="55" y="75" text-anchor="middle" font-weight="700">ATP</text>
+<rect x="230" y="50" width="70" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2"/><text x="265" y="70" text-anchor="middle" font-weight="700">ADP</text><text x="265" y="83" text-anchor="middle" font-size="9">+ Pᵢ</text>
+<path d="M90,60 L230,60" stroke="currentColor" marker-end="url(#aAc)"/><text x="160" y="50" text-anchor="middle" font-size="9">hydrolysis (exergonic): energy released, powers work</text>
+<path d="M230,85 L90,85" stroke="currentColor" marker-end="url(#aAc)"/><text x="160" y="105" text-anchor="middle" font-size="9">synthesis (endergonic): needs energy input</text>
+<defs><marker id="aAc" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="currentColor"/></marker></defs>
+</svg>`;
+const FIG_CATALASEDATA = `<table style="border-collapse:collapse;font-size:15px;margin:4px 0"><tr><th style="border:1px solid var(--line-2);padding:4px 10px">Temperature (°C)</th><th style="border:1px solid var(--line-2);padding:4px 10px">O₂ gas produced (%) ± 2SE</th></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">4</td><td style="border:1px solid var(--line-2);padding:4px 10px">9.7 ± 0.5</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">21</td><td style="border:1px solid var(--line-2);padding:4px 10px">13.7 ± 0.7</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">34</td><td style="border:1px solid var(--line-2);padding:4px 10px">23.8 ± 1.2</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">51</td><td style="border:1px solid var(--line-2);padding:4px 10px">6.0 ± 1.0</td></tr></table>
+<div class="small" style="margin-top:4px">Each value is the cumulative % O₂ released, measured with a gas pressure sensor, after exactly 30 seconds of reaction time at that temperature. Reaction: 2H₂O₂ → 2H₂O + O₂, catalyzed by catalase.</div>`;
+const FIG_INHIB = `<svg viewBox="0 0 440 190" role="img" aria-label="Model of an enzyme's active site: substrate fitting normally on the left, a competitive inhibitor blocking the active site directly in the middle, and a noncompetitive inhibitor binding a separate allosteric site and distorting the active site shape on the right" style="width:100%;max-width:560px;font:10px sans-serif">
+<text x="70" y="16" text-anchor="middle" font-weight="700">Normal</text>
+<path d="M30,60 Q70,30 110,60 Q90,90 70,100 Q50,90 30,60" fill="none" stroke="currentColor" stroke-width="2"/><rect x="60" y="55" width="20" height="14" fill="currentColor"/><text x="70" y="120" text-anchor="middle" font-size="9">substrate fits active site</text>
+<text x="220" y="16" text-anchor="middle" font-weight="700">Competitive inhibitor</text>
+<path d="M180,60 Q220,30 260,60 Q240,90 220,100 Q200,90 180,60" fill="none" stroke="currentColor" stroke-width="2"/><rect x="210" y="55" width="20" height="14" fill="none" stroke="currentColor" stroke-dasharray="2,2"/><text x="220" y="120" text-anchor="middle" font-size="9">blocks the active site directly</text>
+<text x="370" y="16" text-anchor="middle" font-weight="700">Noncompetitive inhibitor</text>
+<path d="M330,68 Q362,34 404,68 Q392,96 366,102 Q342,96 330,68" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="335" cy="92" r="9" fill="none" stroke="currentColor" stroke-dasharray="2,2"/><text x="335" y="114" font-size="8">allosteric site</text><text x="370" y="128" text-anchor="middle" font-size="9">active site shape distorted</text>
+</svg>`;
+
+MCQ.push(
+// ---------- 3.1 ENZYME STRUCTURE, SPECIFICITY & INDUCED FIT ----------
+{id:"u3e1",t:"u3enz",q:"An enzyme speeds up a reaction without being consumed. What else is true of the enzyme's effect on that reaction?",
+ opts:["It makes an endergonic reaction exergonic","It changes the reaction's free-energy change (ΔG), making it more favorable","It lowers the activation energy (Eₐ) needed to reach the transition state, but does not change whether the reaction is thermodynamically favorable","It raises the activation energy so the reaction proceeds more carefully and with fewer errors"],a:2,
+ why:"A catalyst lowers Eₐ, the energy barrier to reach the transition state, so more collisions succeed per second. It does NOT change ΔG: a reaction that was endergonic before the enzyme is still endergonic after.",
+ wrong:{0:"A catalyst never changes whether a reaction is exergonic or endergonic; that depends only on the reactants and products, not on Eₐ.",1:"ΔG is set by the reactants and products; enzymes only affect how fast equilibrium is reached, not where it is.",3:"Enzymes lower, not raise, the activation energy."}},
+{id:"u3e2",t:"u3enz",q:"In the lock-and-key model of enzyme action, the enzyme's active site",
+ opts:["flexes slightly as the substrate binds, improving the fit","is a rigid shape that already matches the substrate's shape before binding","forms only after the substrate binds and induces a new shape","changes shape permanently every time a reaction occurs"],a:1,
+ why:"Lock-and-key treats the active site as a fixed (passive) shape that the substrate simply fits into, like a key into a lock. Induced fit, by contrast, has the enzyme flex (active) as the substrate binds.",
+ wrong:{0:"That flexing describes induced fit, not lock-and-key.",2:"Lock-and-key assumes the matching shape exists before binding.",3:"The active site's shape is not permanently altered; the enzyme returns to its original conformation after releasing product."}},
+{id:"u3e3",t:"u3enz",q:"Why can't a substrate with the right shape, but the wrong charge distribution, bind an enzyme's active site?",
+ opts:["Specificity depends only on shape, so charge never matters","Specificity requires BOTH a matching shape AND matching charge (polarity) between substrate and active site","Charge only matters for cofactors, never for the substrate itself","Enzymes bind any molecule that is small enough to fit, regardless of charge"],a:1,
+ why:"The active site's R-groups form specific interactions (ionic, hydrogen bonds) with the substrate. A shape match alone is not enough; the charged/polar regions of the substrate must also align with complementary regions of the active site.",
+ wrong:{0:"Charge is just as important as shape for a correct fit.",2:"Charge matters for the substrate's own fit, not only for cofactors.",3:"Size alone does not guarantee binding; chemical complementarity is required too."}},
+{id:"u3e4",t:"u3enz",q:"An enzyme requires a small organic, vitamin-derived molecule to function. This molecule is best described as a",
+ opts:["cofactor","coenzyme","holoenzyme","apoenzyme"],a:1,
+ why:"Coenzymes are small ORGANIC molecules, often derived from vitamins (e.g., NAD⁺ from niacin). Cofactors are inorganic ions (Zn²⁺, Fe²⁺, Cu²⁺, etc.).",
+ wrong:{0:"Cofactors are inorganic ions, not organic vitamin-derived molecules.",2:"A holoenzyme is the complete, active complex (apoenzyme + cofactor/coenzyme), not the small molecule itself.",3:"An apoenzyme is the protein portion alone, without its required cofactor or coenzyme — the opposite of what's described."}},
+{id:"u3e5",t:"u3enz",q:"A protein enzyme by itself (without its required zinc ion) cannot catalyze its reaction. Once the zinc ion binds, the complex becomes catalytically active. The protein-alone form is called the",
+ opts:["holoenzyme","coenzyme","apoenzyme","substrate"],a:2,
+ why:"Apoenzyme = the enzyme protein without its cofactor/coenzyme (inactive). Holoenzyme = apoenzyme + cofactor/coenzyme (active). Zinc here is a cofactor (inorganic ion).",
+ wrong:{0:"The holoenzyme is the COMPLETE, active form (protein + zinc), not the protein alone.",1:"A coenzyme is a small organic molecule; zinc is an inorganic cofactor, and neither term describes the protein-alone form.",3:"The substrate is the molecule the enzyme acts on, not the enzyme itself."}}
+);
+
+MCQ.push(
+// ---------- 3.1–3.2 CATALYSIS MECHANISMS ----------
+{id:"u3c1",t:"u3cat",q:"In the reaction E + S → ES → E + P, the 'ES' represents",
+ opts:["the enzyme after it has been permanently changed by the reaction","the enzyme-substrate complex, a temporary intermediate","a second enzyme that forms during the reaction","the products of the reaction, still bound together"],a:1,
+ why:"ES is the enzyme-substrate complex: a temporary, non-covalent association formed when the substrate binds the active site, just before the reaction converts S to P.",
+ wrong:{0:"The enzyme (E) is released unchanged at the end and can be reused.",2:"Only one enzyme molecule is involved throughout.",3:"ES forms BEFORE the reaction occurs; E + P are the separated products released afterward."}},
+{id:"u3c2",t:"u3cat",q:"Which of the following is one of the three specific mechanisms by which an enzyme speeds up a reaction, once the substrate is bound?",
+ opts:["Lowering the temperature of the surrounding solution","Orienting two substrate molecules correctly so they react with each other more easily","Permanently converting the substrate into a different enzyme","Increasing the concentration of water around the active site"],a:1,
+ why:"The three catalytic mechanisms covered are: (1) inducing strain in the substrate toward the transition state, (2) properly orienting substrates relative to each other, and (3) directly contributing chemical groups (R-groups) to the reaction.",
+ wrong:{0:"Enzymes don't work by cooling the solution; temperature is an environmental variable, not a catalytic mechanism.",2:"The substrate becomes product, not a new enzyme.",3:"Local water concentration isn't one of the three described mechanisms."}},
+{id:"u3c3",t:"u3cat",q:"An enzyme's active site stretches a bound substrate's bonds toward the shape of the transition state. This mechanism is called",
+ opts:["substrate orientation","inducing strain","adding a chemical R-group","cofactor binding"],a:1,
+ why:"Inducing strain: the enzyme physically stretches/distorts the substrate's bonds, pushing it toward its unstable transition state, which lowers the energy needed to finish the reaction.",
+ wrong:{0:"Orientation is about positioning two substrates correctly relative to each other, not stretching bonds.",2:"That mechanism involves the enzyme's own R-groups directly participating in the chemistry, not mechanically stretching the substrate.",3:"Binding a cofactor isn't itself one of the three catalytic mechanisms; it's a requirement some enzymes have before they can catalyze at all."}},
+{id:"u3c4",t:"u3cat",q:"Which statement about induced fit is most accurate?",
+ opts:["The enzyme's active site is rigid and never changes shape","The enzyme flexes slightly as the substrate binds, improving the interaction between enzyme and substrate","The substrate changes its own shape permanently to match the enzyme","Induced fit only happens in enzymes that use cofactors"],a:1,
+ why:"In induced fit, binding the substrate causes the enzyme (not the substrate) to adjust its conformation slightly, improving the fit and positioning catalytic groups correctly — an active process, unlike the passive lock-and-key model.",
+ wrong:{0:"That describes lock-and-key, not induced fit.",2:"It's the enzyme's shape that adjusts, not the substrate's.",3:"Induced fit is a general property of many enzymes, with or without cofactors."}},
+{id:"u3c5",t:"u3cat",fig:FIG_INHIB,q:"Using the 'Normal' panel of the model, what makes the substrate fit the active site shown?",
+ opts:["The active site's shape and chemical groups are complementary to the substrate's shape and charge","The substrate is identical in chemical structure to the enzyme","Any molecule of a similar overall size will fit, regardless of its chemical groups","The active site dissolves around the substrate once contact is made"],a:0,
+ why:"Specificity comes from complementary shape AND chemistry (charge/polarity) between the active site's R-groups and the substrate, exactly as modeled by the substrate (rectangle) fitting into the shaped pocket.",
+ wrong:{1:"The substrate and enzyme are chemically different molecules; the enzyme acts ON the substrate.",2:"Size alone isn't sufficient; chemical complementarity is required (see the blocked competitive inhibitor panel, which is a similar size but still shown as a poor fit chemically in a real system).",3:"The active site doesn't dissolve; it is a fixed region of the folded protein that substrate binds into and leaves."}}
+);
+
+MCQ.push(
+// ---------- 3.2 TEMPERATURE, pH & CONCENTRATION ----------
+{id:"u3n1",t:"u3env",fig:FIG_TEMPCURVE,q:"How does the shape of the temperature-vs-rate curve shown compare to a typical pH-vs-rate curve for the same enzyme?",
+ opts:["Both curves are symmetric bell shapes, rising and falling at the same rate on each side of the optimum","The temperature curve is asymmetric (a gentle rise, then a sharp drop past the optimum), while the pH curve is typically symmetric around its optimum","The temperature curve is symmetric, while the pH curve drops sharply only on the acidic side","Both curves rise indefinitely with no optimum or decline"],a:1,
+ why:"This is a key contrast: temperature-vs-rate rises gradually to the optimum then falls off STEEPLY (denaturation accelerates quickly past the optimum), while pH-vs-rate is typically a SYMMETRIC bell curve, falling off evenly on both the acidic and basic sides of the optimum.",
+ wrong:{0:"The temperature curve is asymmetric, not symmetric.",2:"It's the pH curve that tends to be symmetric; the temperature curve is the asymmetric one.",3:"Both curves show a clear optimum and then a decline."}},
+{id:"u3n2",t:"u3env",q:"Pepsin (a stomach enzyme) has an optimum pH around 1.5–2, while trypsin (a small-intestine enzyme) has an optimum pH around 8. What does this best illustrate?",
+ opts:["All enzymes in the body share the same pH optimum, so this data must be an error","Different enzymes have different pH optima, usually matching the pH of the environment where they normally function","pH has no effect on enzyme activity, only temperature does","Trypsin is a better enzyme than pepsin because its optimum pH is higher"],a:1,
+ why:"Each enzyme's optimum pH typically matches the environment it normally works in — pepsin in the strongly acidic stomach, trypsin in the near-neutral-to-basic small intestine. Away from its optimum, an enzyme's rate drops.",
+ wrong:{0:"Different enzymes commonly have very different optima; this isn't an error.",2:"pH strongly affects rate, by altering ionic/H-bond interactions that shape the active site.",3:"A higher optimum pH number doesn't make an enzyme 'better'; each is matched to its own environment."}},
+{id:"u3n3",t:"u3env",q:"At a fixed enzyme concentration, as substrate concentration increases, reaction rate",
+ opts:["increases linearly without limit","rises, then plateaus once all active sites are continuously occupied (saturation)","decreases steadily","stays constant no matter how much substrate is added"],a:1,
+ why:"With enzyme concentration fixed, rate rises as more substrate finds an active site, but eventually every enzyme's active site is occupied continuously (saturation), and adding more substrate can't raise the rate further — the curve plateaus.",
+ wrong:{0:"Rate levels off once the enzyme is saturated; it doesn't rise forever.",2:"Rate increases, at least until saturation, not decreases.",3:"Rate does change — it rises before leveling off."}},
+{id:"u3n4",t:"u3env",q:"At a fixed, excess substrate concentration (substrate is never limiting), as enzyme concentration increases, reaction rate",
+ opts:["rises linearly, with no plateau, because substrate is never the limiting factor","plateaus quickly because the substrate runs out","decreases, because too many enzymes compete for the same substrate","is unaffected by enzyme concentration"],a:0,
+ why:"When substrate is kept in excess, every additional enzyme molecule immediately finds substrate to act on, so rate keeps climbing roughly linearly as [E] increases — there's no saturation plateau in this case, unlike the [S]-vs-rate graph.",
+ wrong:{1:"With excess substrate by definition, substrate doesn't run out; that's what distinguishes this graph from the [S]-vs-rate curve.",2:"More enzyme means more active sites working in parallel, not competition that slows things down.",3:"More enzyme (with ample substrate) means a higher overall rate."}},
+{id:"u3n5",t:"u3env",q:"Which answer best explains why an enzyme's reaction rate drops sharply at a temperature past its optimum (use the teacher's rigor bar: name the bonds and the active-site consequence)?",
+ opts:["The enzyme simply 'stops working' at high temperature","Heat energy breaks the covalent peptide bonds of the primary structure, destroying the amino acid sequence","The added heat disrupts the hydrogen bonds and ionic interactions holding the enzyme's 3° and 4° structure, distorting the active site's shape and reducing its interaction with substrate","The substrate evaporates at high temperature, so there's nothing left for the enzyme to bind"],a:2,
+ why:"A full-credit answer names the specific bonds (H-bonds and ionic bonds stabilizing 3°/4° structure) and the consequence (distorted active-site shape, reduced substrate interaction, lower catalytic function and rate) — not just 'it denatures.'",
+ wrong:{0:"Too vague to earn credit; no mechanism is given.",1:"Denaturation disrupts weaker H-bonds/ionic interactions, not the strong covalent peptide bonds of the primary sequence; the amino acid sequence itself usually stays intact.",3:"Substrates don't evaporate; the enzyme's shape is what's lost."}}
+);
+
+MCQ.push(
+// ---------- 3.2 INHIBITORS, ALLOSTERIC REGULATION & FEEDBACK ----------
+{id:"u3i1",t:"u3inhib",fig:FIG_INHIB,q:"Based on the model, what is the key structural difference between a competitive and a noncompetitive inhibitor?",
+ opts:["A competitive inhibitor binds the active site directly; a noncompetitive inhibitor binds a different (allosteric) site and changes the active site's shape","A competitive inhibitor is always larger than a noncompetitive inhibitor","A noncompetitive inhibitor binds the active site directly; a competitive inhibitor binds elsewhere","Both bind the same site, but at different times"],a:0,
+ why:"Competitive inhibitors physically occupy/block the active site, competing with substrate for the same spot. Noncompetitive (allosteric) inhibitors bind a separate site, changing the enzyme's overall shape so the active site itself no longer fits the substrate well.",
+ wrong:{1:"Size isn't the defining difference; binding location is.",2:"This reverses the two mechanisms.",3:"They bind different locations, not the same site at different times."}},
+{id:"u3i2",t:"u3inhib",q:"An allosteric activator binds an enzyme at a site away from the active site. What is the effect?",
+ opts:["It blocks the active site directly, like a competitive inhibitor","It distorts the active site, reducing its fit for substrate","It improves the active site's fit for substrate, increasing enzyme activity","It has no effect on the active site's shape"],a:2,
+ why:"Allosteric activation works the opposite way from allosteric inhibition: binding at the regulatory site causes a shape change that IMPROVES the active site's fit for substrate, increasing the reaction rate.",
+ wrong:{0:"That describes a competitive inhibitor, not an allosteric activator.",1:"That describes a noncompetitive (allosteric) INHIBITOR, not an activator.",3:"The activator's whole mechanism works through a shape change that reaches the active site."}},
+{id:"u3i3",t:"u3inhib",q:"In a multi-step metabolic pathway, the final product binds to and inhibits the FIRST enzyme in that same pathway. This regulatory mechanism is called",
+ opts:["competitive inhibition","feedback inhibition","induced fit","cofactor activation"],a:1,
+ why:"Feedback inhibition: the pathway's end product loops back and (usually) inhibits the first enzyme in its own pathway, preventing overproduction and maintaining homeostasis — a form of allosteric regulation.",
+ wrong:{0:"Competitive inhibition is about where an inhibitor binds (the active site), not about pathway end-product regulation specifically.",2:"Induced fit describes substrate binding causing a shape change, unrelated to pathway regulation.",3:"Cofactors are required partners for catalysis, not inhibitory end products."}},
+{id:"u3i4",t:"u3inhib",q:"Adding more substrate can often overcome the effect of a competitive inhibitor, but cannot overcome a noncompetitive inhibitor. Why?",
+ opts:["Competitive inhibitors and substrate compete for the SAME active site, so enough substrate can outcompete the inhibitor; a noncompetitive inhibitor binds elsewhere and distorts the active site regardless of how much substrate is present","Noncompetitive inhibitors are destroyed by excess substrate","Competitive inhibitors dissolve when substrate concentration rises","Neither type of inhibitor is affected by substrate concentration"],a:0,
+ why:"Because competitive inhibition is a direct contest for the active site, raising [S] shifts the competition toward the (now more numerous) substrate molecules. Noncompetitive inhibitors act at a separate site, so no amount of substrate changes whether the active site's shape is distorted.",
+ wrong:{1:"Substrate doesn't chemically destroy the inhibitor.",2:"Competitive inhibitors aren't dissolved; they're simply outcompeted for binding.",3:"Competitive inhibition specifically IS affected by substrate concentration."}},
+{id:"u3i5",t:"u3inhib",q:"A student has an enzyme whose rate is reduced by an unknown inhibitor. Which experiment would best determine whether the inhibitor is competitive or noncompetitive?",
+ opts:["Measure the reaction rate at a single substrate concentration, with and without the inhibitor","Measure reaction rate across a range of substrate concentrations, with and without the inhibitor, and see whether high [S] restores the rate seen without the inhibitor","Measure the enzyme's optimum pH with and without the inhibitor","Measure the reaction rate at a single very low temperature, with and without the inhibitor"],a:1,
+ why:"Varying [S] directly tests the key distinguishing feature: a competitive inhibitor's effect is overcome at high enough substrate concentration (rate approaches the uninhibited rate), while a noncompetitive inhibitor's effect persists even with excess substrate.",
+ wrong:{0:"A single substrate concentration can't reveal whether raising [S] overcomes the inhibition.",2:"pH optimum doesn't distinguish where an inhibitor binds.",3:"Temperature isn't relevant to distinguishing active-site competition from allosteric binding."}}
+);
+
+MCQ.push(
+// ---------- 3.3 THERMODYNAMICS ----------
+{id:"u3t1",t:"u3therm",q:"Building large glycogen molecules from many glucose monomers, which requires an input of energy, is an example of",
+ opts:["catabolism","anabolism","exergonic reactions only","the second law of thermodynamics"],a:1,
+ why:"Anabolism builds small molecules into larger ones and requires an input of energy. Catabolism breaks large molecules into smaller ones and releases energy.",
+ wrong:{0:"Catabolism is the breakdown direction (large → small), the opposite of what's described.",2:"Building bonds that store energy is endergonic, not exergonic.",3:"The second law concerns entropy increase and heat loss during energy transformations, not the direction of monomer-to-polymer reactions specifically."}},
+{id:"u3t2",t:"u3therm",q:"Cellular respiration releases free energy as it breaks glucose down to CO₂ and H₂O (ΔG < 0), while photosynthesis requires an input of free energy to build glucose (ΔG > 0). These reactions are respectively",
+ opts:["endergonic and exergonic","exergonic and endergonic","both exergonic","both endergonic"],a:1,
+ why:"Exergonic reactions have ΔG < 0 and release free energy (respiration, breaking glucose down). Endergonic reactions have ΔG > 0 and require a free-energy input (photosynthesis, building glucose).",
+ wrong:{0:"This reverses the two terms.",2:"Photosynthesis requires an energy input; it is not exergonic.",3:"Respiration releases energy; it is not endergonic."}},
+{id:"u3t3",t:"u3therm",q:"The first law of thermodynamics states that",
+ opts:["energy is constantly being created to power living things","energy cannot be created or destroyed, only transformed from one form to another","every energy transformation increases the total entropy of the universe","living systems are exceptions to the laws of thermodynamics"],a:1,
+ why:"The 1st law: energy is conserved — it changes form (e.g., light energy → chemical energy in photosynthesis) but the total amount is never created or destroyed.",
+ wrong:{0:"No new energy is created; existing energy is transformed.",2:"That describes the SECOND law, not the first.",3:"Living systems obey the same thermodynamic laws as everything else."}},
+{id:"u3t4",t:"u3therm",q:"The second law of thermodynamics explains why",
+ opts:["every energy transformation is 100% efficient, with no energy lost","every energy transformation loses some usable energy as heat, increasing the entropy of the universe","energy can be created to compensate for losses in a reaction","organisms never need a constant supply of new energy"],a:1,
+ why:"The 2nd law: no energy transformation is perfectly efficient — some energy is always 'lost' as heat (increasing disorder/entropy), which is also why only about 10% of energy transfers between trophic levels and why organisms need continual energy input.",
+ wrong:{0:"Some energy is always lost as heat; no transformation is 100% efficient.",2:"Energy can't be created; what's lost as heat is genuinely unavailable for work afterward.",3:"Because transformations are inefficient, organisms must continually take in new energy."}},
+{id:"u3t5",t:"u3therm",q:"'Free energy' in biology refers to",
+ opts:["energy that costs nothing to obtain","the total energy contained in a molecule's bonds, including energy that can never be released","the energy in a system that is available to do work","the heat released by a reaction, and nothing else"],a:2,
+ why:"Free energy (G) is specifically the portion of a system's energy that is available to do useful work, which is what determines whether a reaction proceeds spontaneously (exergonic) or requires input (endergonic).",
+ wrong:{0:"\"Free\" refers to energy available for work, not energy with no cost.",1:"Not all of a molecule's total energy is usable for work; free energy is specifically the usable portion.",3:"Heat released is one consequence of energy transformations, but free energy is a broader measure of energy available to do work."}}
+);
+
+MCQ.push(
+// ---------- 3.3 ATP ----------
+{id:"u3a1",t:"u3atp",fig:FIG_ATPCYCLE,q:"ATP is composed of",
+ opts:["a single phosphate group, a 5-carbon sugar, and two nitrogenous bases","adenine, ribose (a 5-carbon sugar), and three phosphate groups","glucose, ribose, and one phosphate group","adenine, deoxyribose, and three phosphate groups"],a:1,
+ why:"ATP = adenine (a nitrogenous base) + ribose (the 5-carbon sugar, NOT deoxyribose) + three phosphate groups in a chain.",
+ wrong:{0:"ATP has three phosphates and only one nitrogenous base (adenine), not two bases.",2:"ATP doesn't contain glucose.",3:"ATP's sugar is ribose, not deoxyribose (which is found in DNA)."}},
+{id:"u3a2",t:"u3atp",fig:FIG_ATPCYCLE,q:"Which is the BEST explanation for why ATP hydrolysis (ATP + H₂O → ADP + Pᵢ) releases usable energy?",
+ opts:["Breaking the high-energy bond between the second and third phosphate releases the energy that was stored inside that bond","The products (ADP and Pᵢ) are more stable and lower in energy than ATP, and separating the negatively charged phosphates also increases entropy — the energy comes from this difference, not from breaking a bond","Water adds energy to the reaction as it is consumed, powering the release","ATP contains a special form of energy that disappears when the molecule is hydrolyzed"],a:1,
+ why:"Breaking any bond actually COSTS energy, never releases it. The real source: ADP + Pᵢ are more thermodynamically stable (lower free energy) than ATP, and separating three like-charged phosphates into two more stable, less repulsive products also raises entropy. The free-energy drop between reactants and products is what's released.",
+ wrong:{0:"This is the classic misconception: bond-breaking always requires energy input, it cannot be the source of released energy.",2:"Water is a reactant that is consumed, not an energy source being added to the system.",3:"Energy isn't a substance stored inside the molecule that 'disappears'; it reflects the relative stability of reactants versus products."}},
+{id:"u3a3",t:"u3atp",q:"Energy coupling in cells most often works by",
+ opts:["using an endergonic reaction to power an exergonic one directly","hydrolyzing ATP (exergonic) to power an endergonic reaction that could not occur on its own","converting all of a cell's heat directly into chemical bonds","storing kinetic energy permanently, with no loss as heat"],a:1,
+ why:"ATP is the cell's main energy currency: its hydrolysis is exergonic and is coupled to power endergonic reactions (like active transport or biosynthesis) that would not proceed spontaneously alone. Heat is still released at each step (2nd law).",
+ wrong:{0:"This reverses the coupling direction; the exergonic reaction powers the endergonic one.",2:"Heat isn't converted directly into chemical bonds; that would violate how energy transformations work.",3:"Every energy transformation loses some energy as heat; none is retained with zero loss."}},
+{id:"u3a4",t:"u3atp",q:"ATP's three phosphate groups all carry negative charges, packed close together. How does this contribute to the energy released by ATP hydrolysis?",
+ opts:["The negative charges attract each other strongly, and that attraction is released as energy when they separate","The close like (negative) charges repel each other; separating them during hydrolysis relieves that repulsion and increases entropy, contributing to the energy released","Negative charges have no effect on the energy of ATP hydrolysis","The charges must be neutralized by water before any energy can be released"],a:1,
+ why:"Like charges repel. Cramming three negatively charged phosphates together is energetically unfavorable; splitting off the terminal phosphate relieves that electrostatic repulsion and allows the fragments to spread out (entropy increase), both of which favor the forward (hydrolysis) reaction.",
+ wrong:{0:"Like charges (all negative) repel each other; they don't attract.",2:"The charge repulsion is a real contributor to why hydrolysis is favorable.",3:"Hydrolysis itself (adding water, breaking the bond) is what separates the charges; neutralization isn't a precondition."}},
+{id:"u3a5",t:"u3atp",q:"Which of these is exergonic?",
+ opts:["ADP + Pᵢ → ATP","ATP + H₂O → ADP + Pᵢ","Glucose + 6O₂ synthesis from CO₂ and H₂O using light","RuBP regeneration in the Calvin cycle"],a:1,
+ why:"ATP hydrolysis (breaking down ATP) is exergonic (ΔG < 0), releasing free energy. ATP synthesis from ADP + Pᵢ, and building glucose or regenerating RuBP, all require an energy input and are endergonic.",
+ wrong:{0:"Building ATP from ADP + Pᵢ requires an energy input (endergonic).",2:"Photosynthesis's glucose-building reactions are endergonic overall.",3:"Regenerating RuBP uses ATP (endergonic) in the Calvin cycle's third phase."}}
+);
+
+MCQ.push(
+// ---------- 3.5 PHOTOSYNTHESIS OVERVIEW ----------
+{id:"u3p1",t:"u3photo",q:"The complete, balanced equation for photosynthesis is Light + 6CO₂ + 12H₂O → C₆H₁₂O₆ + 6O₂ + 6H₂O. Why is the simplified version (Light + 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂) incomplete?",
+ opts:["It leaves out light as a reactant entirely","It doesn't show that 12 water molecules are actually consumed and 6 are produced, for a net consumption of 6 — the simple version hides that water is both a reactant and a product","It shows too much oxygen being produced","It fails to show that CO₂ is a product rather than a reactant"],a:1,
+ why:"The full equation reveals that water is split (12 H₂O consumed, providing electrons/H⁺ and releasing O₂) while 6 H₂O are also regenerated elsewhere in the process, netting to 6 H₂O consumed overall — detail the simplified equation hides.",
+ wrong:{0:"Both versions include light as the energy source.",2:"Both versions show the same 6O₂ produced; the oxygen amount isn't the issue.",3:"Both versions correctly show CO₂ as a reactant."}},
+{id:"u3p2",t:"u3photo",q:"In photosynthesis, which molecule is oxidized and which is reduced?",
+ opts:["CO₂ is oxidized (loses electrons); H₂O is reduced (gains electrons)","H₂O is oxidized (loses electrons) to form O₂; CO₂ is reduced (gains electrons) to form glucose","Both CO₂ and H₂O are reduced","Neither molecule undergoes a redox change; only light energy changes"],a:1,
+ why:"OILRIG: Oxidation Is Loss of electrons, Reduction Is Gain. Water loses electrons (is oxidized) as it's split to form O₂; CO₂ gains electrons (is reduced) as it's built up into glucose.",
+ wrong:{0:"This reverses the two molecules' redox roles.",2:"Only CO₂ is reduced; H₂O is oxidized, not reduced.",3:"Photosynthesis is fundamentally a redox process: electrons move from water to carbon."}},
+{id:"u3p3",t:"u3photo",q:"How does a pigment's absorption spectrum differ from a leaf's action spectrum?",
+ opts:["They are identical, since only chlorophyll affects either one","The absorption spectrum shows which wavelengths a pigment absorbs (measured directly); the action spectrum shows which wavelengths actually drive photosynthetic rate (measured via O₂ output), and accessory pigments can make the action spectrum broader than any single pigment's absorption spectrum","The action spectrum only applies to animals, not plants","The absorption spectrum is measured using O₂ production, while the action spectrum is measured using light absorption"],a:1,
+ why:"Absorption spectrum = direct measurement of which wavelengths a given pigment absorbs. Action spectrum = which wavelengths drive the overall photosynthetic response (e.g., O₂ release); because multiple accessory pigments (not just chlorophyll a) contribute, the action spectrum is often broader than chlorophyll a's absorption spectrum alone.",
+ wrong:{0:"They are related but not identical; accessory pigments widen the action spectrum.",2:"Action spectra are used in photosynthesis research in plants/algae, not specific to animals.",3:"This swaps the two definitions."}},
+{id:"u3p4",t:"u3photo",q:"In Engelmann's classic experiment, a filament of algae was illuminated through a prism (spreading light into its component colors) alongside aerobic bacteria that cluster where O₂ is released. What did Engelmann observe, and what did it show?",
+ opts:["Bacteria clustered evenly along the whole filament, showing no wavelength dependence","Bacteria clustered mainly near the blue and red regions of the spectrum, providing early evidence that these wavelengths drive photosynthesis (matching chlorophyll's absorption)","Bacteria avoided all illuminated regions, showing that light inhibits photosynthesis","Bacteria clustered only in the green region, showing that green light drives photosynthesis best"],a:1,
+ why:"Bacteria clustering where O₂ was being released marked where photosynthesis (and thus O₂ production) was most active — mainly under blue and red light, which matches where chlorophyll absorbs light most strongly, giving early evidence connecting pigment absorption to photosynthetic activity.",
+ wrong:{0:"Clustering was uneven, concentrated near blue/red regions.",2:"Light drives photosynthesis; bacteria clustered where O₂ (a photosynthetic product) was released, not avoided illuminated areas altogether.",3:"Green light is largely reflected by chlorophyll, not strongly absorbed, so it drove the least activity, not the most."}},
+{id:"u3p5",t:"u3photo",q:"Within the chloroplast, the light reactions occur in/on the ___, and the Calvin cycle occurs in the ___.",
+ opts:["stroma; thylakoid membrane","thylakoid membrane; stroma","outer membrane; inner membrane","thylakoid space (lumen); outer membrane"],a:1,
+ why:"The light reactions take place in and across the thylakoid membrane (stacked into grana), while the Calvin cycle's enzymes (including rubisco) operate in the fluid-filled stroma surrounding the thylakoids.",
+ wrong:{0:"This reverses the two locations.",2:"The outer/inner chloroplast membranes aren't the sites of either process; those are the thylakoid membrane and stroma.",3:"The Calvin cycle occurs in the stroma, not the outer membrane, and not the thylakoid space either."}}
+);
+
+MCQ.push(
+// ---------- 3.5 LIGHT REACTIONS ----------
+{id:"u3l1",t:"u3light",fig:FIG_LIGHTRXN,q:"In the non-cyclic electron flow shown in the model, which photosystem's reaction center is re-excited to eventually reduce NADP⁺ to NADPH?",
+ opts:["Photosystem II (P680)","Photosystem I (P700)","Both equally","Neither; NADPH forms without any photosystem"],a:1,
+ why:"Electrons flow PSII → ETC → PSI. At PSI, the electron is re-excited at the P700 reaction center by another photon, and this high-energy electron is what ultimately passes to NADP⁺ reductase to form NADPH.",
+ wrong:{0:"PSII's P680 reaction center starts the chain (and receives electrons from water) but is not where NADPH's electrons are last re-energized.",2:"NADPH formation specifically follows PSI's re-excitation, not an equal contribution from both.",3:"A photosystem (PSI) is required to re-energize the electron before NADP⁺ reductase can use it."}},
+{id:"u3l2",t:"u3light",fig:FIG_LIGHTRXN,q:"Place these steps of non-cyclic electron flow in the correct order, as modeled in the figure.",
+ opts:["Water splits → PSI → ETC → PSII → NADPH forms","PSII absorbs light → electron passes down the ETC (pumping H⁺) → PSI absorbs light and re-excites the electron → NADP⁺ reductase forms NADPH","NADP⁺ reductase works first, which then powers PSII to split water","ATP synthase runs first, which excites PSI directly without any photons"],a:1,
+ why:"The correct order, as modeled: light hits PSII (electron excited, water later splits to replace it) → electron travels down the ETC (pumping H⁺ into the thylakoid space) → light hits PSI (electron re-excited) → electron reduces NADP⁺ to NADPH via NADP⁺ reductase.",
+ wrong:{0:"PSII acts first, not PSI; and water splitting replaces PSII's lost electrons, it doesn't come after PSI.",2:"NADP⁺ reductase works LAST in this sequence, using the electron after it passes through both photosystems.",3:"ATP synthase uses the H⁺ gradient the ETC builds; it doesn't excite PSI, and photons (not ATP synthase) excite the photosystems."}},
+{id:"u3l3",t:"u3light",fig:FIG_LIGHTRXN,q:"In cyclic electron flow, PSI's re-excited electron sometimes returns to the ETC instead of reducing NADP⁺. Why is this useful to the cell?",
+ opts:["It produces extra NADPH, which the Calvin cycle needs more of than ATP","It produces extra ATP without NADPH, helping balance the Calvin cycle's actual ATP:NADPH demand, which is not 1:1","It replaces electrons lost from PSII when water isn't available","It happens only when the cell has excess CO₂ and needs to get rid of it"],a:1,
+ why:"The Calvin cycle uses more ATP than NADPH (18 ATP vs. 12 NADPH per glucose equivalent). Cyclic flow routes PSI's electron back through the ETC to pump more H⁺ (making more ATP) without producing more NADPH, correcting that supply/demand imbalance.",
+ wrong:{0:"Cyclic flow produces NO additional NADPH — that's the whole point, since more ATP (not more NADPH) is what's needed.",2:"Cyclic flow doesn't interact with PSII or water splitting; it's a separate path at PSI.",3:"Cyclic flow is about balancing ATP and NADPH supply, not CO₂ disposal."}},
+{id:"u3l4",t:"u3light",fig:FIG_LIGHTRXN,q:"PSII continually loses electrons to the ETC after absorbing light. What replaces those lost electrons, and what is released as a result?",
+ opts:["NADPH donates electrons back to PSII, releasing CO₂","Water is split (photolysis), donating electrons to PSII and releasing O₂ as a byproduct","ATP synthase donates electrons directly, releasing heat","The Calvin cycle sends electrons back to PSII, releasing glucose"],a:1,
+ why:"Photolysis: H₂O → 2H⁺ + 2e⁻ + ½O₂. The electrons replace those PSII lost to the ETC; the H⁺ adds to the thylakoid-space gradient; O₂ is released as a byproduct (and diffuses out of the leaf).",
+ wrong:{0:"NADPH is a product further down the pathway, not an electron donor back to PSII, and CO₂ isn't released here.",2:"ATP synthase makes ATP from the H⁺ gradient; it doesn't supply electrons to PSII.",3:"The Calvin cycle uses ATP/NADPH from the light reactions; it doesn't send electrons back to PSII."}},
+{id:"u3l5",t:"u3light",fig:FIG_LIGHTRXN,q:"How does the H⁺ gradient shown across the thylakoid membrane lead to ATP production?",
+ opts:["H⁺ directly combines with ADP and Pᵢ to form ATP, without any protein involved","H⁺ accumulated in the thylakoid space flows back to the stroma through ATP synthase, and that flow powers the synthesis of ATP from ADP + Pᵢ (chemiosmosis)","ATP synthase pumps H⁺ into the thylakoid space using energy released by ATP hydrolysis","The H⁺ gradient is used directly by the Calvin cycle instead of producing ATP"],a:1,
+ why:"Chemiosmosis: the ETC pumps H⁺ into the thylakoid space, building a concentration gradient. H⁺ then flows back down that gradient to the stroma through ATP synthase, and that flow of ions through the enzyme drives ATP synthesis from ADP + Pᵢ.",
+ wrong:{0:"A protein (ATP synthase) is required; H⁺ and ADP/Pᵢ don't spontaneously combine on their own at a useful rate.",2:"ATP synthase lets H⁺ flow DOWN its gradient (from thylakoid space to stroma) to make ATP; it doesn't pump H⁺ using ATP hydrolysis (that's closer to how some active-transport pumps work, not ATP synthase here).",3:"The H⁺ gradient's energy is captured as ATP, which the Calvin cycle then uses — the gradient itself isn't used directly by the Calvin cycle."}}
+);
+
+MCQ.push(
+// ---------- 3.5 CALVIN CYCLE ----------
+{id:"u3k1",t:"u3calvin",fig:FIG_CALVIN,q:"In the first phase of the Calvin cycle, shown in the model, what happens?",
+ opts:["G3P is converted into glucose directly","CO₂ is fixed onto RuBP by the enzyme rubisco, forming 3-PGA","ATP and NADPH regenerate RuBP","Light directly splits CO₂ into carbon and oxygen"],a:1,
+ why:"Carbon fixation: rubisco catalyzes the addition of CO₂ to RuBP (a 5-carbon molecule), producing an unstable 6-carbon intermediate that immediately splits into two 3-carbon 3-PGA molecules.",
+ wrong:{0:"Glucose isn't formed directly in the Calvin cycle; G3P molecules combine outside the cycle to eventually form glucose.",2:"ATP/NADPH are used in the second (reduction) and third (regeneration) phases, not the first.",3:"Light isn't directly involved in the Calvin cycle (it's the light-INdependent reactions); rubisco catalyzes CO₂ fixation, not light."}},
+{id:"u3k2",t:"u3calvin",fig:FIG_CALVIN,q:"To produce the net equivalent of ONE glucose molecule (combining 2 G3P), how many times must the Calvin cycle turn, and what are the total ATP and NADPH used?",
+ opts:["One turn; 9 ATP and 6 NADPH","Two turns; 18 ATP and 12 NADPH","Three turns; 18 ATP and 18 NADPH","One turn; 18 ATP and 12 NADPH"],a:1,
+ why:"Each turn fixes 3 CO₂ and uses 9 ATP + 6 NADPH to make 6 G3P, with only 1 G3P exiting as net product. Since 2 G3P combine to form one glucose, the cycle must turn TWICE, totaling 6 CO₂, 18 ATP, and 12 NADPH.",
+ wrong:{0:"One turn only yields 1 G3P (half a glucose); the totals for one turn are correct (9 ATP, 6 NADPH) but a second turn is needed.",2:"ATP and NADPH use aren't equal; it's 18 ATP but only 12 NADPH, and two turns (not three) are needed.",3:"The totals are correct, but it takes two turns of the cycle, not one, to get there."}},
+{id:"u3k3",t:"u3calvin",fig:FIG_CALVIN,q:"Rubisco and RuBP are easily confused. Which statement correctly distinguishes them?",
+ opts:["RuBP is the enzyme; rubisco is the 5-carbon molecule it acts on","Rubisco is the enzyme that catalyzes CO₂ fixation onto RuBP, which is the 5-carbon substrate molecule","They are two names for the same molecule","RuBP is made only in the light reactions, and rubisco only in the Calvin cycle"],a:1,
+ why:"Rubisco = RuBP carboxylase/oxygenase, the ENZYME. RuBP = ribulose bisphosphate, the 5-carbon SUBSTRATE that combines with CO₂ under rubisco's catalysis.",
+ wrong:{0:"This reverses enzyme and substrate.",2:"They are different molecules: one an enzyme, one a substrate.",3:"Both are associated with the Calvin cycle (RuBP is regenerated there; rubisco catalyzes fixation there), not split between the light reactions and Calvin cycle."}},
+{id:"u3k4",t:"u3calvin",fig:FIG_CALVIN,q:"Of the 6 G3P produced per turn of the Calvin cycle, what happens to them?",
+ opts:["All 6 exit the cycle as net product","1 exits as net product; the remaining 5 are used (with ATP) to regenerate 3 RuBP so the cycle can continue","3 exit as net product; 3 regenerate RuBP","All 6 are used to regenerate RuBP, with no net product"],a:1,
+ why:"Only 1 of the 6 G3P leaves the cycle as net output (eventually built into glucose and other organic molecules). The other 5 G3P are rearranged, using 3 more ATP, to regenerate the 3 RuBP molecules consumed in fixation, keeping the cycle running.",
+ wrong:{0:"If all 6 left, no RuBP could be regenerated and the cycle would stop after one turn.",2:"The actual split is 1 exits versus 5 regenerate, not an even 3/3 split.",3:"If none exited, there would be no net carbon gain from the cycle at all."}},
+{id:"u3k5",t:"u3calvin",q:"A student claims: 'The exact three carbon atoms that enter the Calvin cycle as CO₂ during one turn are the same three atoms that leave as G3P during that same turn.' Is this accurate?",
+ opts:["Yes, because atoms are never mixed between molecules in the cycle","No — the carbons entering as CO₂ mix into a larger pool of cycle intermediates, so the specific atoms leaving as G3P in a given turn aren't necessarily the same ones that entered that same turn","Yes, because rubisco physically tracks and keeps each CO₂'s carbons together through the whole cycle","No, because no carbon from CO₂ ever becomes part of G3P"],a:1,
+ why:"A key misconception to avoid: carbons from CO₂ enter a shared pool of 3-, 5-, and 6-carbon intermediates that interconvert throughout the cycle. The specific atoms exiting as G3P in a particular turn are not guaranteed to be the same atoms that entered as CO₂ in that same turn.",
+ wrong:{0:"Atoms do mix among intermediates as the cycle's molecules interconvert.",2:"Rubisco catalyzes a reaction; it doesn't track or label specific atoms through subsequent steps.",3:"CO₂'s carbon is exactly what gets fixed and eventually appears in G3P; it just isn't guaranteed to be in the SAME turn's output."}}
+);
+
+MCQ.push(
+// ---------- UNIT 3a LABS & DATA ----------
+{id:"u3d1",t:"u3lab",fig:FIG_CATALASEDATA,q:"Which type of graph is appropriate for this catalase dataset, and why?",
+ opts:["A bar graph, because temperature is a categorical variable","A line graph, because temperature is a continuous variable, and the line should be drawn through the points rather than leaving them unconnected","A pie chart, to show what percent of total O₂ came from each temperature","No graph is appropriate; data like this should only be presented in a table"],a:1,
+ why:"Temperature is continuous (any value along a numeric scale is possible), so this calls for a line graph with the line actually drawn in — the teacher's rule is that unconnected points earn no credit for a continuous-data line graph.",
+ wrong:{0:"Temperature is continuous, not categorical (categorical data, like inhibitor type, would use a bar graph).",2:"A pie chart doesn't show a trend across an independent variable like temperature.",3:"A properly labeled, titled line graph is exactly the appropriate way to display this trend."}},
+{id:"u3d2",t:"u3lab",fig:FIG_CATALASEDATA,q:"The catalase reaction shown in the data is 2H₂O₂ → 2H₂O + O₂. In this experiment, what is being measured as the dependent variable?",
+ opts:["Temperature, in °C","The amount of catalase enzyme added to each reaction","The % O₂ gas produced, which indicates the rate of the reaction","The amount of hydrogen peroxide remaining unreacted"],a:2,
+ why:"The % O₂ produced is what's measured and plotted on the y-axis; it is the DEPENDENT variable, changing in response to the independent variable (temperature) that the experimenter deliberately varies.",
+ wrong:{0:"Temperature is the independent variable here, the one being deliberately changed.",1:"Enzyme amount would be held constant (a controlled variable) across trials, not measured as the outcome.",3:"The data reports O₂ produced, not leftover peroxide, though the two are related."}},
+{id:"u3d3",t:"u3lab",fig:FIG_CATALASEDATA,q:"Which of these would be the most appropriate negative control for this catalase experiment?",
+ opts:["A reaction tube with catalase and hydrogen peroxide at the optimum temperature (34°C)","A reaction tube with hydrogen peroxide and boiled (denatured) catalase, where no catalytic activity is expected","A reaction tube with twice the normal amount of catalase at 34°C","A reaction tube with hydrogen peroxide and catalase at 21°C, since that's a typical room temperature"],a:1,
+ why:"A negative control should show no effect — here, that means a condition where no catalytic activity is expected, such as hydrogen peroxide mixed with boiled (already denatured, inactive) catalase. Any O₂ measured would reveal a problem with the setup, not real enzyme activity.",
+ wrong:{0:"That's a normal experimental condition expected to show high activity, not a control for 'no activity.'",2:"More catalase is a variation of the independent/controlled variables, not a negative control.",3:"21°C is simply another experimental temperature in the actual dataset, not a condition designed to show zero expected activity."}},
+{id:"u3d4",t:"u3lab",q:"The gene AMY1 encodes salivary amylase, and its diploid copy number varies from 2 to 15 across human populations. What is the functional consequence of having more AMY1 copies?",
+ opts:["More copies means less amylase protein is made, slowing starch digestion","More copies generally means more amylase protein is made, which can improve the efficiency of starch digestion in the mouth","Copy number has no effect on how much amylase protein is produced","AMY1 copy number only affects muscle protein, not digestive enzymes"],a:1,
+ why:"Gene dosage: more copies of a gene generally means more of its gene product (mRNA and then protein) can be made, so individuals with more AMY1 copies tend to produce more salivary amylase, which hydrolyzes starch into maltose more efficiently.",
+ wrong:{0:"More gene copies tends to increase, not decrease, the amount of the gene product made.",2:"Gene copy number is a clear case where dosage does affect protein amount.",3:"AMY1 specifically encodes salivary AMYLASE, a digestive enzyme, not a muscle protein."}},
+{id:"u3d5",t:"u3lab",q:"Perry et al. (2007) hypothesized that populations with historically starch-rich diets (farmers) would have more AMY1 copies, on average, than populations with historically low-starch diets (hunter-gatherers). Which explanation best applies natural selection to this hypothesis?",
+ opts:["Farmers deliberately bred themselves to have more AMY1 copies, the way they bred crops and livestock","Variation in AMY1 copy number already existed; in a starch-rich environment, individuals with more copies digested starch more efficiently, giving them a survival/reproductive advantage, so higher copy number became more common in that population over generations","All individuals in starch-rich environments gained new AMY1 copies during their own lifetime in response to their diet","AMY1 copy number is unrelated to diet; it is purely random genetic drift"],a:1,
+ why:"This is natural selection, not deliberate breeding or an organism acquiring new copies in response to need: existing heritable variation (copy number) + a starch-rich environment creating a selective advantage for more copies + differential survival/reproduction = the higher-copy-number variant becomes more common over generations.",
+ wrong:{0:"Natural selection, not intentional self-breeding, is the proposed mechanism.",2:"Copy number is inherited, not gained anew within an individual's lifetime in response to diet (that would be closer to a Lamarckian mechanism, which isn't how inheritance works).",3:"The hypothesis specifically proposes a selective advantage tied to diet, not pure drift, given the pattern matches diet history."}}
+);
+
+// ================= DAILY SHORT-WRITTEN FRQs (graded nightly by Claude) =================
+FRQ.push(
+// ---------- u3enz ----------
+{id:"D3_enz_1",t:"u3enz",daily:true,title:"An enzyme that tolerates a shape change",
+ stem:"An enzyme's active site is slightly concave and smaller than its substrate before the substrate binds. Once the substrate makes contact, the active site flexes to wrap more closely around it, improving the alignment of catalytic groups.",
+ parts:[
+  {verb:"Identify",text:"which model of enzyme-substrate binding, lock-and-key or induced fit, is described above.",pts:1,rubric:["Induced fit"]},
+  {verb:"Explain",text:"how the active site's flexing described above improves catalysis compared to a perfectly rigid active site.",pts:1,rubric:["The flexing lets the active site's catalytic R-groups align more precisely with the substrate's reactive groups than a fixed shape could manage on its own, improving the interactions (such as inducing strain toward the transition state) that speed up the reaction"]},
+  {verb:"Predict",text:"what would happen to this enzyme's catalytic rate if a mutation made its active site completely rigid, unable to flex at all. Justify your prediction.",pts:1,rubric:["The rate would likely decrease, because the rigid active site could no longer adjust to align its catalytic groups precisely with the substrate, reducing the quality of the interactions that speed up the reaction"]}
+ ]},
+{id:"D3_enz_2",t:"u3enz",daily:true,title:"A substrate that almost fits",
+ stem:"Molecule X has the same overall shape as enzyme E's natural substrate, but molecule X carries a positive charge where the natural substrate carries a negative charge at that position.",
+ parts:[
+  {verb:"Predict",text:"whether molecule X will bind efficiently to enzyme E's active site. Justify your prediction.",pts:1,rubric:["Molecule X will likely NOT bind efficiently, because specificity requires both a matching shape AND a matching charge/polarity between the active site and the substrate; the mismatched charge will disrupt the ionic interactions the active site depends on even though the shape matches"]},
+  {verb:"Explain",text:"why shape alone is not sufficient for a molecule to be recognized as a substrate by an enzyme's active site.",pts:1,rubric:["The active site's R-groups form specific chemical interactions (such as ionic bonds and hydrogen bonds) with the substrate's chemical groups; a molecule that fits geometrically but has the wrong charge distribution will not form those same interactions, so it binds poorly or not at all"]}
+ ]},
+
+// ---------- u3cat ----------
+{id:"D3_cat_1",t:"u3cat",daily:true,title:"Stretching a substrate toward the transition state",
+ stem:"An enzyme's active site binds its substrate and physically pulls on a bond within it, stretching that bond closer to the geometry it would have in the reaction's transition state, before the bond is fully broken.",
+ parts:[
+  {verb:"Identify",text:"which of the three catalytic mechanisms (inducing strain, substrate orientation, or direct chemical participation) is described above.",pts:1,rubric:["Inducing strain"]},
+  {verb:"Explain",text:"how the mechanism described above lowers the reaction's activation energy.",pts:1,rubric:["By mechanically stretching the substrate's bond toward the shape it must reach at the transition state, the enzyme reduces the additional energy the substrate needs to absorb (from random molecular collisions) to actually reach that transition state, so less total energy input is needed to complete the reaction"]},
+  {verb:"Explain",text:"why this mechanism does not change the overall free-energy change (ΔG) of the reaction.",pts:1,rubric:["ΔG depends only on the relative free energy of the reactants and products, which are unchanged by the enzyme; the enzyme only changes the path (lowering activation energy, the energy of the transition state relative to the reactants) by which the reaction proceeds, not the energy difference between the starting and ending molecules"]}
+ ]},
+{id:"D3_cat_2",t:"u3cat",daily:true,title:"Two substrates, one active site",
+ stem:"An enzyme that catalyzes a reaction between two different substrate molecules has an active site shaped so that both substrates bind in a fixed position and orientation relative to each other before any bonds form or break.",
+ parts:[
+  {verb:"Identify",text:"which of the three catalytic mechanisms is described above.",pts:1,rubric:["Substrate orientation (bringing the substrates into proper position relative to each other)"]},
+  {verb:"Predict",text:"what would happen to this enzyme's reaction rate if a mutation in the active site allowed the two substrates to bind, but in random, varying orientations relative to each other each time. Justify your prediction.",pts:1,rubric:["The reaction rate would likely decrease, because the reactive groups of the two substrates would not consistently be positioned correctly to interact, so fewer successful collisions between the correct atoms would occur per unit time even though both substrates are still binding"]}
+ ]},
+
+// ---------- u3env ----------
+{id:"D3_env_1",t:"u3env",daily:true,fig:FIG_TEMPCURVE,title:"Reading the temperature curve",
+ stem:"Figure 1 shows a graph of reaction rate versus temperature for an enzyme.",
+ parts:[
+  {verb:"Describe",text:"the shape of the curve shown in the model, from low temperature up through the optimum and beyond it.",pts:1,rubric:["Rate rises gradually (gently) as temperature increases toward the optimum, reaches a peak at the optimum, and then falls off sharply/steeply past the optimum — the curve is asymmetric, not a mirror image on both sides"]},
+  {verb:"Explain",text:"why the curve drops so much more steeply past the optimum than it rose on the way up to it.",pts:1,rubric:["Past the optimum, rising temperature increasingly disrupts the hydrogen bonds and ionic interactions holding the enzyme's 3° and 4° structure, denaturing the enzyme and distorting its active site; this denaturation accelerates quickly once it begins, producing a much steeper drop than the earlier gradual increase, which was mostly due to molecules simply moving and colliding faster"]},
+  {verb:"Predict",text:"how the curve shown would differ for a pH-vs-rate graph of the same enzyme. Justify your prediction.",pts:1,rubric:["The pH-vs-rate curve would be more symmetric: reaction rate would fall off at roughly a similar rate on both the acidic and basic sides of the optimum pH, unlike the sharply asymmetric temperature curve"]}
+ ]},
+{id:"D3_env_2",t:"u3env",daily:true,title:"Pepsin at the wrong pH",
+ stem:"Pepsin's optimum pH is about 1.5–2. A student mixes pepsin with its protein substrate in a solution buffered to pH 7.",
+ parts:[
+  {verb:"Predict",text:"the effect on pepsin's reaction rate at pH 7 compared to its rate at pH 1.5. Justify your prediction.",pts:1,rubric:["Pepsin's reaction rate at pH 7 will be much lower than at pH 1.5, because pH 7 is far from pepsin's optimum pH, which will alter the ionic interactions holding its active site's shape and reduce its interaction with the substrate"]},
+  {verb:"Explain",text:"why trypsin, which works in the small intestine, has a very different optimum pH (around 8) than pepsin.",pts:1,rubric:["Each enzyme's 3° structure (and therefore its active site shape) is adapted to remain correctly folded and functional at the pH of the environment where it normally operates; trypsin functions in the near-neutral-to-basic small intestine, so its optimum pH is matched to that environment rather than the stomach's strongly acidic environment"]}
+ ]},
+
+// ---------- u3inhib ----------
+{id:"D3_inhib_1",t:"u3inhib",daily:true,fig:FIG_INHIB,title:"Which inhibitor is which?",
+ stem:"Figure 1 models an enzyme's active site under three conditions: normal substrate binding, a competitive inhibitor, and a noncompetitive inhibitor.",
+ parts:[
+  {verb:"Identify",text:"which panel shown in the model represents a noncompetitive inhibitor, and justify your answer using a feature of the model.",pts:1,rubric:["The right-hand panel, because the inhibitor is shown binding a separate (allosteric) site away from the active site, and the active site's shape itself appears distorted compared to the normal panel"]},
+  {verb:"Predict",text:"what would happen to the rate of inhibition shown in the competitive-inhibitor panel if the substrate concentration were greatly increased. Justify your prediction using the model.",pts:1,rubric:["Increasing substrate concentration would reduce the inhibitor's effect (the rate would rise back toward the uninhibited rate), because the model shows the inhibitor and substrate competing for the SAME active site, so more substrate molecules increase the chance that substrate, rather than inhibitor, occupies the site"]},
+  {verb:"Predict",text:"whether increasing substrate concentration would have the same effect on the noncompetitive inhibitor shown. Justify your prediction using the model.",pts:1,rubric:["No, increasing substrate concentration would not restore the rate, because the noncompetitive inhibitor binds a separate allosteric site (not the active site itself), so no amount of substrate can prevent the inhibitor from binding there and distorting the active site's shape"]}
+ ]},
+{id:"D3_inhib_2",t:"u3inhib",daily:true,title:"A pathway that shuts itself off",
+ stem:"In a five-step metabolic pathway, enzyme 1 converts starting molecule A into intermediate B, and enzymes 2 through 5 eventually convert B into final product F. When the concentration of F becomes high, F binds to enzyme 1 at a site separate from its active site, and the pathway's overall rate of producing F drops sharply.",
+ parts:[
+  {verb:"Identify",text:"the type of regulation described above.",pts:1,rubric:["Feedback inhibition (a form of allosteric regulation, since F binds a site other than enzyme 1's active site)"]},
+  {verb:"Explain",text:"the biological advantage of F regulating enzyme 1 in this way, rather than F having no effect on the pathway.",pts:1,rubric:["This maintains homeostasis by preventing the cell from wastefully overproducing F once there is already enough of it; as F accumulates and inhibits enzyme 1, production slows, keeping F's concentration within a useful range rather than continuing to rise without limit"]},
+  {verb:"Predict",text:"what would happen to the concentration of intermediate B if a mutation made enzyme 1 unable to bind F at all. Justify your prediction.",pts:1,rubric:["Intermediate B (and ultimately F) would likely build up to higher-than-normal concentrations, because enzyme 1 would keep converting A to B at an unregulated rate even once plenty of F is already present, since the feedback signal could no longer act on it"]}
+ ]},
+
+// ---------- u3therm ----------
+{id:"D3_therm_1",t:"u3therm",daily:true,title:"Climbing the food chain",
+ stem:"An ecologist estimates that only about 10% of the energy stored in the biomass of one trophic level is incorporated into the biomass of the next trophic level up the food chain.",
+ parts:[
+  {verb:"Explain",text:"why this 10% figure reflects the second law of thermodynamics, rather than the first.",pts:1,rubric:["The first law says energy is conserved overall, but the second law explains why only some of that energy remains usable after each transformation: at each step of an organism's metabolism, some energy is lost as heat (increasing entropy), so less and less of the original energy remains stored in biomass as it is passed up the food chain"]},
+  {verb:"Predict",text:"whether a food chain with five trophic levels could support as much total biomass at the top level as a food chain with only three trophic levels, assuming the same amount of energy enters at the first level. Justify your prediction.",pts:1,rubric:["No, the five-level food chain would support much less biomass at its top level, because each additional transfer loses roughly 90% of the available energy, so energy available at the top shrinks multiplicatively with each added trophic level"]}
+ ]},
+{id:"D3_therm_2",t:"u3therm",daily:true,title:"Exergonic or endergonic?",
+ stem:"Reaction P releases free energy as it proceeds and occurs spontaneously once started. Reaction Q requires a continuous input of free energy to proceed and does not occur on its own.",
+ parts:[
+  {verb:"Identify",text:"whether Reaction P is exergonic or endergonic, and whether Reaction Q is exergonic or endergonic.",pts:1,rubric:["Reaction P is exergonic (ΔG < 0); Reaction Q is endergonic (ΔG > 0). Both needed"]},
+  {verb:"Explain",text:"how cells can use a reaction like Reaction P to make a reaction like Reaction Q occur, even though Reaction Q would not happen on its own.",pts:1,rubric:["Through energy coupling, the free energy released by the exergonic reaction (often by hydrolyzing ATP) is used to power the endergonic reaction; the two reactions are linked so that the energy released by one supplies the energy required by the other"]}
+ ]},
+
+// ---------- u3atp ----------
+{id:"D3_atp_1",t:"u3atp",daily:true,fig:FIG_ATPCYCLE,title:"What actually releases the energy?",
+ stem:"A student writes: 'ATP hydrolysis releases energy because breaking the bond between the second and third phosphate releases the energy that was stored in that bond.'",
+ parts:[
+  {verb:"Evaluate",text:"whether the student's explanation is scientifically accurate.",pts:1,rubric:["The explanation is NOT accurate: breaking any chemical bond requires an input of energy, it never releases energy on its own"]},
+  {verb:"Explain",text:"the actual reason ATP hydrolysis releases usable energy.",pts:1,rubric:["The products (ADP and Pᵢ) are more stable and lower in free energy than ATP, and separating the three like (negatively) charged phosphates relieves electrostatic repulsion and increases entropy; the energy released reflects this difference in stability between ATP and its hydrolysis products, not energy released by breaking a bond"]}
+ ]},
+{id:"D3_atp_2",t:"u3atp",daily:true,fig:FIG_ATPCYCLE,title:"Powering an uphill reaction",
+ stem:"A cell must move a solute from a region of low concentration to a region of high concentration across its membrane, which does not happen spontaneously on its own.",
+ parts:[
+  {verb:"Identify",text:"whether moving this solute against its concentration gradient is an exergonic or endergonic process.",pts:1,rubric:["Endergonic (it requires an input of energy and does not occur spontaneously)"]},
+  {verb:"Explain",text:"how hydrolyzing ATP allows this endergonic transport to occur.",pts:1,rubric:["ATP hydrolysis is exergonic and releases free energy; through energy coupling, that released energy is used to power the pump protein's conformational change, which moves the solute against its gradient — the exergonic ATP hydrolysis and the endergonic transport are linked so one powers the other"]}
+ ]},
+
+// ---------- u3photo ----------
+{id:"D3_photo_1",t:"u3photo",daily:true,title:"The equation hides a detail",
+ stem:"The full, balanced equation for photosynthesis is Light + 6CO₂ + 12H₂O → C₆H₁₂O₆ + 6O₂ + 6H₂O.",
+ parts:[
+  {verb:"Calculate",text:"the net number of water molecules consumed by this reaction, showing your work.",pts:1,rubric:["12 H₂O (reactant) − 6 H₂O (product) = 6 H₂O net consumed"]},
+  {verb:"Explain",text:"why the simplified equation (6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂) is considered incomplete even though it is still balanced.",pts:1,rubric:["The simplified version shows only the net water consumed, hiding that water is both split (photolysis, providing electrons and H⁺ at PSII, releasing O₂) and regenerated elsewhere; the full equation is needed to see that O₂ comes from water (not CO₂) and that 12, not 6, water molecules actually react"]}
+ ]},
+{id:"D3_photo_2",t:"u3photo",daily:true,title:"Tracking the electrons",
+ stem:"During photosynthesis, electrons move from water molecules to carbon dioxide molecules, by way of the light reactions and Calvin cycle.",
+ parts:[
+  {verb:"Identify",text:"which molecule, water or CO₂, is oxidized, and which is reduced.",pts:1,rubric:["Water is oxidized (loses electrons, forming O₂); CO₂ is reduced (gains electrons, eventually forming glucose). Both needed"]},
+  {verb:"Justify",text:"the claim that photosynthesis is fundamentally a redox (oxidation-reduction) process.",pts:1,rubric:["Electrons are transferred from one molecule (water, which loses them) to another (CO₂, which gains them) over the course of the pathway, which is the defining feature of a redox reaction, even though the transfer happens across multiple intermediate steps rather than in one single reaction"]}
+ ]},
+
+// ---------- u3light ----------
+{id:"D3_light_1",t:"u3light",daily:true,fig:FIG_LIGHTRXN,title:"Following one electron",
+ stem:"Figure 1 models the non-cyclic electron flow of the light reactions.",
+ parts:[
+  {verb:"Describe",text:"the path a single electron takes, as shown in the model, from the point it is excited at PSII to the point it reduces NADP⁺.",pts:2,rubric:["The electron is excited at PSII (P680) by a photon, then passes through the electron transport chain (ETC), where its energy is used to pump H⁺ into the thylakoid space","The electron then reaches PSI (P700), where it is re-excited by a second photon, and finally passes to NADP⁺ reductase, which uses it (with H⁺) to reduce NADP⁺ to NADPH. Both photosystems and the ETC must be named in order"]},
+  {verb:"Explain",text:"what replaces the electron that PSII loses, as shown in the model.",pts:1,rubric:["Water is split (photolysis) at PSII, donating an electron to replace the one lost to the ETC, while also releasing H⁺ (into the thylakoid space) and O₂ as byproducts"]}
+ ]},
+{id:"D3_light_2",t:"u3light",daily:true,fig:FIG_LIGHTRXN,title:"When the Calvin cycle needs more ATP",
+ stem:"The Calvin cycle consumes ATP and NADPH in an 18:12 (3:2) ratio, not 1:1. Cyclic electron flow at PSI can route an electron back through the ETC instead of sending it to NADP⁺ reductase.",
+ parts:[
+  {verb:"Explain",text:"how cyclic electron flow, shown as a variation on the model's PSI pathway, helps the chloroplast meet the Calvin cycle's actual ATP and NADPH demand.",pts:2,rubric:["Cyclic flow sends the electron from PSI back into the ETC instead of to NADP⁺ reductase, so the electron pumps additional H⁺ into the thylakoid space (making more ATP via chemiosmosis) without producing any additional NADPH","Because the Calvin cycle needs proportionally more ATP than NADPH, this extra ATP-only production from cyclic flow helps bring the chloroplast's ATP:NADPH output in line with what the Calvin cycle actually consumes"]},
+  {verb:"Predict",text:"what would happen to NADPH levels in the stroma if a chloroplast relied only on cyclic electron flow and never used non-cyclic electron flow. Justify your prediction.",pts:1,rubric:["NADPH would not be produced at all (or would run out quickly), because only non-cyclic electron flow sends electrons to NADP⁺ reductase; without it, the chloroplast would make ATP but have no way to generate the NADPH the Calvin cycle also requires"]}
+ ]},
+
+// ---------- u3calvin ----------
+{id:"D3_calvin_1",t:"u3calvin",daily:true,fig:FIG_CALVIN,title:"Why does the cycle need three phases?",
+ stem:"Figure 1 models the three phases of the Calvin cycle: carbon fixation, reduction, and regeneration.",
+ parts:[
+  {verb:"Describe",text:"what happens to RuBP in the first and third phases shown in the model.",pts:1,rubric:["In phase 1 (fixation), RuBP is consumed: 3 RuBP combine with 3 CO₂ to form 6 3-PGA; in phase 3 (regeneration), RuBP is rebuilt: the remaining 5 G3P are rearranged (using ATP) to regenerate 3 RuBP. Both phases needed"]},
+  {verb:"Predict",text:"what would happen to the Calvin cycle shown in the model if the regeneration phase stopped working, while fixation and reduction continued normally. Justify your prediction.",pts:1,rubric:["The cycle would stop after RuBP ran out, because fixation consumes RuBP every turn, and without regeneration there would be no RuBP left for rubisco to combine with new CO₂, even though fixation and reduction themselves were still functioning"]}
+ ]},
+{id:"D3_calvin_2",t:"u3calvin",daily:true,title:"One glucose, two turns",
+ stem:"A student says: 'Since the Calvin cycle makes 6 G3P per turn and glucose is made from 2 G3P, one turn of the cycle makes 3 glucose molecules.'",
+ parts:[
+  {verb:"Evaluate",text:"whether the student's claim is accurate.",pts:1,rubric:["The claim is not accurate: only 1 of the 6 G3P produced per turn exits the cycle as net product; the other 5 are used to regenerate RuBP, so one turn does not yield 6 usable G3P for making glucose"]},
+  {verb:"Calculate",text:"how many turns of the Calvin cycle, and how many total CO₂ molecules, are required to produce the net equivalent of one glucose molecule. Show your reasoning.",pts:1,rubric:["Each turn nets only 1 G3P, so 2 turns are needed to get the 2 G3P that combine to form 1 glucose; since each turn fixes 3 CO₂, 2 turns fix 3 × 2 = 6 CO₂ total, matching glucose's 6 carbons"]}
+ ]},
+
+// ---------- u3lab ----------
+{id:"D3_lab_1",t:"u3lab",daily:true,fig:FIG_CATALASEDATA,title:"Reading the catalase data",
+ stem:"Figure 1 shows O₂ gas produced by the catalase reaction (2H₂O₂ → 2H₂O + O₂) at four temperatures, each measured after 30 seconds of reaction time.",
+ parts:[
+  {verb:"Identify",text:"the independent variable and the dependent variable in this investigation.",pts:1,rubric:["Independent variable: temperature (°C); dependent variable: % O₂ gas produced. Both needed"]},
+  {verb:"Calculate",text:"the rate of O₂ production, in % O₂ per second, at 34°C. Show your work.",pts:1,rubric:["23.8% ÷ 30 sec ≈ 0.79% O₂ per second (accept 0.78–0.80)"]},
+  {verb:"Describe",text:"the shape of the data across the four temperatures shown.",pts:1,rubric:["O₂ production rises from 4°C through 21°C to a peak at 34°C (9.7% → 13.7% → 23.8%), then drops sharply at 51°C (down to 6.0%), consistent with an optimum somewhere in the low-to-mid 30s°C followed by denaturation at higher temperature"]}
+ ]},
+{id:"D3_lab_2",t:"u3lab",daily:true,title:"Designing the amylase experiment",
+ stem:"A student wants to test whether more copies of the AMY1 gene are associated with more efficient starch digestion by salivary amylase, using saliva samples from volunteers with known AMY1 copy numbers (measured previously by a genetic test), each mixed with the same amount of starch solution and IKI indicator.",
+ parts:[
+  {verb:"Identify",text:"the independent variable the student should compare across saliva samples.",pts:1,rubric:["AMY1 copy number of the volunteer who donated the saliva sample"]},
+  {verb:"Describe",text:"an appropriate negative control for this experiment.",pts:1,rubric:["A tube with starch solution and IKI indicator but no saliva (or with saliva that has been boiled/denatured first), which should still test positive for starch (dark blue-black with IKI) throughout the test period, showing that starch breakdown in the other tubes is due to active amylase and not some other factor"]},
+  {verb:"Predict",text:"the expected relationship between AMY1 copy number and the time it takes for a sample to test negative for starch with IKI. Justify your prediction.",pts:1,rubric:["Samples from volunteers with higher AMY1 copy number are predicted to test negative for starch sooner (less time), because more gene copies generally means more amylase protein is produced, which should break down starch into maltose faster"]}
+ ]}
+);
+
+// ================= APPLY-IT (lvl:2) FRQs — one per topic, slightly harder synthesis =================
+FRQ.push(
+{id:"A3_enz_1",t:"u3enz",lvl:2,title:"Specificity under two conditions",
+ stem:"Enzyme Z normally binds substrate M, which has both a matching shape and a matching charge distribution to Z's active site. A mutation changes one amino acid near Z's active site, altering the charge at that position but leaving the active site's overall shape unchanged.",
+ parts:[
+  {verb:"Predict",text:"how the mutation described above will affect Z's ability to bind substrate M. Justify your prediction.",pts:1,rubric:["Binding will likely be reduced or lost, because even though the shape still matches, the altered charge disrupts the chemical (ionic/hydrogen bonding) complementarity the active site needs for specific binding; shape alone is not sufficient"]},
+  {verb:"Predict",text:"whether this same mutation would also affect Z's ability to perform the 'inducing strain' catalytic mechanism on a substrate that still manages to bind. Justify your prediction.",pts:1,rubric:["It likely would, because inducing strain relies on precise interactions between active-site R-groups and the substrate to stretch specific bonds toward the transition state; if the mutated charge disrupts those local interactions, the enzyme may bind the substrate somewhat but fail to position or strain it correctly, reducing catalytic efficiency even without eliminating binding entirely"]}
+ ]},
+{id:"A3_cat_1",t:"u3cat",lvl:2,title:"Two mechanisms, one active site",
+ stem:"Enzyme Y catalyzes a reaction between substrates P and Q by first positioning them next to each other in a fixed orientation, and then stretching one bond in substrate P toward the shape of the transition state.",
+ parts:[
+  {verb:"Identify",text:"the two catalytic mechanisms used by enzyme Y, in the order they are described.",pts:1,rubric:["Substrate orientation, then inducing strain (both needed, in this order)"]},
+  {verb:"Predict",text:"which mechanism's loss would more severely reduce the rate of a reaction between two different substrates (like P and Q) compared to a reaction with only one substrate molecule. Justify your prediction.",pts:1,rubric:["Losing substrate orientation would be more severe for a two-substrate reaction specifically, because that mechanism is what positions two separate molecules correctly relative to each other; a single-substrate reaction has no second molecule to orient, so inducing strain alone could still meaningfully speed up that kind of reaction"]}
+ ]},
+{id:"A3_env_1",t:"u3env",lvl:2,fig:FIG_TEMPCURVE,title:"Temperature and an allosteric inhibitor, same symptom",
+ stem:"A researcher observes that an enzyme's reaction rate drops to roughly the same new, lower value under two different conditions: Condition 1, where temperature is raised 15°C above the enzyme's optimum, and Condition 2, where a noncompetitive inhibitor is added at the optimum temperature.",
+ parts:[
+  {verb:"Explain",text:"how BOTH conditions described above could independently produce a similar drop in reaction rate.",pts:2,rubric:["In Condition 1, excess heat disrupts the hydrogen bonds and ionic interactions holding the enzyme's 3°/4° structure, distorting the active site's shape so it binds substrate less effectively","In Condition 2, the noncompetitive inhibitor binds an allosteric site, causing a conformational change that also distorts the active site's shape; both conditions end up reducing the rate through the same underlying effect — a poorly shaped active site — even though the cause is different"]},
+  {verb:"Describe",text:"one experiment that would distinguish whether a given drop in rate (in an unlabeled sample) was caused by temperature or by an inhibitor.",pts:1,rubric:["Return the sample to the enzyme's optimum temperature and remeasure the rate: if the rate recovers, the drop was due to temperature (since lowering a denatured enzyme's temperature does NOT restore activity, but the sample wasn't yet denatured if it was Condition 2); alternatively, dialyze/remove small molecules from the sample and retest — if the rate recovers, an inhibitor (which can be physically removed) was responsible, whereas a truly denatured (Condition 1, severely overheated) enzyme would not regain activity once badly denatured"]}
+ ]},
+{id:"A3_inhib_1",t:"u3inhib",lvl:2,title:"An inhibitor that is also a pathway's product",
+ stem:"In a biosynthetic pathway, enzyme 1 converts A to B, and several more steps eventually convert B to final product F. F binds reversibly to an allosteric site on enzyme 1, reducing its activity. A researcher adds a large excess of starting molecule A to a reaction already containing a high concentration of F.",
+ parts:[
+  {verb:"Predict",text:"whether adding excess A will restore enzyme 1's activity to the same degree that removing F would. Justify your prediction.",pts:2,rubric:["Adding excess A will NOT restore activity the way removing F would, because F is acting as a noncompetitive/allosteric inhibitor (binding a site other than the active site), not a competitive one; since F doesn't compete with A for the active site, increasing A's concentration doesn't prevent F from binding its separate allosteric site and distorting enzyme 1's active site"]},
+  {verb:"Explain",text:"why this regulatory arrangement (F inhibiting enzyme 1) is advantageous even though it also slows the production of A's own direct product, B.",pts:1,rubric:["Because B is only an intermediate on the way to F, slowing B's production when F is already abundant prevents the cell from wasting resources making more of an intermediate that would just accumulate; this feedback inhibition keeps F's concentration within a useful range (homeostasis) rather than overproducing it indefinitely"]}
+ ]},
+{id:"A3_therm_1",t:"u3therm",lvl:2,title:"Comparing two coupled processes",
+ stem:"Process 1 couples the exergonic hydrolysis of ATP to the endergonic active transport of a solute against its concentration gradient. Process 2 couples the exergonic light-driven splitting of water to the endergonic reduction of NADP⁺ to NADPH.",
+ parts:[
+  {verb:"Explain",text:"what Process 1 and Process 2 have in common, in terms of thermodynamics and energy coupling.",pts:2,rubric:["Both processes link an exergonic reaction (ATP hydrolysis in Process 1; water splitting/the light reactions in Process 2) to an endergonic reaction (active transport in Process 1; NADP⁺ reduction in Process 2) that would not occur spontaneously on its own","In both cases, the free energy released by the exergonic half of the coupled pair supplies the free energy required by the endergonic half, consistent with the first law (energy is transformed, not created) and the second law (some energy is still lost as heat at each step)"]},
+  {verb:"Justify",text:"the claim that neither process violates the second law of thermodynamics, even though both result in a more organized, lower-entropy product (a solute concentrated on one side of a membrane, or a reduced NADPH molecule).",pts:1,rubric:["Locally, entropy can decrease (a more ordered product forms) as long as the overall entropy of the surroundings (or the universe as a whole) increases by at least as much, which happens because each coupled process also releases heat and other less-ordered byproducts; the second law applies to the total system, not to every sub-part of it in isolation"]}
+ ]},
+{id:"A3_atp_1",t:"u3atp",lvl:2,fig:FIG_ATPCYCLE,title:"Correcting two misconceptions at once",
+ stem:"A student writes: 'ATP stores energy in its phosphate bonds. When the cell needs energy, breaking one of those bonds releases the stored energy directly to power the cell's work.'",
+ parts:[
+  {verb:"Evaluate",text:"the student's claim, identifying what it gets right and what it gets wrong.",pts:2,rubric:["Right: ATP hydrolysis does release free energy that can power cellular work","Wrong: the energy is not 'stored in' and released by breaking the bond itself (breaking any bond requires energy input); the energy released actually reflects that the hydrolysis products, ADP and Pᵢ, are more stable/lower in free energy than ATP, plus the entropy increase from separating the charged phosphates"]},
+  {verb:"Explain",text:"how this corrected understanding of ATP hydrolysis is consistent with the idea that enzymes lower activation energy without changing a reaction's overall ΔG.",pts:1,rubric:["ATP hydrolysis is exergonic (ΔG < 0) regardless of whether an enzyme is present, because that sign depends only on the relative stability of ATP versus ADP + Pᵢ; an enzyme that catalyzes ATP hydrolysis only lowers the activation energy needed to get there faster, it doesn't change the fact that the products are more stable than the reactant, which is the real source of the released energy"]}
+ ]},
+{id:"A3_photo_1",t:"u3photo",lvl:2,title:"Two experiments, one pigment story",
+ stem:"Researcher 1 measures chlorophyll a's absorption spectrum by shining different wavelengths of light through a purified chlorophyll a solution and recording how much light is absorbed. Researcher 2 measures a leaf's action spectrum by shining different wavelengths on an intact leaf and recording the rate of O₂ release at each wavelength. The two spectra are similar in overall shape but not identical — the leaf's action spectrum shows meaningful photosynthetic activity at some wavelengths where chlorophyll a absorbs only weakly.",
+ parts:[
+  {verb:"Explain",text:"why Researcher 1's and Researcher 2's spectra are not identical, given that the leaf contains pigments besides chlorophyll a.",pts:1,rubric:["Accessory pigments (such as chlorophyll b and carotenoids) in the leaf absorb some wavelengths that chlorophyll a absorbs only weakly, and energy absorbed by those accessory pigments can still be passed on to drive photosynthesis; this widens the leaf's overall action spectrum beyond chlorophyll a's absorption spectrum alone"]},
+  {verb:"Predict",text:"how Researcher 2's action spectrum would change if the leaf's accessory pigments were experimentally destroyed, leaving only chlorophyll a functional. Justify your prediction.",pts:1,rubric:["The action spectrum would narrow and shift to more closely match chlorophyll a's own absorption spectrum, because the leaf would lose the additional light-capturing contribution of the accessory pigments at the wavelengths they normally absorb"]}
+ ]},
+{id:"A3_light_1",t:"u3light",lvl:2,fig:FIG_LIGHTRXN,title:"A poison at the ATP synthase",
+ stem:"A toxin creates a channel through the thylakoid membrane that allows H⁺ to leak freely between the thylakoid space and the stroma, bypassing ATP synthase entirely, while PSII, the ETC, and PSI continue functioning normally.",
+ parts:[
+  {verb:"Predict",text:"the effect of this toxin on ATP production by chemiosmosis, shown in the model. Justify your prediction.",pts:1,rubric:["ATP production would decrease sharply (or stop), because the H⁺ gradient the ETC builds across the thylakoid membrane would be continuously lost through the leak instead of being maintained for ATP synthase to use; without a strong gradient, H⁺ flow specifically through ATP synthase (the only flow that is coupled to ATP synthesis) would be reduced"]},
+  {verb:"Predict",text:"whether NADPH production, shown in the model, would also be directly reduced by this same toxin. Justify your prediction.",pts:1,rubric:["NADPH production would likely continue largely unaffected at first, because NADPH formation depends on electrons reaching PSI and then NADP⁺ reductase, a path that doesn't require the H⁺ gradient or ATP synthase; the toxin specifically disrupts the H⁺ gradient used for ATP synthesis, not the separate electron path to NADP⁺"]}
+ ]},
+{id:"A3_calvin_1",t:"u3calvin",lvl:2,fig:FIG_CALVIN,title:"When ATP runs low",
+ stem:"A chloroplast's stroma experiences a sudden shortage of ATP (but not NADPH), while CO₂ and all three Calvin cycle enzymes remain available at normal levels.",
+ parts:[
+  {verb:"Predict",text:"which phase of the Calvin cycle, shown in the model, would be most directly limited by this ATP shortage, and justify your prediction by citing where ATP is used in the cycle.",pts:2,rubric:["Both the reduction phase (which uses 6 ATP per turn to convert PGA to G3P) and the regeneration phase (which uses 3 ATP per turn to rebuild RuBP) would be directly limited, since ATP is consumed in both of these phases but not in the carbon fixation phase","The fixation phase itself (3 CO₂ + 3 RuBP → 6 3-PGA, catalyzed by rubisco) does not directly require ATP, so it could continue briefly as long as RuBP was still available from before the shortage began"]},
+  {verb:"Predict",text:"what will eventually happen to the rate of carbon fixation if the ATP shortage continues, even though fixation itself doesn't use ATP directly. Justify your prediction.",pts:1,rubric:["Carbon fixation will eventually slow and stop, because fixation depends on a continuous supply of RuBP, and RuBP can only be regenerated using ATP (in the regeneration phase); once existing RuBP is used up and can't be replaced, rubisco has no substrate left to act on"]}
+ ]},
+{id:"A3_lab_1",t:"u3lab",lvl:2,fig:FIG_CATALASEDATA,title:"Comparing two ways to slow the same reaction",
+ stem:"The catalase data in the model show reaction rate dropping sharply at 51°C. In a separate experiment, adding a noncompetitive inhibitor to the same catalase reaction at 34°C (the optimum) produces a very similar drop in the % O₂ produced after 30 seconds.",
+ parts:[
+  {verb:"Explain",text:"how the temperature effect and the noncompetitive-inhibitor effect could produce a similar drop in rate through different underlying causes.",pts:2,rubric:["At 51°C, excess heat disrupts the H-bonds/ionic interactions holding catalase's 3°/4° structure, denaturing the enzyme and distorting its active site","The noncompetitive inhibitor at 34°C instead binds a separate allosteric site and causes a conformational change that also distorts the active site, without any change in temperature; both mechanisms end in a poorly shaped active site, but one is caused by heat and the other by a bound molecule"]},
+  {verb:"Describe",text:"one modification to the experiment that would reveal whether a given drop in rate (in a new, unlabeled sample run at 34°C) was caused by an inhibitor rather than by some unexpected denaturation.",pts:1,rubric:["Dialyze the sample (or otherwise physically remove small, diffusible molecules) and retest its rate at 34°C: if the rate recovers, a removable inhibitor was responsible; if the enzyme had instead been denatured, removing small molecules would not restore its activity because the protein's own folded structure, not a bound inhibitor, would be the problem"]}
+ ]}
+);
+
+// ================= MOCK FRQs (full AP-exam style, multi-part) =================
+FRQ.push(
+{id:"M3_catalase",t:"u3lab",mock:true,title:"Catalase and temperature (full lab FRQ)",
+ fig:FIG_CATALASEDATA,
+ stem:"A student used a gas pressure sensor to measure the % O₂ gas produced by the reaction 2H₂O₂ → 2H₂O + O₂, catalyzed by the enzyme catalase, at four temperatures. Each value in Figure 1 is the cumulative % O₂ produced after exactly 30 seconds of reaction time, with error bars showing ± 2 standard errors of the mean. Answer in complete sentences, with units where appropriate.",
+ parts:[
+  {verb:"Identify",text:"the independent variable and the dependent variable in this investigation.",pts:1,rubric:["Independent variable: temperature (°C); dependent variable: % O₂ gas produced after 30 seconds. Both required"]},
+  {verb:"Describe",text:"an appropriate negative control for this investigation.",pts:1,rubric:["A reaction tube containing hydrogen peroxide and catalase that has been boiled (denatured) beforehand, where essentially no O₂ production is expected, confirming that any O₂ measured in the other tubes is due to active catalase and not some other factor in the setup"]},
+  {verb:"Graph",text:"describe how these data should be displayed, including the type of graph, its title, and its axes, following standard graphing conventions.",pts:1,rubric:["A line graph (temperature is continuous), with the line actually drawn through the plotted points (not left unconnected); titled 'The effect of temperature on O₂ production by catalase'; x-axis labeled 'Temperature (°C)', y-axis labeled '% O₂ produced'; evenly scaled axes that do not need to start at 0; error bars plotted before the axes are scaled; no color used"]},
+  {verb:"Calculate",text:"the rate of O₂ production, in % O₂ per second, at 34°C. Show your work.",pts:1,rubric:["23.8% ÷ 30 sec ≈ 0.79% O₂ per second (accept 0.78–0.80)"]},
+  {verb:"Describe",text:"the trend shown in the data across all four temperatures, citing specific values.",pts:1,rubric:["% O₂ rises from 9.7% at 4°C to 13.7% at 21°C to a peak of 23.8% at 34°C, then falls sharply to 6.0% at 51°C, consistent with an enzyme that has an optimum temperature somewhere around the low-to-mid 30s°C and denatures at higher temperatures"]},
+  {verb:"Explain",text:"why the reaction rate is lower at 51°C than at 34°C, naming the specific bonds involved and the consequence for the active site.",pts:2,rubric:["At 51°C, the added heat disrupts the hydrogen bonds and ionic interactions holding catalase's 3° and 4° structure together","This denaturation distorts the shape of catalase's active site, reducing its ability to bind hydrogen peroxide and reducing the overall reaction rate, consistent with the drop from 23.8% to 6.0% O₂ produced"]}
+ ]},
+{id:"M3_lightcalvin",t:"u3light",mock:true,title:"From photon to glucose (light reactions + Calvin cycle synthesis)",
+ fig:FIG_LIGHTRXN,
+ stem:"Figure 1 models the light reactions occurring across the thylakoid membrane of a chloroplast. The ATP and NADPH produced are used by the Calvin cycle in the stroma, which requires 18 ATP and 12 NADPH to produce the net equivalent of one glucose molecule. Answer in complete sentences and name specific structures and molecules; avoid using 'it.'",
+ parts:[
+  {verb:"Describe",text:"the role of water in the light reactions shown in the model.",pts:1,rubric:["Water is split (photolysis) at PSII, donating electrons to replace those PSII loses to the electron transport chain, while releasing H⁺ (adding to the thylakoid-space gradient) and O₂ as a byproduct"]},
+  {verb:"Explain",text:"how the H⁺ gradient shown across the thylakoid membrane results in ATP production.",pts:2,rubric:["The electron transport chain pumps H⁺ from the stroma into the thylakoid space as electrons move from PSII toward PSI, building up a high H⁺ concentration in the thylakoid space relative to the stroma","H⁺ then flows back down its concentration gradient into the stroma through ATP synthase, and this flow of H⁺ through the enzyme (chemiosmosis) powers the synthesis of ATP from ADP and Pᵢ"]},
+  {verb:"Explain",text:"why cyclic electron flow at PSI, which produces ATP without producing NADPH, is necessary for the Calvin cycle to function efficiently.",pts:1,rubric:["Because the Calvin cycle consumes ATP and NADPH in an 18:12 ratio rather than 1:1, non-cyclic electron flow alone would not supply enough ATP relative to NADPH; cyclic electron flow lets the chloroplast make extra ATP (by returning the PSI electron to the ETC to pump more H⁺) without overproducing NADPH, better matching the Calvin cycle's actual demand"]},
+  {verb:"Identify",text:"which phase of the Calvin cycle uses both ATP and NADPH together, as opposed to ATP alone.",pts:1,rubric:["The reduction phase (where 6 PGA are converted to 6 G3P using 6 ATP and 6 NADPH); the regeneration phase uses ATP alone (3 ATP, no NADPH), and the fixation phase uses neither"]},
+  {verb:"Calculate",text:"the total number of times the Calvin cycle must turn, and the total CO₂ molecules fixed, to produce one glucose molecule from two G3P. Show your reasoning.",pts:1,rubric:["Each turn nets only 1 G3P (of the 6 produced, 5 regenerate RuBP), so 2 turns are required to yield the 2 G3P that combine into 1 glucose; since each turn fixes 3 CO₂, 2 turns fix 6 CO₂ total"]}
+ ]},
+{id:"M3_amylase",t:"u3cat",mock:true,title:"Starch, saliva, and natural selection (amylase synthesis FRQ)",
+ fig:`<table style="border-collapse:collapse;font-size:15px;margin:4px 0"><tr><th style="border:1px solid var(--line-2);padding:4px 10px">Population (historical diet)</th><th style="border:1px solid var(--line-2);padding:4px 10px">Average AMY1 diploid copy number</th></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">Agricultural (starch-rich)</td><td style="border:1px solid var(--line-2);padding:4px 10px">6.7</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">Hunter-gatherer, rainforest (low-starch, high-protein)</td><td style="border:1px solid var(--line-2);padding:4px 10px">5.4</td></tr>
+<tr><td style="border:1px solid var(--line-2);padding:4px 10px">Hunter-gatherer, Arctic (low-starch, high-protein/fat)</td><td style="border:1px solid var(--line-2);padding:4px 10px">4.5</td></tr></table>`,
+ stem:"The AMY1 gene on chromosome 1 encodes salivary amylase, the enzyme that hydrolyzes the α-glycosidic bonds in starch to release maltose in the mouth. Human AMY1 diploid copy number varies across individuals (2 to 15 copies), arising through gene duplication over human evolutionary history. Figure 1 shows average AMY1 copy number for populations grouped by their historical diet (Perry et al., 2007). Answer in complete sentences and name specific molecules; avoid using 'it.'",
+ parts:[
+  {verb:"Describe",text:"the specific chemical reaction that salivary amylase catalyzes.",pts:1,rubric:["Salivary amylase catalyzes the hydrolysis of the α-glycosidic bonds that link glucose monomers together in starch, breaking starch down into smaller sugars such as maltose"]},
+  {verb:"Explain",text:"how having more AMY1 gene copies, shown in the data, is expected to affect the amount of amylase protein a person's salivary glands produce.",pts:1,rubric:["More gene copies generally means more template available for transcription and translation, so individuals with more AMY1 copies are expected to produce more amylase mRNA and, in turn, more amylase protein (gene dosage)"]},
+  {verb:"Justify",text:"using principles of natural selection, why a population with a historically starch-rich diet would be expected to have more AMY1 gene copies on average than a population with a historically low-starch diet, as shown in the data.",pts:2,rubric:["Variation in AMY1 copy number already existed in ancestral populations; in a starch-rich environment, individuals with more copies produced more amylase and digested starch more efficiently, gaining more usable energy from their diet","This digestive advantage increased those individuals' survival and/or reproductive success relative to individuals with fewer copies, so over many generations, higher AMY1 copy number became more common (increased in frequency) in populations with starch-rich diets, while it did not increase in low-starch populations lacking that selective pressure"]},
+  {verb:"Predict",text:"how the average AMY1 copy number of the agricultural population shown in the data would be expected to change over many future generations if that population's diet shifted permanently to a very low-starch diet. Justify your prediction.",pts:1,rubric:["Average AMY1 copy number would be expected to decrease over many generations (or simply stop increasing), because without a starch-rich diet there is no longer a selective advantage to having extra copies, removing the selective pressure that previously favored higher copy number; note that this is a slow, population-level, multi-generational change, not a change within any living individual's own genome"]}
+ ]},
+{id:"M3_thermatp",t:"u3atp",mock:true,title:"Energy coupling and the ATP misconception (thermodynamics + ATP synthesis FRQ)",
+ fig:FIG_ATPCYCLE,
+ stem:"A student's lab notebook includes this explanation: 'ATP hydrolysis releases energy because breaking the high-energy bond between the second and third phosphate groups releases the energy that was stored in that bond. This energy then powers the cell's endergonic reactions directly.' Answer in complete sentences and name specific molecules; avoid using 'it.'",
+ parts:[
+  {verb:"Identify",text:"the law of thermodynamics that is violated by the claim that breaking a chemical bond releases energy.",pts:1,rubric:["This isn't strictly a violation of a named law stated as such, but full credit requires identifying that breaking ANY chemical bond always requires an input of energy rather than releasing it; consuming energy to break a bond is consistent with energy being conserved (first law) but the student's claim about where the released energy comes from is incorrect regardless"]},
+  {verb:"Correct",text:"the error in the student's explanation of why ATP hydrolysis releases energy.",pts:2,rubric:["Breaking the bond between the second and third phosphate actually requires energy input, not release — this is true of any bond-breaking step","The energy released by ATP hydrolysis actually comes from the products (ADP and Pᵢ) being more stable/lower in free energy than ATP, together with an increase in entropy from separating the three mutually repelling, negatively charged phosphate groups; both components should be named"]},
+  {verb:"Explain",text:"how the exergonic hydrolysis of ATP is coupled to power an endergonic cellular reaction, such as active transport.",pts:1,rubric:["Energy coupling links the free energy released by ATP's exergonic hydrolysis to drive an endergonic reaction (such as a pump protein's conformational change during active transport) that would not proceed spontaneously on its own; the two reactions are linked, often through the same protein, so the energy from one reaction directly supplies the energy required by the other"]},
+  {verb:"Explain",text:"why the amount of free energy released by ATP hydrolysis (ΔG) does not depend on whether an enzyme catalyzes the reaction.",pts:1,rubric:["ΔG depends only on the relative free energy of the reactants (ATP + H₂O) and products (ADP + Pᵢ), which are the same molecules regardless of whether an enzyme is present; an enzyme only lowers the activation energy needed to reach the transition state, speeding up how fast equilibrium is reached, without changing the actual energy difference between reactants and products"]}
+ ]}
+);
+
+// ================= WORD-PAIR REVIEW (short written items, graded nightly by Claude) =================
+FRQ.push(
+{id:"U3S1",t:"u3therm",short:true,title:"1st Law vs. 2nd Law",
+ stem:"Two laws of thermodynamics govern every energy transformation in a cell.",
+ parts:[{verb:"Explain",text:"how the first law of thermodynamics differs from the second law of thermodynamics.",pts:1,rubric:["The first law states energy cannot be created or destroyed, only transformed from one form to another; the second law states that every energy transformation loses some usable energy as heat, increasing the entropy of the universe. Both must be stated correctly and distinguished"]}]},
+{id:"U3S2",t:"u3therm",short:true,title:"Anabolism vs. catabolism",
+ stem:"Cellular metabolism includes two opposite categories of reactions.",
+ parts:[{verb:"Explain",text:"how anabolism differs from catabolism.",pts:1,rubric:["Anabolism builds smaller molecules into larger ones and requires an input of energy; catabolism breaks larger molecules into smaller ones and releases energy. Both directions and their energy requirements must be stated"]}]},
+{id:"U3S3",t:"u3therm",short:true,title:"Exergonic vs. endergonic",
+ stem:"Reactions can be classified by the sign of their free-energy change (ΔG).",
+ parts:[{verb:"Explain",text:"how an exergonic reaction differs from an endergonic reaction, giving the sign of ΔG for each.",pts:1,rubric:["An exergonic reaction has ΔG < 0 and releases free energy (e.g., cellular respiration breaking down glucose); an endergonic reaction has ΔG > 0 and requires an input of free energy (e.g., photosynthesis building glucose). Both signs and an example are expected"]}]},
+{id:"U3S4",t:"u3therm",short:true,title:"Energy vs. free energy",
+ stem:"Biologists distinguish a system's total energy from its free energy.",
+ parts:[{verb:"Explain",text:"how 'energy' differs from 'free energy' in this context.",pts:1,rubric:["Energy refers to the capacity to do work or cause change in general; free energy specifically refers to the portion of a system's energy that is available to do useful work, which determines whether a reaction is exergonic or endergonic"]}]},
+{id:"U3S5",t:"u3therm",short:true,title:"Open system vs. closed system",
+ stem:"Living organisms and their energy exchange with the environment can be described using systems language.",
+ parts:[{verb:"Explain",text:"how an open system differs from a closed system, and state which type a living cell is.",pts:1,rubric:["An open system exchanges both energy and matter with its surroundings; a closed system exchanges energy but not matter with its surroundings. Living cells are open systems, continuously exchanging matter (nutrients, waste) and energy with their environment"]}]},
+{id:"U3S6",t:"u3atp",short:true,title:"ATP vs. ADP",
+ stem:"ATP and ADP are related molecules that interconvert in cells.",
+ parts:[{verb:"Explain",text:"how ATP differs from ADP, in terms of structure and energy.",pts:1,rubric:["ATP has three phosphate groups attached to adenine and ribose, while ADP has only two phosphate groups (having released one Pᵢ); ATP is higher in free energy than ADP + Pᵢ, so hydrolyzing ATP to ADP releases usable energy"]}]},
+{id:"U3S7",t:"u3cat",short:true,title:"Activation energy vs. free energy",
+ stem:"Activation energy (Eₐ) and free-energy change (ΔG) are both energy terms used to describe a reaction, but they measure different things.",
+ parts:[{verb:"Explain",text:"how activation energy differs from free-energy change, and how an enzyme affects each one.",pts:1,rubric:["Activation energy (Eₐ) is the energy barrier that must be overcome to reach the transition state; free-energy change (ΔG) is the overall difference in free energy between reactants and products, determining whether a reaction is exergonic or endergonic. An enzyme lowers Eₐ but does NOT change ΔG"]}]},
+{id:"U3S8",t:"u3enz",short:true,title:"Lock-and-key vs. induced fit",
+ stem:"Two models describe how an enzyme's active site interacts with its substrate.",
+ parts:[{verb:"Explain",text:"how the lock-and-key model differs from the induced-fit model.",pts:1,rubric:["In lock-and-key, the active site is a rigid, pre-formed shape that already matches the substrate (a passive fit); in induced fit, the enzyme's active site flexes slightly as the substrate binds, improving the fit (an active process)"]}]},
+{id:"U3S9",t:"u3inhib",short:true,title:"Competitive vs. noncompetitive inhibitor",
+ stem:"Inhibitors can reduce enzyme activity by binding in different locations.",
+ parts:[{verb:"Explain",text:"how a competitive inhibitor differs from a noncompetitive inhibitor, in terms of where each binds and how each can be overcome.",pts:1,rubric:["A competitive inhibitor binds the active site directly, competing with substrate, and its effect can be reduced by adding more substrate; a noncompetitive inhibitor binds a separate (allosteric) site, distorting the active site's shape, and its effect is not overcome by adding more substrate"]}]},
+{id:"U3S10",t:"u3enz",short:true,title:"Cofactor vs. coenzyme",
+ stem:"Many enzymes require a non-protein helper molecule to function.",
+ parts:[{verb:"Explain",text:"how a cofactor differs from a coenzyme.",pts:1,rubric:["A cofactor is an inorganic ion (such as Zn²⁺, Fe²⁺, or Cu²⁺) required for enzyme function; a coenzyme is a small organic molecule, often derived from a vitamin, that serves the same kind of role"]}]},
+{id:"U3S11",t:"u3inhib",short:true,title:"Feedback inhibition vs. allosteric regulation",
+ stem:"A pathway's end product can regulate its own production.",
+ parts:[{verb:"Explain",text:"how feedback inhibition relates to allosteric regulation.",pts:1,rubric:["Feedback inhibition is a specific example of allosteric regulation in which a pathway's end product binds an allosteric site (not the active site) on the first enzyme of that same pathway, inhibiting it; allosteric regulation is the broader category that also includes allosteric activation at sites other than the active site"]}]},
+{id:"U3S12",t:"u3env",short:true,title:"Rate vs. [substrate] graph vs. rate vs. [enzyme] graph",
+ stem:"Two different graphs show how reaction rate responds to changing concentration.",
+ parts:[{verb:"Explain",text:"how a graph of rate versus increasing substrate concentration (at fixed enzyme concentration) differs in shape from a graph of rate versus increasing enzyme concentration (at excess, constant substrate concentration).",pts:1,rubric:["Rate versus [substrate] at fixed [enzyme] rises and then PLATEAUS once all active sites are saturated; rate versus [enzyme] at excess [substrate] rises LINEARLY with no plateau, because substrate is never the limiting factor as more enzyme is added"]}]},
+{id:"U3S13",t:"u3env",short:true,title:"Rate vs. pH graph vs. rate vs. temperature graph",
+ stem:"Two environmental variables each produce a characteristic rate-versus-variable curve.",
+ parts:[{verb:"Explain",text:"how a graph of rate versus pH differs in shape from a graph of rate versus temperature.",pts:1,rubric:["The rate-vs-pH curve is typically symmetric, falling off at a similar rate on both sides of the optimum pH; the rate-vs-temperature curve is asymmetric, rising gently to the optimum but then dropping sharply past it due to denaturation"]}]},
+{id:"U3S14",t:"u3photo",short:true,title:"Light-dependent vs. light-independent reactions",
+ stem:"Photosynthesis is often divided into two stages.",
+ parts:[{verb:"Explain",text:"how the light-dependent reactions differ from the light-independent reactions (the Calvin cycle), in location and in their need for light.",pts:1,rubric:["The light-dependent (light) reactions occur across the thylakoid membrane and directly require light to excite electrons; the light-independent reactions (Calvin cycle, or dark reactions) occur in the stroma and do not directly require light, though they depend on the ATP and NADPH the light reactions supply"]}]},
+{id:"U3S15",t:"u3light",short:true,title:"Photosystem I vs. Photosystem II",
+ stem:"The light reactions involve two distinct photosystems.",
+ parts:[{verb:"Explain",text:"how Photosystem II differs from Photosystem I, including their reaction-center names and order of action in non-cyclic electron flow.",pts:1,rubric:["Photosystem II (reaction center P680) acts first, receiving electrons from water (photolysis) after its own electrons are excited and passed to the ETC; Photosystem I (reaction center P700) acts second, re-exciting the electron that arrives from the ETC before it reduces NADP⁺ to NADPH"]}]},
+{id:"U3S16",t:"u3photo",short:true,title:"Oxidation vs. reduction",
+ stem:"Photosynthesis involves a transfer of electrons between water and carbon dioxide.",
+ parts:[{verb:"Explain",text:"how oxidation differs from reduction, and identify which process water and CO₂ each undergo in photosynthesis.",pts:1,rubric:["Oxidation is the loss of electrons; reduction is the gain of electrons (OILRIG). Water is oxidized (loses electrons, forming O₂); CO₂ is reduced (gains electrons, eventually forming glucose)"]}]},
+{id:"U3S17",t:"u3light",short:true,title:"P680 vs. P700",
+ stem:"Each photosystem's reaction center is named for the wavelength of light it absorbs best.",
+ parts:[{verb:"Explain",text:"how P680 differs from P700, including which photosystem each belongs to.",pts:1,rubric:["P680 is the reaction center of Photosystem II, which absorbs light best around 680 nm; P700 is the reaction center of Photosystem I, which absorbs light best around 700 nm"]}]},
+{id:"U3S18",t:"u3light",short:true,title:"Cyclic vs. non-cyclic electron flow",
+ stem:"Electrons excited at Photosystem I can take one of two paths.",
+ parts:[{verb:"Explain",text:"how cyclic electron flow differs from non-cyclic electron flow, including what each produces.",pts:1,rubric:["Non-cyclic electron flow runs electrons from water through PSII, the ETC, and PSI to NADP⁺ reductase, producing both ATP and NADPH; cyclic electron flow routes the electron from PSI back into the ETC instead, producing additional ATP but no additional NADPH"]}]},
+{id:"U3S19",t:"u3photo",short:true,title:"Stoma vs. stroma",
+ stem:"These two similar-sounding words refer to very different structures.",
+ parts:[{verb:"Explain",text:"how a stoma differs from the stroma.",pts:1,rubric:["A stoma is a pore in the leaf's epidermis that allows gas exchange (CO₂ in, O₂ and water vapor out); the stroma is the fluid-filled space inside the chloroplast, surrounding the thylakoids, where the Calvin cycle occurs"]}]},
+{id:"U3S20",t:"u3photo",short:true,title:"Cuticle vs. stoma",
+ stem:"The leaf surface includes both a protective layer and small openings.",
+ parts:[{verb:"Explain",text:"how the cuticle differs from a stoma, in structure and function.",pts:1,rubric:["The cuticle is a waxy, continuous layer covering the leaf's surface that reduces water loss; a stoma is a small pore (opening) in the epidermis that allows controlled gas exchange, interrupting the cuticle's otherwise continuous barrier"]}]},
+{id:"U3S21",t:"u3light",short:true,title:"Thylakoid space vs. stroma vs. intermembrane space",
+ stem:"A chloroplast and a mitochondrion each have multiple internal compartments.",
+ parts:[{verb:"Explain",text:"how the thylakoid space differs from the stroma, and how the thylakoid space differs from a mitochondrion's intermembrane space.",pts:1,rubric:["The thylakoid space (lumen) is inside the thylakoid membranes, where H⁺ accumulates during the light reactions; the stroma is the fluid outside the thylakoids but inside the chloroplast's inner membrane, where the Calvin cycle occurs. The intermembrane space is the compartment between a mitochondrion's outer and inner membranes, a different organelle and a different H⁺-accumulating space than the thylakoid space"]}]},
+{id:"U3S22",t:"u3light",short:true,title:"Thylakoid vs. cristae",
+ stem:"Chloroplasts and mitochondria each have specialized internal membrane folds.",
+ parts:[{verb:"Explain",text:"how a thylakoid differs from a crista (cristae, plural), including which organelle each belongs to.",pts:1,rubric:["A thylakoid is a flattened, sac-like membrane structure inside the chloroplast (stacked into grana), where the light reactions occur; cristae are the folds of a mitochondrion's inner membrane, where the reactions of aerobic respiration occur. They belong to different organelles"]}]},
+{id:"U3S23",t:"u3calvin",short:true,title:"RuBP vs. rubisco",
+ stem:"Carbon fixation in the Calvin cycle involves both a substrate and an enzyme.",
+ parts:[{verb:"Explain",text:"how RuBP differs from rubisco.",pts:1,rubric:["RuBP (ribulose bisphosphate) is the 5-carbon substrate molecule that combines with CO₂; rubisco is the enzyme that catalyzes that combination (carbon fixation)"]}]},
+{id:"U3S24",t:"u3calvin",short:true,title:"PGA vs. PGAL (G3P)",
+ stem:"The Calvin cycle's reduction phase converts one 3-carbon molecule into another.",
+ parts:[{verb:"Explain",text:"how 3-PGA differs from PGAL (G3P), including which phase of the Calvin cycle produces each.",pts:1,rubric:["3-PGA (3-phosphoglycerate) is the 3-carbon product of the carbon fixation phase; PGAL (G3P, glyceraldehyde-3-phosphate) is formed from 3-PGA during the reduction phase, using ATP and NADPH, and is the molecule that either exits the cycle as net product or is used to regenerate RuBP"]}]},
+{id:"U3S25",t:"u3light",short:true,title:"ETC vs. photosystem",
+ stem:"The light reactions include both photosystems and an electron transport chain.",
+ parts:[{verb:"Explain",text:"how a photosystem differs from the electron transport chain (ETC) in the light reactions.",pts:1,rubric:["A photosystem (PSII or PSI) is a complex that absorbs light and uses that energy to excite an electron; the ETC is the series of proteins the excited electron passes through afterward, using the electron's energy to pump H⁺ into the thylakoid space rather than absorbing light itself"]}]},
+{id:"U3S26",t:"u3light",short:true,title:"NADPH vs. NADH",
+ stem:"Both NADPH and NADH are electron carriers, but they are used in different processes covered so far.",
+ parts:[{verb:"Explain",text:"how NADPH differs from NADH in this unit's content.",pts:1,rubric:["NADPH is the electron carrier produced by the light reactions of photosynthesis and used to power the Calvin cycle's reduction phase; NADH is a different electron carrier used in cellular respiration (a topic outside this unit's scope). The extra phosphate group in NADPH distinguishes its structure from NADH"]}]}
+);
+
+UNITS[3] = {name:"Unit 3a · Cellular Energetics — Energy, Enzymes & Photosynthesis"};
+Object.assign(CURRENT, {unit:3, newest:["u3therm","u3atp"], taughtThrough:"3.2", asOf:"Tue Oct 13", taughtOn:Object.assign({}, CURRENT.taughtOn, { u3therm:"2026-10-13", u3atp:"2026-10-14", u3enz:"2026-10-14", u3cat:"2026-10-15", u3env:"2026-10-16", u3inhib:"2026-10-19", u3photo:"2026-10-20", u3light:"2026-10-21", u3calvin:"2026-10-22", u3lab:"2026-10-26" })});
+
+// Daily plan for Unit 3a: matches the teacher's real posted calendar (screenshots from 10/12) —
+// Enzymes Quiz Fri 10/16 (continues Mon 10/19), Photosynthesis Quiz Mon 10/26, Unit 3a Test Thu 10/29 (50% MCQ / 50% FRQ).
+PLAN.push(
+  {date:"2026-10-13", topic:"u3therm", idea:"Idea 1", title:"Energy rules of life (thermodynamics)", guide:"unit3a.html#i1", note:"3.3 · taught in class today (Energy deck + ATP POGIL)."},
+  {date:"2026-10-14", topic:"u3atp",   idea:"Idea 2", title:"ATP: the energy currency",             guide:"unit3a.html#i2", note:"3.3 · taught in class today. HW tonight: Crash Course Biology #28 + guided notes (graded)."},
+  {date:"2026-10-15", topic:"u3enz",   idea:"Idea 3", title:"Enzymes: catalysts with a shape",       guide:"unit3a.html#i3", note:"3.1 · the Enzymes deck started yesterday in class."},
+  {date:"2026-10-16", topic:"u3env",   idea:"Idea 4", title:"What speeds an enzyme up or shuts it down", guide:"unit3a.html#i4", note:"3.2 · Enzymes Quiz is today (graded classwork).", extra:"<b>Weekend FRQ (about 20 min):</b> tap <b>FRQ practice</b> below for the catalase graphing question. Claude grades it that night."},
+  {date:"2026-10-19", topic:"u3inhib", idea:"Idea 5", title:"Inhibitors and feedback",               guide:"unit3a.html#i5", note:"3.2 · the Enzymes Quiz continues today in class; Photosynthesis starts."},
+  {date:"2026-10-20", topic:"u3photo", idea:"Idea 6", title:"Sunlight in, sugar out: the big picture of photosynthesis", guide:"unit3a.html#i6", note:"3.5 · taught in class today."},
+  {date:"2026-10-21", topic:"u3light", idea:"Idea 7", title:"The light reactions, step by step",     guide:"unit3a.html#i7", note:"3.5 · PSAT/testing day in class — no new content, so this is a good catch-up day."},
+  {date:"2026-10-22", topic:"u3calvin",idea:"Idea 8", title:"The Calvin cycle",                      guide:"unit3a.html#i8", note:"3.5 · Photosynthesis finishes in class today. Photosynthesis Quiz is Monday 10/26."},
+  {date:"2026-10-23", topic:"mix", pool:["u3photo","u3light","u3calvin"], poolName:"the Photosynthesis Quiz topics (Ideas 6–8)", idea:"Quiz review", title:"Photosynthesis, mixed", guide:"unit3a.html#i6", note:"Photosynthesis Quiz review. The quiz is Monday 10/26.", extra:"After the session, tap <b>Redo my misses</b> until it's empty."},
+  {date:"2026-10-26", assess:"Photosynthesis Quiz", topic:"u3lab", idea:"Idea 9", title:"Reading the catalase and AMY1 data", guide:"unit3a.html#i9", note:"Photosynthesis Quiz today. Tonight: the catalase lab data and the AMY1/diet case study, both graded classwork and both on the Unit 3a Test.", extra:"<b>Diet and the Evolution of Salivary Amylase</b> is graded classwork today — read it before tonight's session."},
+  {date:"2026-10-27", topic:"mix", poolName:"all of Unit 3a", idea:"Test review 1", title:"All of Unit 3a, mixed", guide:"unit3a.html#test", note:"Unit 3a Test is Thursday 10/29: 50% multiple choice, 50% FRQ. Class reviews today: Word Pairs, the Enzyme Graphing FRQ, Graphing in AP Biology, and Tips for answering FRQs."},
+  {date:"2026-10-28", topic:"mix", poolName:"all of Unit 3a", idea:"Test review 2", title:"Final review before the Unit 3a Test", guide:"unit3a.html#test", note:"The Unit 3a Test is tomorrow.", extra:"Do one full FRQ: <a href=\"./#frq=M3_lightcalvin\">From photon to glucose</a>. Then <b>Redo my misses</b> until it's empty."},
+  {date:"2026-10-29", assess:"Unit 3a Test: Energy, Enzymes, & Photosynthesis (50% MCQ / 50% FRQ)", topic:"quiz", idea:"Test day", title:"Unit 3a Test today", guide:"unit3a.html#test", extra:"No full session needed. Before school, 5 minutes on the self-check."}
+);

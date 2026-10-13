@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unit 3a Study Guide</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#176B62">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔆</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F6F7F4; --paper:#FFFFFF; --ink:#1A2230; --ink-2:#4A5568; --ink-3:#7A8494;
+  --line:#DDE1DA; --line-2:#C9CFC6;
+  --teal:#176B62; --teal-soft:#DDEFEA; --teal-ink:#0F4F48;
+  --hi:#FFE85C; --hi-ink:#4A3F00;
+  --polar:#BDEFF5; --polar-ink:#0A4A55;
+  --nonpolar:#F3E3C6; --nonpolar-ink:#5A3E0A;
+  --neg:#CDEFC8; --neg-ink:#1F4F1A;
+  --pos:#FFE1A8; --pos-ink:#5B3A00;
+  --acid:#F5CDEB; --acid-ink:#5A0F45;
+  --warn:#B4342B; --warn-soft:#FBE7E4;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D;
+    --line:#2C3841; --line-2:#3A4852;
+    --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+    --hi:#C9B23A; --hi-ink:#1E1900;
+    --polar:#15505A; --polar-ink:#BDEFF5;
+    --nonpolar:#5A4320; --nonpolar-ink:#F3E3C6;
+    --neg:#22502A; --neg-ink:#CDEFC8;
+    --pos:#5B3F0E; --pos-ink:#FFE1A8;
+    --acid:#5A1F4E; --acid-ink:#F5CDEB;
+    --warn:#F08A80; --warn-soft:#3A1F1C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131A1E; --paper:#1B2429; --ink:#EEF2EE; --ink-2:#B7C1BC; --ink-3:#86928D;
+  --line:#2C3841; --line-2:#3A4852;
+  --teal:#4FBFAF; --teal-soft:#183833; --teal-ink:#A9E6DC;
+  --hi:#C9B23A; --hi-ink:#1E1900;
+  --polar:#15505A; --polar-ink:#BDEFF5;
+  --nonpolar:#5A4320; --nonpolar-ink:#F3E3C6;
+  --neg:#22502A; --neg-ink:#CDEFC8;
+  --pos:#5B3F0E; --pos-ink:#FFE1A8;
+  --acid:#5A1F4E; --acid-ink:#F5CDEB;
+  --warn:#F08A80; --warn-soft:#3A1F1C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.12}
+h1{font-size:clamp(34px,7vw,52px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(24px,4.5vw,32px);font-weight:700;letter-spacing:-.015em;margin-top:56px;padding-top:28px;border-top:2px solid var(--ink)}
+h3{font-size:20px;font-weight:700;margin-top:28px}
+h4{font-size:17px;font-weight:700;margin-top:18px}
+p{margin:12px 0;max-width:68ch}
+ul,ol{padding-left:22px;margin:10px 0}
+li{margin:6px 0}
+strong{font-weight:700}
+.eyebrow{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+header{padding-top:40px}
+header .sub{font-size:19px;color:var(--ink-2);max-width:60ch}
+mark{background:var(--hi);color:var(--hi-ink);padding:0 4px;border-radius:2px}
+code,.f{font-family:var(--mono);font-size:.93em;background:var(--teal-soft);color:var(--teal-ink);padding:1px 6px;border-radius:4px;white-space:nowrap}
+.lede{font-size:19px}
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:28px -18px 0;padding:10px 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink-2);text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid var(--line-2)}
+nav a:hover,nav a:focus-visible{color:var(--teal);border-color:var(--teal);outline:none}
+/* facts row */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.fact .n{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.fact .l{font-size:14px;color:var(--ink-2);margin-top:6px}
+/* callouts */
+.note{background:var(--paper);border-left:4px solid var(--teal);padding:14px 18px;border-radius:0 10px 10px 0;margin:18px 0}
+.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.note p:first-child{margin-top:0}.note p:last-child{margin-bottom:0}
+.teacher{font-style:italic;color:var(--ink-2)}
+.teacher::before{content:"Teacher's words: ";font-style:normal;font-weight:700;color:var(--ink)}
+/* schedule */
+.day{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px;margin-top:18px}
+.day h3{margin-top:0;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.day h3 .t{font-size:14px;color:var(--ink-3);font-weight:500;font-family:var(--body)}
+.task{display:grid;grid-template-columns:28px 64px 1fr;gap:10px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.task:first-of-type{border-top:0}
+.task input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--teal);cursor:pointer}
+.task .min{font-family:var(--mono);font-size:13px;color:var(--ink-3);padding-top:4px;font-variant-numeric:tabular-nums}
+.task label{cursor:pointer}
+.task label b{display:block;font-weight:700}
+.task label span{color:var(--ink-2);font-size:15.5px}
+.task input:checked ~ label{opacity:.55;text-decoration:line-through}
+.day .why{font-size:14.5px;color:var(--ink-3);margin:10px 0 6px;font-style:italic}
+/* big ideas */
+.idea{margin-top:36px;padding-top:8px}
+.idea .num{font-family:var(--display);font-weight:800;color:var(--teal);font-size:14px;letter-spacing:.1em}
+.idea h3{margin-top:4px;font-size:24px}
+.plain{background:var(--teal-soft);color:var(--teal-ink);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:16.5px}
+.plain b{color:inherit}
+/* tags */
+.tag{display:inline-block;font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.04em;padding:2px 8px;border-radius:999px;line-height:1.5;white-space:nowrap}
+.tag.polar{background:var(--polar);color:var(--polar-ink)}
+.tag.nonpolar{background:var(--nonpolar);color:var(--nonpolar-ink)}
+.tag.neg{background:var(--neg);color:var(--neg-ink)}
+.tag.pos{background:var(--pos);color:var(--pos-ink)}
+.tag.acid{background:var(--acid);color:var(--acid-ink)}
+/* tables */
+.tbl{overflow-x:auto;margin:16px -18px;padding:0 18px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td .f{white-space:nowrap}
+.tbl.narrow table{min-width:420px}
+/* mnemonic */
+.mn{display:flex;gap:12px;align-items:flex-start;margin:14px 0;padding:12px 14px;border:1.5px dashed var(--line-2);border-radius:10px}
+.mn .k{font-family:var(--display);font-weight:800;color:var(--teal);font-size:13px;letter-spacing:.1em;padding-top:3px;flex:none;max-width:30%}
+.mn>div:last-child{min-width:0}
+/* trap */
+.trap{margin:14px 0;padding:12px 14px;border-radius:10px;background:var(--warn-soft);border:1px solid transparent}
+.trap b{color:var(--warn)}
+/* details quiz */
+details{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--mono);color:var(--teal);flex:none;width:14px}
+details[open] summary::before{content:"–"}
+details .a{padding:0 16px 14px 40px;color:var(--ink-2);font-size:16px}
+details .a b{color:var(--ink)}
+/* verbs */
+.verbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+.verb{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.verb .v{font-family:var(--display);font-weight:800;font-size:19px}
+.verb .len{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-left:6px}
+.verb p{margin:6px 0 0;font-size:15px}
+.check li{list-style:none;position:relative;padding-left:26px}
+.check li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border:2px solid var(--teal);border-radius:3px}
+.foot{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-3);font-size:14px}
+@media (prefers-reduced-motion:no-preference){details .a{animation:fade .18s ease-out}}
+@keyframes fade{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+@media (max-width:480px){
+  .task{grid-template-columns:26px 1fr}
+  .task .min{grid-column:2;padding-top:0;margin-top:-4px}
+  .task label{grid-column:2}
+}
+</style>
+<style>
+.back{display:inline-block;margin-bottom:14px;font-family:var(--display);font-weight:700;color:var(--teal);text-decoration:none}
+.ver{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:8px}
+.u1{display:block;margin-top:4px;color:var(--teal-ink);background:var(--teal-soft);border-radius:6px;padding:4px 8px;font-size:15px}
+p.u1{padding:8px 12px}
+.route li{margin:10px 0}
+.idea,h2{scroll-margin-top:64px}
+.practice{display:inline-block;margin-top:16px;background:var(--teal);color:#fff;font-family:var(--display);font-weight:700;padding:11px 16px;border-radius:10px;text-decoration:none}
+.mn-inline{display:block;margin-top:6px;color:var(--ink-2)}
+.small{font-size:13px}
+</style></head><body>
+<div class="wrap">
+<header>
+  <a class="back" href="./">← Study Lab</a>
+  <div class="eyebrow">AP Biology · Unit 3a · Cellular Energetics</div>
+  <h1>Unit 3a Study Guide</h1>
+  <div class="ver">Covers Topics 3.1–3.3, 3.5 (enzymes, ATP/thermodynamics, photosynthesis) · cellular respiration and fitness are Unit 3b, not here</div>
+  <p class="sub">Energy, Enzymes &amp; Photosynthesis. Unit 3a isn't about memorizing a new pile of vocabulary — it's about one question asked three ways: <em>where does usable energy come from, what controls how fast a cell can use it, and how does a plant make its own?</em> Enzymes (3.1–3.2) control the "how fast." ATP and thermodynamics (3.3) explain the "usable" part. Photosynthesis (3.5) is where a plant builds that usable energy out of sunlight.</p>
+
+  <div class="facts">
+    <div class="fact"><div class="n">Fri 10/16</div><div class="l">Enzymes Quiz (continues Mon 10/19)</div></div>
+    <div class="fact"><div class="n">Mon 10/26</div><div class="l">Photosynthesis Quiz</div></div>
+    <div class="fact"><div class="n">Thu 10/29</div><div class="l">Unit 3a Test · 50% MCQ / 50% FRQ</div></div>
+    <div class="fact"><div class="n">3.6–3.7, Resp.</div><div class="l">Out of scope here — covered in Unit 3b</div></div>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <a href="#bigpicture">Big picture</a>
+  <a href="#plan">Daily plan</a>
+  <a href="#i1">1 · Energy rules</a>
+  <a href="#i2">2 · ATP</a>
+  <a href="#i3">3 · Enzymes</a>
+  <a href="#i4">4 · Rate curves</a>
+  <a href="#i5">5 · Inhibitors</a>
+  <a href="#i6">6 · Photosynthesis</a>
+  <a href="#i7">7 · Light reactions</a>
+  <a href="#i8">8 · Calvin cycle</a>
+  <a href="#i9">9 · Reading data</a>
+  <a href="#pairs">Word pairs</a>
+  <a href="#labs">Labs</a>
+  <a href="#test">Test &amp; grading</a>
+  <a href="#writing">FRQ writing</a>
+  <a href="#check">Self-check</a>
+</nav>
+
+<!-- ================= BIG PICTURE ================= -->
+<h2 id="bigpicture">The big picture</h2>
+<p class="lede">One sentence for the whole unit: <mark>living things have to pay a fee every time they move energy around, enzymes control how fast that energy gets used, and photosynthesis is how a plant makes its own supply from sunlight.</mark></p>
+<p>Every topic in Unit 3a answers one of four questions:</p>
+<ol>
+  <li><strong>What are the rules energy has to follow?</strong> Thermodynamics and ATP (3.3).</li>
+  <li><strong>What speeds a reaction up, in a cell-safe way?</strong> Enzyme structure and catalysis (3.1–3.2).</li>
+  <li><strong>What slows an enzyme down or shuts it off on purpose?</strong> Environment, inhibitors, and feedback (3.2).</li>
+  <li><strong>Where does a plant's usable energy actually come from?</strong> Photosynthesis: the light reactions and the Calvin cycle (3.5).</li>
+</ol>
+<div class="note warn"><p><strong>Scope check:</strong> this guide stops before cellular respiration (glycolysis, the Krebs cycle, fermentation) and before fitness/3.6–3.7. Those are Unit 3b. If a question mentions NADH, the mitochondrial matrix, or pyruvate, it's next unit — don't let it creep in here.</p></div>
+
+<h3>Where earlier units show up in Unit 3a</h3>
+<p>This is the table to understand, not memorize. Almost every Unit 3a answer leans on something from Unit 1 or Unit 2.</p>
+<div class="tbl"><table>
+  <tr><th>Earlier idea</th><th>Where it shows up now</th></tr>
+  <tr><td><strong>Protein structure</strong> (R-groups, 3°/4° structure, H-bonds — Unit 1)</td><td>An enzyme's active site is just its 3° (or 4°) shape. The same H-bonds and ionic bonds that hold a protein folded are exactly what breaks when an enzyme denatures.</td></tr>
+  <tr><td><strong>Active transport spends ATP</strong> (pumps — Unit 2)</td><td>Same currency, same idea: ATP hydrolysis is exergonic, and the cell couples it to whatever endergonic job needs doing — pumping ions in Unit 2, building molecules here.</td></tr>
+  <tr><td><strong>Compartmentalization &amp; endosymbiosis</strong> (Unit 2)</td><td>Chloroplasts (like mitochondria) are double-membraned, have their own DNA and ribosomes, and divide on their own — the same endosymbiotic evidence, just the photosynthetic organelle this time.</td></tr>
+  <tr><td><strong>Membrane permeability &amp; gradients</strong> (Unit 2)</td><td>Chemiosmosis is the concentration-gradient reasoning Ana already used for osmosis and water potential — except the crowded, charged particle is H⁺, and instead of just diffusing, it's forced through one specific channel (ATP synthase) that captures the energy of its movement.</td></tr>
+</table></div>
+
+<div class="note"><p><strong>How to use this guide.</strong> Follow the <a href="#plan">daily plan</a>: read one idea, then do the Study Lab's "Today" session, which practices that same idea. Every day includes one short written answer, typed in the Study Lab; Claude grades it that night. The self-check questions at the bottom work anywhere, including in line or in the car.</p></div>
+
+
+<!-- ================= DAILY PLAN ================= -->
+<h2 id="plan">The daily plan to the Enzymes Quiz, Photosynthesis Quiz, and Unit 3a Test</h2>
+<p class="lede">Matches the teacher's real posted calendar: Enzymes Quiz Fri 10/16 (continues Mon 10/19), Photosynthesis Quiz Mon 10/26, Unit 3a Test Thu 10/29 (50% MCQ / 50% FRQ). About 20–25 minutes total, same rhythm as every unit:</p>
+<ol>
+  <li><b>Read</b> the day's idea (about 8 min).</li>
+  <li><b>14 questions</b> (about 10 min): 6 on that idea, 6 review questions due from earlier days, and 2 from Units 1–2. Anything she misses comes back the next day, then again 3 days and 7 days later, until it sticks.</li>
+  <li><b>One short written answer</b> (about 4 min), typed. Claude grades it that night; the grade and feedback show up under "Written work" in the Study Lab.</li>
+</ol>
+<div class="tbl narrow"><table>
+  <tr><th>Date</th><th>Read</th><th>AP topic</th></tr>
+  <tr><td>Tue 10/13</td><td><a href="#i1">Idea 1 · Energy rules of life</a></td><td>3.3</td></tr>
+  <tr><td>Wed 10/14</td><td><a href="#i2">Idea 2 · ATP: the energy currency</a></td><td>3.3</td></tr>
+  <tr><td>Thu 10/15</td><td><a href="#i3">Idea 3 · Enzymes: catalysts with a shape</a></td><td>3.1</td></tr>
+  <tr><td>Fri 10/16</td><td><a href="#i4">Idea 4 · What speeds an enzyme up or shuts it down</a> — Enzymes Quiz today</td><td>3.2</td></tr>
+  <tr><td>Mon 10/19</td><td><a href="#i5">Idea 5 · Inhibitors and feedback</a> — Enzymes Quiz continues</td><td>3.2</td></tr>
+  <tr><td>Tue 10/20</td><td><a href="#i6">Idea 6 · Sunlight in, sugar out</a></td><td>3.5</td></tr>
+  <tr><td>Wed 10/21</td><td><a href="#i7">Idea 7 · The light reactions, step by step</a></td><td>3.5</td></tr>
+  <tr><td>Thu 10/22</td><td><a href="#i8">Idea 8 · The Calvin cycle</a></td><td>3.5</td></tr>
+  <tr><td>Fri 10/23</td><td>Photosynthesis Quiz review (Ideas 6–8, mixed)</td><td>3.5</td></tr>
+  <tr><td>Mon 10/26</td><td><a href="#i9">Idea 9 · Reading real enzyme and genetics data</a> — Photosynthesis Quiz today</td><td>3.1–3.2, 3.5</td></tr>
+  <tr><td>Tue 10/27</td><td>Test review 1: all of Unit 3a, mixed + <a href="#pairs">word pairs</a></td><td>All of the above</td></tr>
+  <tr><td>Wed 10/28</td><td>Test review 2: final review</td><td>All of the above</td></tr>
+  <tr><td>Thu 10/29</td><td><strong>Unit 3a Test</strong> — 50% MCQ / 50% FRQ</td><td>All of the above</td></tr>
+</table></div>
+<p class="small">Missed a day? The Study Lab doesn't skip anything. It shows the missed idea first as "Catch-up," then the day's idea. Dates come from the teacher's own posted course calendar (checked 10/12); if she moves a quiz or the test, tell Claude and this plan will be updated.</p>
+
+<!-- ================= IDEA 1 ================= -->
+<div class="idea" id="i1">
+  <div class="num">IDEA 1 · 3.3</div>
+  <h3>Energy follows two rules, and every conversion costs something.</h3>
+  <div class="plain"><b>In plain English:</b> Energy can't be created or destroyed — it only changes form (1st Law). But every time it changes form, some of it leaks away as heat, so the universe gets a little messier each time (2nd Law: entropy increases). Neither law is about cells being wasteful. It's just the toll every conversion charges.</div>
+
+  <h4>A number that makes the 2nd Law concrete</h4>
+  <p>Building about <strong>1 kg of animal body takes roughly 10 kg of food</strong> broken down along the way. That's not inefficiency to feel bad about — it's the 2nd Law showing up in real life. Most of that energy isn't "wasted," it's converted to heat at every single step between the food and the new tissue, and that heat has to go somewhere (which is part of why animals are warm).</p>
+
+  <h4>Potential, kinetic, and free energy</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Term</th><th>Means</th></tr>
+    <tr><td><strong>Potential energy</strong></td><td>Stored energy — for example, in a chemical bond</td></tr>
+    <tr><td><strong>Kinetic energy</strong></td><td>The energy of motion</td></tr>
+    <tr><td><strong>Free energy</strong></td><td>The energy that's actually <em>available</em> to do cellular work, after accounting for the energy lost as heat</td></tr>
+  </table></div>
+  <p>"Energy" and "free energy" aren't the same thing. A reaction can release a lot of energy overall, but only the free energy portion is usable by the cell. That distinction is exactly why the next idea (ATP) exists.</p>
+
+  <h4>Exergonic vs. endergonic, anabolism vs. catabolism</h4>
+  <div class="tbl"><table>
+    <tr><th></th><th>Exergonic</th><th>Endergonic</th></tr>
+    <tr><td><b>Free energy</b></td><td><strong>Releases</strong> free energy</td><td><strong>Requires a net input</strong> of free energy</td></tr>
+    <tr><td><b>Example</b></td><td>Breaking down glucose (catabolism)</td><td>Building glucose in photosynthesis (anabolism)</td></tr>
+    <tr><td><b>Molecule size</b></td><td>Large → small (catabolism)</td><td>Small → large (anabolism)</td></tr>
+  </table></div>
+  <div class="mn"><div class="k">ANCHOR IT</div><div><strong>Catabolism</strong> breaks big things down and releases energy, so it's <strong>exergonic</strong>. <strong>Anabolism</strong> builds small things up and costs energy, so it's <strong>endergonic</strong>. Cat<em>a</em>bolism tears <em>a</em>part; an<em>a</em>bolism <em>a</em>ssembles.</div></div>
+
+  <div class="trap"><b>What this topic is NOT:</b> the teacher's own slides leave the Gibbs free energy equation (ΔG = ΔH − TΔS) <strong>off the AP exam</strong> — this is a concept-only topic here. If a question asks you to calculate ΔG from enthalpy and entropy, that's not what you'll see; you need to be able to say <em>whether</em> a reaction is exergonic or endergonic and why, not plug numbers into that formula.</div>
+
+  <!-- TODO: insert real drill id for Unit 3a thermodynamics idea -->
+  <a class="practice" href="./#drill=u3therm">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 2 ================= -->
+<div class="idea" id="i2">
+  <div class="num">IDEA 2 · 3.3–3.4</div>
+  <h3>ATP: small, safe packets instead of one giant release.</h3>
+  <div class="plain"><b>In plain English:</b> A cell could, in theory, release all of glucose's energy in one burst — but that would be like trying to light a candle with a stick of dynamite. Instead, cells store and spend energy in small, immediately usable packets called ATP. Breaking down ATP (hydrolysis) is exergonic, and the cell spends that released energy on jobs that need it.</div>
+
+  <h4>ATP structure</h4>
+  <p><strong>Adenine</strong> (a nitrogenous base) + <strong>ribose</strong> (a 5-carbon sugar) + <strong>three phosphate groups</strong> in a row. Swap out two of those phosphates and you get ADP (adenosine <em>di</em>phosphate) — the "spent" form.</p>
+
+  <h4>Why ATP instead of just using food energy directly</h4>
+  <p>Food (glucose) holds a huge amount of energy, released all at once if you just burned it. ATP breaks that energy into small, immediately usable packets the cell can spend exactly where and when it's needed, without a dangerous burst of heat in one spot.</p>
+
+  <div class="note warn"><p><strong>Correct this exact misconception — the teacher flags it directly:</strong> it is <em>not</em> true that "breaking the phosphate bond releases energy." Breaking <em>any</em> bond actually <strong>costs</strong> energy; that's true of every bond, always. ATP hydrolysis is exergonic for a different reason: the <strong>products</strong> (ADP + a free phosphate) are more stable and lower-energy than ATP was. Part of why: ATP's three phosphates are all negatively charged and crowded close together, repelling each other — like a coiled spring. Separating them and letting them spread out releases that stored repulsion energy. It's the products being more stable, not the bond-breaking itself, that makes the overall reaction exergonic.</p></div>
+
+  <h4>Energy coupling</h4>
+  <p>Cells pair up the exergonic hydrolysis of ATP with an endergonic reaction elsewhere that needs energy — building a molecule, pumping an ion, moving something. <span class="u1">Unit 2 link: this is exactly what the sodium-potassium pump does — it couples ATP hydrolysis to pumping Na⁺ and K⁺ against their gradients.</span> And just like Idea 1 said, heat is released at every one of these coupled steps — the 2nd Law never takes a day off.</p>
+
+  <!-- TODO: insert real FRQ id for ATP hydrolysis / energy coupling FRQ -->
+  <p><a class="practice" href="./#frq=D3_atp_1">Practice an ATP hydrolysis / energy coupling FRQ →</a></p>
+  <a class="practice" href="./#drill=u3atp">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 3 ================= -->
+<div class="idea" id="i3">
+  <div class="num">IDEA 3 · 3.1</div>
+  <h3>Enzymes are catalysts with a very specific shape.</h3>
+  <div class="plain"><b>In plain English:</b> A catalyst speeds a reaction up without being used up and without changing whether the reaction can happen — only how fast it happens. Enzymes are biology's catalysts, and they work because their shape (and charge) fits a specific substrate.</div>
+
+  <h4>Activation energy: the hill a reaction has to climb</h4>
+  <p>Before a reaction can happen, the substrate has to pass through an unstable, high-energy in-between state. The energy needed to get there is the <strong>activation energy (Eₐ)</strong>. An enzyme lowers that hill — it does <em>not</em> change the starting energy level of the substrate or the ending energy level of the product. E + S → ES → E + P.</p>
+
+  <h4>Specificity: shape AND charge, not shape alone</h4>
+  <div class="trap"><b>Tripping point:</b> "the substrate just has to be the right shape" is an incomplete answer. Both the <strong>shape</strong> and the <strong>charge</strong> of the substrate have to match the active site. A substrate can be the right shape and still fail to bind if its charges don't line up with the active site's.</div>
+
+  <h4>Lock-and-key vs. induced fit</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Model</th><th>Idea</th></tr>
+    <tr><td><strong>Lock-and-key</strong> (older)</td><td>The enzyme is a rigid, passive shape that the substrate simply fits into, like a key into a lock</td></tr>
+    <tr><td><strong>Induced fit</strong> (the real model)</td><td>The enzyme <em>flexes</em> slightly as the substrate binds, improving the fit as it goes</td></tr>
+  </table></div>
+
+  <h4>Three ways enzymes actually speed a reaction up</h4>
+  <ul class="check">
+    <li><strong>Stretching the substrate</strong> toward its unstable, in-between shape (lowering Eₐ directly)</li>
+    <li><strong>Holding two substrates</strong> in exactly the right position next to each other, so they don't have to collide randomly</li>
+    <li><strong>Directly lending a chemical group</strong> to help the reaction along</li>
+  </ul>
+
+  <h4>Cofactors and coenzymes</h4>
+  <p>Many enzymes need help: <strong>cofactors</strong> are inorganic helpers (metal ions, like Mg²⁺ or Zn²⁺); <strong>coenzymes</strong> are organic helpers, often made from vitamins. The protein part alone is called the <strong>apoenzyme</strong>; the protein plus its cofactor/coenzyme together is the working <strong>holoenzyme</strong>.</p>
+  <div class="mn"><div class="k">REMEMBER</div><div>Co<strong>factor</strong> = inorganic (think: metal). Co<strong>enzyme</strong> = organic (think: vitamin-derived). Apo = incomplete; holo = whole and working.</div></div>
+
+  <a class="practice" href="./#drill=u3enz">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 4 ================= -->
+<div class="idea" id="i4">
+  <div class="num">IDEA 4 · 3.2</div>
+  <h3>Two shapes of curve students mix up, and why they're shaped that way.</h3>
+  <div class="plain"><b>In plain English:</b> Temperature and pH both affect enzyme rate, but their graphs look different for a mechanical reason, not a random one. Learn the <em>why</em> and you'll never mix them up again.</div>
+
+  <h4>Temperature vs. rate: asymmetric, with a steep cliff</h4>
+  <p>Rate rises slowly up to the enzyme's optimum temperature, then <strong>crashes steeply</strong> past it. Why asymmetric? Because heat doesn't gently loosen a protein's shape as it rises — it builds up until it suddenly breaks the bonds holding the 3° and 4° structure together, and that's permanent: <strong>denaturation</strong>.</p>
+
+  <h4>pH vs. rate: symmetric</h4>
+  <p>Rate falls off at roughly the <em>same rate</em> whether the pH goes too acidic or too basic in either direction — a smooth curve centered on the enzyme's optimum pH, not a cliff.</p>
+
+  <h4>Real examples — would pepsin work in the intestine?</h4>
+  <p><strong>Pepsin</strong> (stomach) works best around pH 1.5–2. <strong>Trypsin and lipase</strong> (intestine) work best around pH 8. Would pepsin work in the intestine? <strong>No</strong> — the wrong pH would denature it. Each enzyme's optimum matches the environment it actually works in.</p>
+
+  <h4>What denaturation actually is, mechanically</h4>
+  <p>The H-bonds and ionic interactions holding the enzyme's 3° (or 4°) structure together break. The active site loses its shape. The substrate no longer fits. <span class="u1">Unit 1 link: this is the exact same 3°/4° structure — R-group interactions — you already studied for proteins in general.</span></p>
+
+  <div class="note"><p class="teacher">"As the temperature increases beyond the optimum, the enzyme reaction rate decreases. This is because the H-bonds and ionic bonds stabilizing the 3° and 4° structure in the enzyme will break and the enzyme will begin to denature. This denaturation will disrupt the shape of the active site and reduce the interaction of the enzyme with the substrate. The result is a decrease in the catalytic function of the enzyme and a decrease in the reaction rate."</p></div>
+  <p>That's a model of what a <em>complete</em> answer looks like: it names the actual bonds, the actual structure level, and walks the mechanism all the way through to rate — not just "it denatures."</p>
+
+  <h4>Substrate concentration vs. enzyme concentration: two more curves that differ for a reason</h4>
+  <div class="tbl"><table>
+    <tr><th></th><th>Rate vs. Δ[substrate] (enzyme fixed)</th><th>Rate vs. Δ[enzyme] (substrate in excess)</th></tr>
+    <tr><td><b>Shape</b></td><td>Rises, then <strong>plateaus</strong></td><td>Rises in a <strong>straight line</strong>, no plateau</td></tr>
+    <tr><td><b>Why</b></td><td>Once every active site is occupied, adding more substrate can't speed things up — <strong>saturation</strong></td><td>Substrate is never the limiting factor, so more enzyme just keeps making more product</td></tr>
+  </table></div>
+  <div class="trap"><b>Tripping point:</b> don't mix these two curves up with temperature/pH. Those two denature or disrupt the enzyme; these two are about running out of active sites (or not).</div>
+
+  <!-- TODO: insert real FRQ id for enzyme denaturation explain-the-mechanism FRQ -->
+  <p><a class="practice" href="./#frq=D3_env_1">Practice an "explain the mechanism" denaturation FRQ →</a></p>
+  <a class="practice" href="./#drill=u3env">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 5 ================= -->
+<div class="idea" id="i5">
+  <div class="num">IDEA 5 · 3.2</div>
+  <h3>Inhibitors shut enzymes off on purpose; feedback is the cell's thermostat.</h3>
+  <div class="plain"><b>In plain English:</b> Sometimes a cell needs to slow or stop an enzyme deliberately, not by accident (like denaturation). Inhibitors do that in two different spots, and feedback inhibition is how a whole pathway polices itself.</div>
+
+  <h4>Competitive vs. noncompetitive (allosteric) inhibitors</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Type</th><th>Where it binds</th><th>Effect</th></tr>
+    <tr><td><strong>Competitive</strong></td><td>The active site itself</td><td>Physically blocks the substrate — "if it fits, it sits" there instead of the real substrate</td></tr>
+    <tr><td><strong>Noncompetitive / allosteric</strong></td><td>Somewhere else on the enzyme</td><td>Changes the enzyme's shape so the active site no longer fits the substrate</td></tr>
+  </table></div>
+  <p><strong>Allosteric activation</strong> is the mirror image of noncompetitive inhibition: binding somewhere else on the enzyme <em>improves</em> the active site's fit instead of ruining it.</p>
+
+  <h4>Feedback inhibition: the cell's built-in thermostat</h4>
+  <p>In a multi-step pathway, the <strong>end product</strong> loops back and shuts off (usually) the <strong>very first enzyme</strong> in that same pathway. The cell stops making something it already has plenty of — the same logic as a thermostat shutting off the heat once the room's warm enough.</p>
+
+  <a class="practice" href="./#drill=u3inhib">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 6 ================= -->
+<div class="idea" id="i6">
+  <div class="num">IDEA 6 · 3.5</div>
+  <h3>Sunlight can't be stored directly — so plants convert it into sugar.</h3>
+  <div class="plain"><b>In plain English:</b> Light energy can't just sit in a cell waiting to be used, and it can't be shipped to another part of the plant. To actually store and transport that energy, it has to be converted into something stable: glucose. That's the whole point of photosynthesis.</div>
+
+  <h4>The real equation (not the simplified one)</h4>
+  <p class="plain"><strong>Light + 6CO₂ + 12H₂O → C₆H₁₂O₆ + 6O₂ + 6H₂O</strong></p>
+  <div class="trap"><b>Tripping point:</b> most textbooks show a simplified version with only 6H₂O on each side and cancel them out — that hides where the extra 6 waters actually go. <strong>12 waters go in; only 6 come out</strong> (a net 6 are consumed). The 12 that go in get split apart in the light reactions. The 6 that come out are made fresh during the Calvin cycle. They are not the same water molecules passing straight through.</div>
+
+  <h4>Photosynthesis is a redox reaction</h4>
+  <p><strong>OIL RIG: Oxidation Is Loss, Reduction Is Gain</strong> (of electrons). CO₂ is <strong>reduced</strong> (gains electrons, becomes glucose). H₂O is <strong>oxidized</strong> (loses electrons, becomes O₂).</p>
+
+  <h4>Chloroplast structure, the quick tour</h4>
+  <div class="tbl narrow"><table>
+    <tr><th>Part</th><th>What it is</th></tr>
+    <tr><td><strong>Outer / inner membrane</strong></td><td>The double membrane around the whole organelle (endosymbiotic evidence — Unit 2)</td></tr>
+    <tr><td><strong>Stroma</strong></td><td>The fluid inside the inner membrane, where the Calvin cycle happens</td></tr>
+    <tr><td><strong>Thylakoids</strong></td><td>Flattened membrane sacs, stacked into <strong>grana</strong>, where the light reactions happen</td></tr>
+    <tr><td><strong>Thylakoid space (lumen)</strong></td><td>The compartment inside the thylakoid membrane</td></tr>
+  </table></div>
+
+  <h4>Pigments: absorption spectrum vs. action spectrum</h4>
+  <p>Chlorophyll absorbs mostly <strong>blue and red</strong> light and reflects <strong>green</strong> — that's why plants look green. The <strong>absorption spectrum</strong> (what wavelengths a pigment actually soaks up, measured directly) is close to, but <em>not identical to</em>, the <strong>action spectrum</strong> (what wavelengths actually drive the most photosynthesis, measured by oxygen output). The two differ slightly because of accessory pigments that absorb other wavelengths and pass that energy along.</p>
+  <div class="mn"><div class="k">HISTORY</div><div><strong>Engelmann's experiment:</strong> a strip of algae was lit through a prism (splitting light into its colors) alongside light-loving bacteria. The bacteria clustered most densely exactly where chlorophyll absorbs best — the first real evidence tying specific wavelengths of light to photosynthesis.</div></div>
+
+  <a class="practice" href="./#drill=u3photo">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 7 ================= -->
+<div class="idea" id="i7">
+  <div class="num">IDEA 7 · 3.5</div>
+  <h3>The light reactions: follow one electron.</h3>
+  <div class="plain"><b>In plain English:</b> Follow a single electron's journey and the whole light-reaction diagram makes sense. A photon excites it, it gets passed down a chain while that energy builds a pressurized pocket of H⁺, and that pressure is what actually makes ATP.</div>
+
+  <h4>The path, step by step</h4>
+  <ol class="route">
+    <li>A photon hits <strong>Photosystem II (PSII)</strong>, exciting an electron at its reaction center, <strong>P680</strong>.</li>
+    <li>That electron is handed down a chain of proteins, the <strong>electron transport chain (ETC)</strong>. The energy released along the way pumps <strong>H⁺ into the thylakoid space</strong>, building up a crowded, acidic pocket.</li>
+    <li>Those H⁺ flow back out through <strong>ATP synthase</strong> — like water through a turbine — and that flow makes <strong>ATP</strong>. This whole process is <strong>chemiosmosis</strong>.</li>
+    <li>Meanwhile, the electron reaches <strong>Photosystem I (PSI)</strong>, gets re-excited by another photon at its reaction center, <strong>P700</strong>, and is handed to <strong>NADP⁺</strong>, turning it into <strong>NADPH</strong>.</li>
+    <li>Both ATP and NADPH head to the Calvin cycle.</li>
+  </ol>
+  <p><strong>Where PSII's missing electrons come from:</strong> water molecules are split apart (<strong>photolysis</strong>) to replace them — and that splitting is also where the <strong>O₂</strong> byproduct comes from.</p>
+  <p>This whole path — water → PSII → ETC → PSI → NADPH — is <strong>non-cyclic electron flow</strong>.</p>
+
+  <h4>Cyclic electron flow: when the cell needs more ATP than NADPH</h4>
+  <p>Sometimes a cell already has plenty of NADPH but still needs more ATP. The electron leaving PSI gets rerouted back into the ETC instead of going to NADP⁺ — making more ATP but no new NADPH. This exists because the Calvin cycle needs <strong>more ATP than NADPH</strong> (not a 1:1 ratio) — cyclic flow lets the cell dial that ratio up or down as needed.</p>
+  <div class="mn"><div class="k">ORDER</div><div><strong>P</strong>SII (<strong>P680</strong>) → <strong>E</strong>TC (pumps H⁺) → ATP synthase (ATP) → <strong>P</strong>SI (<strong>P700</strong>) → NADPH. Water is split to refill PSII's electrons; that's where O₂ comes from.</div></div>
+
+  <!-- TODO: insert real FRQ id for the light-reactions diagram/electron-path FRQ -->
+  <p><a class="practice" href="./#frq=D3_light_1">Practice the light-reactions diagram FRQ →</a></p>
+  <a class="practice" href="./#drill=u3light">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 8 ================= -->
+<div class="idea" id="i8">
+  <div class="num">IDEA 8 · 3.5</div>
+  <h3>The Calvin cycle has to turn around twice to make one glucose.</h3>
+  <div class="plain"><b>In plain English:</b> The Calvin cycle spends the ATP and NADPH the light reactions made, to build sugar out of CO₂. It happens in the stroma, in three phases, and it has to run around more than once before a full glucose molecule exists.</div>
+
+  <h4>Three phases</h4>
+  <ol class="route">
+    <li><strong>Carbon fixation.</strong> The enzyme <strong>Rubisco</strong> grabs 3 CO₂ molecules, one at a time, and attaches each to <strong>RuBP</strong> (a 5-carbon sugar), producing <strong>6 molecules of 3-PGA</strong> (a 3-carbon compound).</li>
+    <li><strong>Reduction.</strong> Those 6 PGA molecules each get a phosphate from <strong>ATP</strong>, then electrons/hydrogens from <strong>NADPH</strong>, turning into <strong>6 G3P</strong> (also called PGAL). This is the step where the Calvin cycle actually spends the ATP and NADPH the light reactions made. <strong>One</strong> of those 6 G3P leaves the cycle — the actual payoff, headed toward glucose or whatever else the plant needs.</li>
+    <li><strong>Regeneration.</strong> The other <strong>5 G3P</strong> molecules get rearranged, using a bit more ATP, back into <strong>3 RuBP</strong>, so the cycle can run again.</li>
+  </ol>
+
+  <div class="trap"><b>Why it takes two turns:</b> only 1 G3P comes out per turn, but it takes <strong>2 G3P</strong> to build 1 glucose. So the Calvin cycle has to turn around <strong>twice</strong> to make one glucose's worth of material. The real totals for 1 glucose: <strong>6 CO₂, 12 NADPH, 18 ATP.</strong></div>
+
+  <div class="trap"><b>A subtle but real trap:</b> the 3 carbon atoms that leave as G3P in one turn are <em>not necessarily</em> the exact same 3 atoms that entered as CO₂ that same turn. They're mixed into a shared pool of intermediates. Don't picture a straight line "this CO₂ becomes this G3P" — the cycle pools and redistributes carbons.</div>
+
+  <!-- TODO: insert real FRQ id for Calvin cycle stoichiometry/calculation FRQ -->
+  <p><a class="practice" href="./#frq=D3_calvin_2">Practice a Calvin cycle stoichiometry FRQ →</a></p>
+  <a class="practice" href="./#drill=u3calvin">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= IDEA 9 ================= -->
+<div class="idea" id="i9">
+  <div class="num">IDEA 9 · 3.1–3.2, 3.5</div>
+  <h3>Reading real data: catalase and the AMY1 gene.</h3>
+  <div class="plain"><b>In plain English:</b> Two real datasets you'll see on the test: one shows an enzyme's temperature optimum in action, the other shows natural selection acting on an enzyme-related gene in actual human history.</div>
+
+  <h4>The catalase / temperature experiment</h4>
+  <p>Catalase breaks down hydrogen peroxide into water and oxygen (2H₂O₂ → 2H₂O + O₂). Measuring how much O₂ is produced at different temperatures — with an O₂ gas sensor, after exactly 30 seconds of reaction time at each temperature — reveals the enzyme's temperature curve directly. This is the real data from the class's enzyme-graphing practice FRQ:</p>
+  <div class="tbl narrow"><table>
+    <tr><th>Temp (°C)</th><th>O₂ gas produced (%) ± 2SE</th></tr>
+    <tr><td>4</td><td>9.7 ± 0.5</td></tr>
+    <tr><td>21</td><td>13.7 ± 0.7</td></tr>
+    <tr><td>34</td><td>23.8 ± 1.2</td></tr>
+    <tr><td>51</td><td>6.0 ± 1.0</td></tr>
+  </table></div>
+  <p>Activity rises from 4°C up through 34°C, then <strong>crashes</strong> to 6.0% at 51°C. That's consistent with a real-world optimum somewhere in the low-to-mid 30s°C, with denaturation well underway before 51°C — exactly the asymmetric curve from Idea 4. (One worked number: the rate of O₂ production at 34°C is 23.8% ÷ 30 sec ≈ 0.79% O₂ per second — always finish a calculation like this to a decimal, never leave it as a fraction.)</p>
+
+  <h4>Connect it to the teacher's graphing rules</h4>
+  <ul class="check">
+    <li><strong>Continuous data → a line graph</strong>, with the line actually drawn in connecting the points.</li>
+    <li><strong>Label both axes</strong> with a title <em>and</em> units.</li>
+    <li><strong>Title the graph</strong> "The effect of [independent variable] on [dependent variable]."</li>
+    <li><strong>Never extrapolate</strong> past the real data you collected.</li>
+    <li><strong>Calculate error bars before you scale the axes</strong>, so the scale actually accommodates them.</li>
+    <li><strong>No color</strong> — tests are scanned in grayscale, so color-coding earns nothing (and can cost clarity).</li>
+  </ul>
+
+  <h4>The AMY1 / salivary amylase story</h4>
+  <p>Humans vary from <strong>2 to 15 copies</strong> of the AMY1 gene. More copies → more amylase enzyme in saliva → better starch digestion. Populations with a long history of starch-rich diets (farmers) tend to carry <strong>more</strong> AMY1 copies on average than populations with a long history of low-starch, protein-rich diets (hunter-gatherers). This is a real, documented example of <strong>natural selection acting on an enzyme-related gene</strong> within human history — a good bridge from Unit 3 (enzymes) into evolution.</p>
+
+  <!-- TODO: insert real FRQ id for the catalase temperature-graphing FRQ -->
+  <p><a class="practice" href="./#frq=M3_catalase">Practice the catalase graphing FRQ →</a></p>
+  <!-- TODO: insert real FRQ id for the AMY1 / diet data-reading FRQ -->
+  <p><a class="practice" href="./#frq=M3_amylase">Practice the AMY1 data-reading FRQ →</a></p>
+  <a class="practice" href="./#drill=u3lab">Practice this idea: 10 questions →</a>
+</div>
+
+<!-- ================= WORD PAIRS ================= -->
+<h2 id="pairs">Word pairs (29 pairs — enzymes, energy, and photosynthesis only)</h2>
+<p class="lede">Word-pair questions test whether she can tell two related things apart. The winning answer always has two halves: <strong>how they're alike</strong>, then <strong>the one difference that matters</strong>, stated for both. Tap a pair only after saying both halves out loud. (Cellular respiration terms like glycolysis, the Krebs cycle, NADH, and the matrix are Unit 3b — not here.)</p>
+<details><summary>1st Law of Thermodynamics &amp; 2nd Law</summary><div class="a"><b>Alike:</b> Both describe rules every energy conversion must follow<br><b>Different:</b> 1st Law: energy is never created or destroyed, only converted from one form to another. 2nd Law: every conversion loses some energy as heat, so disorder (entropy) in the universe increases.<br><span class="small">Idea 1</span></div></details>
+<details><summary>Anabolism &amp; catabolism</summary><div class="a"><b>Alike:</b> Both are categories of metabolic reactions<br><b>Different:</b> Anabolism builds small molecules into large ones and costs energy (endergonic). Catabolism breaks large molecules into small ones and releases energy (exergonic).<br><span class="small">Idea 1</span></div></details>
+<details><summary>Exergonic &amp; endergonic</summary><div class="a"><b>Alike:</b> Both describe the free-energy change of a reaction<br><b>Different:</b> Exergonic reactions release free energy (products have less than reactants); endergonic reactions require a net input of free energy (products have more than reactants).<br><span class="small">Idea 1</span></div></details>
+<details><summary>Energy &amp; free energy</summary><div class="a"><b>Alike:</b> Both measure a system's capacity to do something<br><b>Different:</b> "Energy" is the total amount involved in a conversion. "Free energy" is only the portion actually available to do cellular work, after some is lost as heat.<br><span class="small">Idea 1</span></div></details>
+<details><summary>Open system &amp; closed system</summary><div class="a"><b>Alike:</b> Both describe whether energy/matter can be exchanged with the surroundings<br><b>Different:</b> An open system exchanges energy (and often matter) with its surroundings — living things are open systems. A closed system does not exchange matter with its surroundings (though it may still exchange energy).<br><span class="small">Idea 1</span></div></details>
+<details><summary>ATP &amp; ADP</summary><div class="a"><b>Alike:</b> Both are adenine + ribose + phosphate groups<br><b>Different:</b> ATP has three phosphates and is the "charged," higher-energy form. ADP has two phosphates and is the "spent," lower-energy form, after hydrolysis releases a phosphate.<br><span class="small">Idea 2</span></div></details>
+<details><summary>Energy of activation &amp; free energy</summary><div class="a"><b>Alike:</b> Both are energy quantities involved in a reaction<br><b>Different:</b> Activation energy (Eₐ) is the "hill" that must be climbed before a reaction can start, which enzymes lower. Free energy is the difference between the reactants' and products' energy, which enzymes do NOT change.<br><span class="small">Idea 3</span></div></details>
+<details><summary>Lock-and-key &amp; induced fit</summary><div class="a"><b>Alike:</b> Both are models for how an enzyme's active site binds its substrate<br><b>Different:</b> Lock-and-key treats the active site as a rigid shape the substrate simply fits into. Induced fit (the accurate model) has the enzyme flex slightly as the substrate binds, improving the fit.<br><span class="small">Idea 3</span></div></details>
+<details><summary>Competitive inhibitor &amp; noncompetitive inhibitor</summary><div class="a"><b>Alike:</b> Both are molecules that reduce enzyme activity by binding to the enzyme<br><b>Different:</b> Competitive binds directly in the active site, physically blocking the substrate. Noncompetitive (allosteric) binds elsewhere, changing the enzyme's shape so the active site no longer fits the substrate.<br><span class="small">Idea 5</span></div></details>
+<details><summary>Cofactor &amp; coenzyme</summary><div class="a"><b>Alike:</b> Both are non-protein helpers an enzyme needs to function (together with the protein, called a holoenzyme)<br><b>Different:</b> Cofactors are inorganic (metal ions). Coenzymes are organic, often vitamin-derived.<br><span class="small">Idea 3</span></div></details>
+<details><summary>Graph of rate vs. Δ[substrate] (fixed [enzyme]) &amp; graph of rate vs. Δ[enzyme] (excess substrate)</summary><div class="a"><b>Alike:</b> Both show how reaction rate changes as you increase the amount of one thing<br><b>Different:</b> Rate vs. substrate (enzyme fixed) rises then plateaus once every active site is saturated. Rate vs. enzyme (substrate in excess) rises as a straight line, with no plateau, because substrate is never the limiting factor.<br><span class="small">Idea 4</span></div></details>
+<details><summary>Graph of rate vs. ΔpH &amp; graph of rate vs. Δtemperature</summary><div class="a"><b>Alike:</b> Both show an optimum where rate peaks, with rate falling off on either side<br><b>Different:</b> The pH curve is roughly symmetric — rate falls off at a similar pace too acidic or too basic. The temperature curve is asymmetric — a slow rise to the optimum, then a steep, cliff-like crash past it, because heat denatures the enzyme fast and permanently.<br><span class="small">Idea 4</span></div></details>
+<details><summary>Feedback inhibition &amp; allosteric regulation</summary><div class="a"><b>Alike:</b> Both control enzyme activity by binding somewhere other than the active site<br><b>Different:</b> Feedback inhibition is specifically the end product of a pathway shutting off (usually) the first enzyme in that same pathway. Allosteric regulation is the broader mechanism — binding at a non-active site to either inhibit OR activate an enzyme — that feedback inhibition is one example of.<br><span class="small">Idea 5</span></div></details>
+<details><summary>Light-dependent reaction &amp; light-independent reaction</summary><div class="a"><b>Alike:</b> Both are stages of photosynthesis, both happen in the chloroplast<br><b>Different:</b> Light-dependent (light reactions) directly require light and happen in the thylakoid membrane, producing ATP and NADPH and releasing O₂. Light-independent (Calvin cycle) doesn't directly need light — it uses the ATP and NADPH already made — and happens in the stroma.<br><span class="small">Idea 6–8</span></div></details>
+<details><summary>Light-independent reaction &amp; Calvin cycle</summary><div class="a"><b>Alike:</b> They're the same thing<br><b>Different:</b> "Light-independent reaction" describes it functionally (doesn't directly need light). "Calvin cycle" is its name. Neither is more correct; they're two labels for one process.<br><span class="small">Idea 8</span></div></details>
+<details><summary>Photosystem I &amp; Photosystem II</summary><div class="a"><b>Alike:</b> Both are protein complexes in the thylakoid membrane that absorb light and pass excited electrons along the chain<br><b>Different:</b> PSII (reaction center P680) comes first in the electron path and gets its replacement electrons from splitting water. PSI (reaction center P700) comes second and hands its excited electron to NADP⁺ to make NADPH.<br><span class="small">Idea 7</span></div></details>
+<details><summary>Oxidation &amp; reduction</summary><div class="a"><b>Alike:</b> Both describe a change in electrons during a redox reaction, and they always happen together<br><b>Different:</b> Oxidation is losing electrons (water, becoming O₂). Reduction is gaining electrons (CO₂, becoming glucose).<br><span class="small">Idea 6</span></div></details>
+<details><summary>P680 &amp; P700</summary><div class="a"><b>Alike:</b> Both are reaction centers that get excited by a photon of light<br><b>Different:</b> P680 is the reaction center of Photosystem II, excited first in the electron path. P700 is the reaction center of Photosystem I, excited second, and hands its electron toward NADPH.<br><span class="small">Idea 7</span></div></details>
+<details><summary>Stoma &amp; stroma</summary><div class="a"><b>Alike:</b> Both sound alike and both matter for photosynthesis<br><b>Different:</b> A stoma is a pore in a leaf's surface that lets CO₂ in and O₂/water vapor out. The stroma is the fluid inside a chloroplast's inner membrane, where the Calvin cycle happens.<br><span class="small">Idea 6, 8</span></div></details>
+<details><summary>Cyclic electron flow &amp; non-cyclic electron flow</summary><div class="a"><b>Alike:</b> Both move electrons through the photosystems and make ATP<br><b>Different:</b> Non-cyclic flow runs water → PSII → ETC → PSI → NADPH, making both ATP and NADPH. Cyclic flow reroutes the electron from PSI back into the ETC instead of to NADP⁺, making extra ATP but no new NADPH — used when the cell needs more ATP than NADPH.<br><span class="small">Idea 7</span></div></details>
+<details><summary>Stroma &amp; thylakoid space</summary><div class="a"><b>Alike:</b> Both are fluid-filled regions inside a chloroplast<br><b>Different:</b> Stroma is the fluid outside the thylakoids but inside the inner membrane, where the Calvin cycle runs. Thylakoid space (lumen) is the compartment inside the thylakoid membrane itself, where H⁺ builds up during chemiosmosis.<br><span class="small">Idea 6–7</span></div></details>
+<details><summary>Thylakoid &amp; cristae</summary><div class="a"><b>Alike:</b> Both are folded internal membranes that increase surface area for energy reactions<br><b>Different:</b> Thylakoids are flattened sacs in the chloroplast, stacked into grana, where the light reactions happen. Cristae are the folds of the mitochondrion's inner membrane (Unit 3b territory), where the electron transport chain of respiration happens.<br><span class="small">Idea 6</span></div></details>
+<details><summary>RuBP &amp; Rubisco</summary><div class="a"><b>Alike:</b> Both are essential to carbon fixation, the first step of the Calvin cycle<br><b>Different:</b> RuBP is the 5-carbon sugar that CO₂ attaches to. Rubisco is the enzyme that attaches CO₂ to RuBP.<br><span class="small">Idea 8</span></div></details>
+<details><summary>Intermembrane space &amp; thylakoid space</summary><div class="a"><b>Alike:</b> Both are compartments created by a folded or double membrane where H⁺ can build up<br><b>Different:</b> Intermembrane space is between the outer and inner membranes of the mitochondrion (Unit 3b). Thylakoid space is inside the thylakoid membrane of the chloroplast, where H⁺ accumulates during the light reactions.<br><span class="small">Idea 7</span></div></details>
+<details><summary>PGA &amp; PGAL (G3P)</summary><div class="a"><b>Alike:</b> Both are 3-carbon compounds in the Calvin cycle<br><b>Different:</b> PGA (3-PGA) is made first, right when Rubisco fixes CO₂ onto RuBP. PGAL (G3P) is made next, after PGA is reduced using ATP and NADPH — it's the form that actually leaves the cycle or gets recycled into RuBP.<br><span class="small">Idea 8</span></div></details>
+<details><summary>Cuticle &amp; stoma</summary><div class="a"><b>Alike:</b> Both are leaf-surface features that manage water and gas exchange<br><b>Different:</b> The cuticle is a waxy, waterproof coating over the whole leaf surface that prevents water loss. A stoma is a pore (that the cuticle does NOT cover) that opens and closes to let CO₂ in and water vapor/O₂ out.<br><span class="small">Idea 6</span></div></details>
+<details><summary>Red light, green light, blue light &amp; purple light</summary><div class="a"><b>Alike:</b> All are wavelengths of visible light that can hit a leaf<br><b>Different:</b> Red and blue light are strongly <strong>absorbed</strong> by chlorophyll and drive photosynthesis. Green light is mostly <strong>reflected</strong> (not absorbed), which is why plants look green. Purple/violet light is also absorbed by accessory pigments, contributing to the action spectrum slightly differently than chlorophyll's absorption spectrum alone.<br><span class="small">Idea 6</span></div></details>
+<details><summary>Electron transport chain (ETC) &amp; photosystem</summary><div class="a"><b>Alike:</b> Both are groups of proteins embedded in a membrane that handle excited electrons<br><b>Different:</b> A photosystem (PSI or PSII) absorbs light and excites an electron in the first place. The ETC is the chain of proteins that passes that already-excited electron along, releasing energy that pumps H⁺.<br><span class="small">Idea 7</span></div></details>
+<details><summary>NADPH &amp; NADH</summary><div class="a"><b>Alike:</b> Both are electron carriers that shuttle high-energy electrons/hydrogens to where they're needed<br><b>Different:</b> NADPH is made in the light reactions of photosynthesis and spent in the Calvin cycle (this unit). NADH is made in cellular respiration (glycolysis, the Krebs cycle) and spent in the electron transport chain there — Unit 3b, not this guide.<br><span class="small">Idea 7</span></div></details>
+<p class="small">These word pairs also show up as short written questions in the daily sessions once each topic above has been taught — Claude grades them the same night.</p>
+
+<!-- ================= LABS ================= -->
+<h2 id="labs">Lab prep</h2>
+<p class="lede">Labs are graded classwork. Most lost points come from vague answers, not wrong science. For each lab (or data case study): know <strong>what question it answers</strong>, <strong>what the result means</strong>, and <strong>how to write the analysis</strong>. This section teaches the reasoning. It doesn't fill in her answers: the lab is hers to write, and she'll do better on the test if she's worked it out herself.</p>
+
+<div class="idea" id="lab-catalase">
+  <div class="num">LAB · CATALASE &amp; HYDROGEN PEROXIDE</div>
+  <h3>The question: what's catalase's actual temperature optimum?</h3>
+  <div class="plain"><b>Setup in one sentence:</b> catalase breaks down hydrogen peroxide (H₂O₂) into water and oxygen; measuring the O₂ produced at several different temperatures reveals the enzyme's temperature curve directly.</div>
+  <h4>The experimental logic</h4>
+  <ul class="check">
+    <li><strong>Why temperature is the independent variable:</strong> it's the one thing deliberately changed between trials, with everything else (enzyme amount, substrate concentration, pH) held constant.</li>
+    <li><strong>Why O₂ production is the dependent variable:</strong> it's what you measure, and it depends on how fast catalase is working — it's the thing you're trying to find out, not the thing you're controlling.</li>
+    <li><strong>Why you'd want a negative control:</strong> a trial with no catalase added (or denatured catalase) shows how much O₂ shows up from H₂O₂ breaking down on its own, without the enzyme — so you know the enzyme, not something else, caused the O₂ you measured.</li>
+    <li><strong>How to describe the trend using real numbers, not vague language:</strong> instead of "it went up then down," say something like "O₂ production rose from X% at 4°C to Y% at 34°C, then fell to Z% at 51°C" — cite the actual data points.</li>
+  </ul>
+  <p><a class="practice" href="./#drill=u3lab">Practice reading enzyme-lab data →</a></p>
+</div>
+
+<div class="idea" id="case-amy1">
+  <div class="num">CASE STUDY · AMY1 &amp; DIET</div>
+  <h3>The question: does diet history predict AMY1 copy number?</h3>
+  <div class="plain"><b>What it's really asking:</b> whether a population's long-term diet (starch-rich vs. protein-rich) correlates with how many copies of the AMY1 gene its members tend to carry — a real test of natural selection acting on an enzyme-related trait.</div>
+  <h4>How to read the copy-number data</h4>
+  <ul class="check">
+    <li>Compare <em>average</em> copy number between groups, not single individuals — natural selection shifts population averages, not everyone identically.</li>
+    <li>Connect copy number → amylase amount → starch-digesting ability → a real survival/reproductive advantage in a starch-heavy environment, step by step, rather than jumping straight to "more copies are better."</li>
+    <li>Watch for the trap of treating correlation as if every single farmer has more copies than every single hunter-gatherer — it's a population-level trend, with overlap between groups.</li>
+  </ul>
+  <p><a class="practice" href="./#drill=u3lab">Practice reading real data like this →</a></p>
+</div>
+
+<div class="idea" id="graphing">
+  <div class="num">HER TEACHER'S GRAPHING RULES</div>
+  <h3>A graph point is easy to earn and easy to lose.</h3>
+  <ul class="check">
+    <li><strong>Independent variable (with units) on the x-axis; dependent variable (with units) on the y-axis.</strong> The IV is what you change on purpose.</li>
+    <li><strong>Continuous data gets a line graph</strong>, with the line actually drawn in connecting the points — not left as disconnected dots.</li>
+    <li><strong>Title the graph "The effect of [IV] on [DV]."</strong></li>
+    <li><strong>Label both axes with a title AND units.</strong></li>
+    <li><strong>Calculate your error bars before you scale the axes</strong>, so the scale you pick actually fits them.</li>
+    <li><strong>Never extrapolate past your actual data.</strong></li>
+    <li><strong>No color</strong> — tests are scanned in grayscale.</li>
+  </ul>
+</div>
+
+<!-- ================= TEST ================= -->
+<h2 id="test">How the Unit 3a Test is graded, and how to get an A</h2>
+<p class="lede">The test is <strong>half multiple choice, half FRQ</strong>, with the AP formula sheet and a calculator, no retests. That's why every day in the Study Lab has a written answer, not just multiple choice.</p>
+<h4>Her teacher's FRQ-writing rules</h4>
+<ul class="check">
+  <li><strong>Write in full sentences, never bullet points, outlines, or diagrams alone.</strong> A diagram without full labels earns nothing.</li>
+  <li><strong>Never use "it" or "stuff."</strong> Always name the actual subject: "the enzyme," "the H⁺ gradient," not "it."</li>
+  <li><strong>When asked to compare two things, address BOTH explicitly</strong>, not just one.</li>
+  <li><strong>Always include units</strong> when identifying a variable.</li>
+  <li><strong>For "Identify / Predict / Determine" verbs, one clear sentence is enough.</strong> Don't over-explain — that wastes time without earning extra points.</li>
+  <li><strong>For "Explain," cite the actual mechanism</strong> — which bonds, which structures, which process — never just restate the vocabulary word.</li>
+  <li><strong>Don't contradict an earlier correct statement</strong>, even accidentally. A contradiction can cost a point you already earned.</li>
+  <li><strong>Always finish any calculation to a decimal</strong>, never leave it as a fraction.</li>
+  <li><strong>For graphs: draw the line in, label both axes with title and units, and never extrapolate past the real data.</strong></li>
+</ul>
+<h4>Sentence patterns that earn points</h4>
+<div class="tbl"><table>
+  <tr><th>Question type</th><th>Pattern</th></tr>
+  <tr><td>Explain a rate change</td><td>"The rate [increased/decreased] because [the specific bonds/structure] [did this], which [disrupted/improved] [the specific mechanism]."</td></tr>
+  <tr><td>Compare two things</td><td>"[Thing A] [does X], while [Thing B] [does Y]." Address both sides explicitly — never answer for only one.</td></tr>
+  <tr><td>Calculation</td><td>Formula → numbers plugged in → answer with sign and unit → one full sentence.</td></tr>
+  <tr><td>Explain evidence</td><td>"[Observation] supports [claim] because [link]." Example: "Chloroplasts have their own circular DNA, which supports endosymbiosis because bacteria also have circular DNA."</td></tr>
+  <tr><td>Identify/Predict</td><td>One direct sentence. "The rate will decrease because the active sites are already saturated."</td></tr>
+</table></div>
+<p><strong>Time-budget guidance from the teacher:</strong> roughly <strong>22 minutes</strong> per big, multi-part FRQ; roughly <strong>8–10 minutes</strong> per small one. Ana should practice pacing herself during timed practice FRQs, not just accuracy — a perfectly reasoned answer that takes 40 minutes still costs the rest of the test.</p>
+
+<!-- ================= FRQ WRITING ================= -->
+<h2 id="writing">Writing Unit 3a FRQs</h2>
+<p class="lede">Unit 3a FRQs usually ask you to explain a mechanism — not just name a vocabulary word. A few sentence starters to build from:</p>
+<div class="plain">"The rate decreased because the [specific bonds] broke, disrupting the [specific structure], which [caused this downstream effect]."<br><br>"[Substance] moves from [PSII/PSI/the thylakoid space/the stroma] to [the next location] by [process], carrying [what it's carrying]."<br><br>"The [curve] plateaus/rises in a straight line because [the actual reason — saturation, or substrate never being limiting]."</div>
+<ul class="check">
+  <li><strong>Name the actual structure or bond.</strong> "The active site's H-bonds," not "its shape."</li>
+  <li><strong>Describe = what it is. Explain = how or why.</strong> "Describe the Calvin cycle" wants the three phases in order. "Explain why it takes two turns to make glucose" wants the 1 G3P per turn vs. 2 G3P per glucose reasoning.</li>
+  <li><strong>For "predict" questions</strong> about inhibitors or temperature/pH shifts, walk from the mechanism to the rate, not the other way around.</li>
+  <li><strong>For Calvin cycle totals</strong>, show the doubling logic (why ×2) rather than just stating 6 CO₂/12 NADPH/18 ATP.</li>
+  <li><strong>Connect to Units 1–2 when it fits.</strong> "The same H-bonds that hold the enzyme's 3° structure" shows understanding and often earns the explanation point.</li>
+</ul>
+
+<!-- ================= SELF-CHECK ================= -->
+<h2 id="check">Self-check</h2>
+<p class="lede">Answer out loud before tapping. Hesitating counts as a miss; mark it and come back tomorrow.</p>
+<details><summary>Why isn't "breaking the phosphate bond releases energy" correct?</summary><div class="a">Breaking any bond costs energy. ATP hydrolysis is exergonic because the products (ADP + phosphate) are more stable/lower-energy than ATP — partly because separating ATP's three crowded, negatively charged phosphates releases their mutual repulsion, like a coiled spring.</div></details>
+<details><summary>What does an enzyme change about a reaction, and what does it NOT change?</summary><div class="a">It lowers the activation energy (Eₐ), speeding the reaction up. It does NOT change the starting or ending energy levels (the overall free energy change) of the reaction.</div></details>
+<details><summary>What two things must match for a substrate to fit an active site?</summary><div class="a">Both shape AND charge — not shape alone.</div></details>
+<details><summary>Why is the temperature-vs-rate curve asymmetric but the pH-vs-rate curve symmetric?</summary><div class="a">Heat builds up and suddenly breaks the bonds holding 3°/4° structure (denaturation) — a steep, permanent crash. pH shifts gradually disrupt ionic interactions at a similar rate in either direction, giving a smoother, symmetric curve.</div></details>
+<details><summary>Rate vs. [substrate] plateaus. Rate vs. [enzyme] doesn't. Why the difference?</summary><div class="a">Substrate concentration plateaus once every active site is occupied (saturation) — more substrate can't speed things up further. Enzyme concentration doesn't plateau because substrate is in excess, so it's never the limiting factor.</div></details>
+<details><summary>Competitive or noncompetitive: which binds the active site itself?</summary><div class="a">Competitive. Noncompetitive (allosteric) binds elsewhere and changes the enzyme's shape instead.</div></details>
+<details><summary>What does feedback inhibition usually shut off, and why?</summary><div class="a">Usually the first enzyme in a multi-step pathway — so the cell stops making more of something it already has enough of.</div></details>
+<details><summary>Why does the real photosynthesis equation show 12 H₂O in but only 6 H₂O out?</summary><div class="a">The 12 that go in are split apart in the light reactions (photolysis). The 6 that come out are made fresh during the Calvin cycle — they aren't the same water molecules passing through.</div></details>
+<details><summary>In photosynthesis, what gets oxidized and what gets reduced?</summary><div class="a">Water is oxidized (loses electrons, becomes O₂). CO₂ is reduced (gains electrons, becomes glucose).</div></details>
+<details><summary>Put in order: P700, water splitting, ATP synthase, P680, NADPH formation.</summary><div class="a">Water splitting (replaces PSII's electrons) → P680 (PSII) → ATP synthase (via the H⁺ gradient the ETC built) → P700 (PSI) → NADPH formation.</div></details>
+<details><summary>Why does cyclic electron flow exist?</summary><div class="a">The Calvin cycle needs more ATP than NADPH (not a 1:1 ratio). Cyclic flow reroutes the electron from PSI back into the ETC to make extra ATP without making more NADPH, letting the cell balance the ratio.</div></details>
+<details><summary>Name the three phases of the Calvin cycle, in order.</summary><div class="a">Carbon fixation (Rubisco attaches CO₂ to RuBP, making PGA) → Reduction (PGA becomes G3P using ATP and NADPH) → Regeneration (the leftover G3P is rebuilt into RuBP using more ATP).</div></details>
+<details><summary>Why does the Calvin cycle have to turn twice to make one glucose?</summary><div class="a">Only 1 G3P leaves the cycle per turn, but it takes 2 G3P to build 1 glucose — so two turns are needed, using 6 CO₂, 12 NADPH, and 18 ATP in total.</div></details>
+<details><summary>A catalase trial shows rising O₂ production from 4°C to 34°C, then a crash at 51°C. What does that tell you?</summary><div class="a">The enzyme's real-world optimum is somewhere in the low-to-mid 30s°C; by 51°C it has already started denaturing, matching the asymmetric temperature curve.</div></details>
+<details><summary>What does the AMY1 story show about natural selection?</summary><div class="a">Populations with long histories of starch-rich diets tend to carry more AMY1 gene copies on average than populations with low-starch diets — natural selection acting on an enzyme-related gene within human history.</div></details>
+
+<div class="foot">Built from the teacher's Unit 3a slides on enzyme structure/catalysis, thermodynamics and ATP, and photosynthesis; the catalase enzyme-activity lab; and the AMY1/diet case study. Scope: AP topics 3.1–3.3 (with 3.4 folded into Idea 2) and 3.5. Cellular respiration (3.6 territory and beyond) and fitness (3.6–3.7) are Unit 3b.</div>
+</div>
+
+</body></html>
